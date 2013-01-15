@@ -16,7 +16,7 @@ namespace Snake
         private int _Direction;
 
         
-
+        //This is the game methode
         public Game()
         {
             InitializeComponent();
