@@ -7,51 +7,74 @@ namespace Snake
 {
     public class SnakePart
     {
-        private int _X;
-        private int _Y;
-        private int _Direction;
-        private int _LastDirection;
-        private Panel _GraphicPart;
+        /********************************************* Declaration of variables *********************************************/
 
+        private int _X;             // Position in X.
+        private int _Y;             // Position in Y.
+        private int _Direction;     // Direction.
+        private int _LastDirection; // Last direction.
+        private Panel _GraphicPart; // His panel.
+
+
+        /**************************************************** Constructor ****************************************************/
 
         public SnakePart()
         {
-            _X = 50;
-            _Y = 50;
-            _Direction = 1;
-            _LastDirection = 1;
-            _GraphicPart = InitGraphicPart();
+            _X = 250;                         // Position in Y set to 250.
+            _Y = 250;                         // Position in Y set to 250.
+            _Direction = 1;                   // Direction is set to 1 (right).
+            _LastDirection = 1;               // Last direction is set to 1 (right).
+            _GraphicPart = InitGraphicPart(); // Initialization of the panel.
         }
+
+
+        /****************************************************** Methods ******************************************************/
+
+        //////////////////////////////////////////
+        // Initialization of the snake part panel
 
         private Panel InitGraphicPart()
         {
-            Panel panel = new Panel();
-            panel.Location = new System.Drawing.Point(_X, _Y);
-            panel.Size = new System.Drawing.Size(8, 8);
-            panel.BackColor = System.Drawing.Color.Black;
+            Panel panel = new Panel();                         // Instanciation of a new panel.
+            panel.Location = new System.Drawing.Point(_X, _Y); // Definition of the panel location.
+            panel.Size = new System.Drawing.Size(8, 8);        // Definition of the panel size.
+            panel.BackColor = System.Drawing.Color.Black;      // Definition of the panel color.
 
-            return panel;
+            return panel; // Return panel.
         }
+
+
+        ///////////////////////////
+        // Update snake part panel
 
         private Panel Update()
         {  
-            _GraphicPart.Location = new System.Drawing.Point(_X, _Y);
-            return _GraphicPart;
+            _GraphicPart.Location = new System.Drawing.Point(_X, _Y); // Define the location.
+            return _GraphicPart; // Return panel.
         }
+
+
+        ///////////
+        // Move up
 
         public Panel MoveUp()
         {
-            if (_Y - 10 < 0)
+            if (_Y - 10 < 0) // Exception (border up) 
                 _Y = 0;
             else
-                _Y = _Y - 10;
+                _Y = _Y - 10; // Move 10 px up.
 
-            _Direction = 0;
+            _Direction = 0; // Set the direction to 0 (up).
 
             if (_Direction != _LastDirection)
-                _LastDirection = _Direction;
-            return Update();
+                _LastDirection = _Direction; // Update the last direction.
+
+            return Update(); // Update the panel and return it.
         }
+
+
+        //////////////
+        // Move right
 
         public Panel MoveRight()
         {
@@ -67,6 +90,10 @@ namespace Snake
             return Update();
         }
 
+
+        /////////////
+        // Move down
+
         public Panel MoveDown()
         {
             if (_Y + 10 > 1000)
@@ -81,6 +108,10 @@ namespace Snake
             return Update();
         }
 
+
+        /////////////
+        // Move left
+
         public Panel MoveLeft()
         {
             if (_X - 10 < 0)
@@ -94,6 +125,10 @@ namespace Snake
                 _LastDirection = _Direction;
             return Update();
         }
+
+
+        ////////////////
+        // Get the part
 
         public Panel GetPart(int direction)
         {         
