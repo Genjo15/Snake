@@ -10,10 +10,12 @@ namespace Snake
 {
     public partial class Game : Form
     {
-        private FullSnake _FullSnake;
-        private int _Score;
-        private Timer _Timer;
-        private int _Direction;
+        /********************************************* Declaration of variables *********************************************/
+
+        private FullSnake _FullSnake; // The complete snake (which is a list of snake elements).
+        private int _Score;           // The score.
+        private Timer _Timer;         // The timer.
+        private int _Direction;       // The direction.
 
         
 
