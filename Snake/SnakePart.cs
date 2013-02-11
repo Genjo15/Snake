@@ -3,152 +3,198 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 
+
 namespace Snake
 {
     public class SnakePart
     {
         /********************************************* Declaration of variables *********************************************/
 
-        private int _X;             // Position in X.
-        private int _Y;             // Position in Y.
-        private int _Direction;     // Direction.
-        private int _LastDirection; // Last direction.
-        private Panel _GraphicPart; // His panel.
+        #region Variables
 
+        private Boolean _IsHead;      // Head or not.
+        private int _X;               // Position in X.
+        private int _Y;               // Position in Y.
+        private int _Direction;       // Direction.
+        private int _LastDirection;   // Last direction.
+        private const int _SIDE = 12; // Size of the panel side.
 
-        /**************************************************** Constructor ****************************************************/
+        #endregion
+
+        /**************************************************** Constructors ****************************************************/
+
+        #region Constructors
 
         public SnakePart()
         {
-            _X = 250;                         // Position in Y set to 250.
-            _Y = 250;                         // Position in Y set to 250.
+            _IsHead = true;
+            _X = (_SIDE + 2) * 15;            // Position in X set to 210 (must be a multiple of _SIDE + 2 to be in synchronisation with items).
+            _Y = (_SIDE + 2) * 15;            // Position in Y set to 210 (must be a multiple of _SIDE + 2 to be in synchronisation with items).
             _Direction = 1;                   // Direction is set to 1 (right).
             _LastDirection = 1;               // Last direction is set to 1 (right).
-            _GraphicPart = InitGraphicPart(); // Initialization of the panel.
+            
         }
 
+        public SnakePart(int x, int y, int direction)
+        {
+            _IsHead = false;
+            _X = x;                           // Position in X set to 250.
+            _Y = y;                           // Position in Y set to 250.
+            _Direction = direction;           // Direction is set to 1 (right).
+            _LastDirection = direction;       // Last direction is set to 1 (right).
+        }
+
+        #endregion
 
         /****************************************************** Methods ******************************************************/
 
-        //////////////////////////////////////////
-        // Initialization of the snake part panel
-
-        private Panel InitGraphicPart()
-        {
-            Panel panel = new Panel();                         // Instanciation of a new panel.
-            panel.Location = new System.Drawing.Point(_X, _Y); // Definition of the panel location.
-            panel.Size = new System.Drawing.Size(8, 8);        // Definition of the panel size.
-            panel.BackColor = System.Drawing.Color.Black;      // Definition of the panel color.
-
-            return panel; // Return panel.
-        }
-
-
-        ///////////////////////////
-        // Update snake part panel
-
-        private Panel Update()
-        {  
-            _GraphicPart.Location = new System.Drawing.Point(_X, _Y); // Define the location.
-            return _GraphicPart; // Return panel.
-        }
-
+        #region Methods
 
         ///////////
         // Move up
 
-        public Panel MoveUp()
+        public void MoveUp()
         {
-            if (_Y - 10 < 0) // Exception (border up) 
-                _Y = 0;
-            else
-                _Y = _Y - 10; // Move 10 px up.
-
+            _Y = _Y - (_SIDE + 2); // Move 14 px up.
             _Direction = 0; // Set the direction to 0 (up).
-
-            if (_Direction != _LastDirection)
-                _LastDirection = _Direction; // Update the last direction.
-
-            return Update(); // Update the panel and return it.
         }
 
 
         //////////////
         // Move right
 
-        public Panel MoveRight()
+        public void MoveRight()
         {
-            if (_X + 10 > 1000)
-                _X = 1000;
-            else
-                _X = _X + 10;
-
+            _X = _X + (_SIDE + 2);
             _Direction = 1;
-
-            if (_Direction != _LastDirection)
-                _LastDirection = _Direction;
-            return Update();
         }
 
 
         /////////////
         // Move down
 
-        public Panel MoveDown()
+        public void MoveDown()
         {
-            if (_Y + 10 > 1000)
-                _Y = 1000;
-            else
-                _Y = _Y + 10;
-
+            _Y = _Y + (_SIDE + 2);
             _Direction = 2;
-
-            if (_Direction != _LastDirection)
-                _LastDirection = _Direction;
-            return Update();
         }
 
 
         /////////////
         // Move left
 
-        public Panel MoveLeft()
+        public void MoveLeft()
         {
-            if (_X - 10 < 0)
-                _X = 0;
-            else
-                _X = _X - 10;
-
+            _X = _X - (_SIDE + 2);
             _Direction = 3;
-
-            if (_Direction != _LastDirection)
-                _LastDirection = _Direction;
-            return Update();
         }
 
 
         ////////////////
         // Get the part
 
-        public Panel GetPart(int direction)
+        public void GetPart(int direction)
         {         
-            //  si l'utilisateur n'appuie sur aucune touche, la direction est la même que la précedente.
+            //  If the user does nothing, direction is the same as the previous one.
             if (direction == -1)
                 _Direction = _LastDirection;
-            else
+
+            else if(direction == _Direction + 2) // Force the direction to be the same as the previous one if the user wants to move back
+            {                                    // Case Up to Down and Right to Left.
+                _Direction = _LastDirection;
+            }
+
+            else if (direction == _Direction - 2) // Force the direction to be the same as the previous one if the user wants to move back
+            {                                     // Case Down to Up and Left to Right.
+                _Direction = _LastDirection;
+            }
+
+            else // Update direction and last direction.
+            {
+                _LastDirection = _Direction;
                 _Direction = direction;
-
-
+            }
 
             if (_Direction == 0)
-                return MoveUp();
+                MoveUp();
             else if (_Direction == 1)
-                return MoveRight();
+                MoveRight();
             else if (_Direction == 2)
-                return MoveDown();
-            else return MoveLeft();  
+                MoveDown();
+            else MoveLeft();  
         }
 
+
+        ///////////////////
+        // Check Collision
+
+        public Boolean CheckCollision(int width, int height)
+        {
+            Boolean collision = false;
+
+            if ((_Y < 0) || (_X + _SIDE > width) || (_Y + 10 > height) || (_X < 0))
+                collision = true;
+
+            return collision;
+        }
+
+        #endregion
+
+        # region Accessors
+
+        ///////////////////////////
+        // Get the boolean _IsHead
+
+        public Boolean Get_IsHead()
+        {
+            return _IsHead;
+        }
+
+
+        //////////
+        // Get _X
+
+        public int Get_X()
+        {
+            return _X;
+        }
+
+
+        //////////
+        // Get _Y
+
+        public int Get_Y()
+        {
+            return _Y;
+        }
+
+
+        //////////////////////
+        // Get _Direction
+
+        public int Get_Direction()
+        {
+            return _Direction;
+        }
+
+        //////////////////////
+        // Get _LastDirection
+
+        public int Get_LastDirection()
+        {
+            return _LastDirection;
+        }
+
+
+        /////////////
+        // Get _SIDE
+
+        public int Get_SIDE()
+        {
+            return _SIDE;
+        }
+
+        #endregion
 
     }
 }
