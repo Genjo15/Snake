@@ -53,61 +53,55 @@ namespace Snake
         ///////////
         // Move up
 
-        public void MoveUp()
+        public void MoveUp(int height)
         {
-            _Y = _Y - (_SIDE + 2); // Move 14 px up.
-            _Direction = 0; // Set the direction to 0 (up).
+            _Y = _Y - (_SIDE + 2);       // Move 14 px up.
+            if (_Y == (0 - _SIDE - 2))   // if the snake part reaches the top edge...
+                _Y = height - _SIDE - 6; // it appears at the opposite of the map.
+            _Direction = 0;              // Set the direction to 0 (up).
         }
-
 
         //////////////
         // Move right
 
-        public void MoveRight()
+        public void MoveRight(int width)
         {
-            _X = _X + (_SIDE + 2);
-            _Direction = 1;
+            _X = _X + (_SIDE + 2); // Move 14 px right.
+            if (_X == (width + 1)) // if the snake part reaches the right edge...
+                _X = 0;            // it appears at the opposite of the map.
+            _Direction = 1;        // Set the direction to 1 (right).
         }
-
 
         /////////////
         // Move down
 
-        public void MoveDown()
+        public void MoveDown(int height)
         {
-            _Y = _Y + (_SIDE + 2);
-            _Direction = 2;
+            _Y = _Y + (_SIDE + 2); // Move 14 px down.
+            if (_Y == height - 4)  // if the snake part reaches the lower edge...
+                _Y = 0;            // it appears at the opposite of the map.
+            _Direction = 2;        // Set the direction to 2 (down).
         }
-
 
         /////////////
         // Move left
 
-        public void MoveLeft()
+        public void MoveLeft(int width)
         {
-            _X = _X - (_SIDE + 2);
-            _Direction = 3;
+            _X = _X - (_SIDE + 2);      // Move 14 px left.
+            if (_X == 0 - _SIDE - 2)    // if the snake part reaches the left edge...
+                _X = width - _SIDE - 1; // it appears at the opposite of the map.
+            _Direction = 3;             // Set the direction to 2 (left).
         }
-
 
         ////////////////
         // Get the part
 
-        public void GetPart(int direction)
+        public void UpdateSnakePart(int direction, int width, int height)
         {         
             //  If the user does nothing, direction is the same as the previous one.
             if (direction == -1)
                 _Direction = _LastDirection;
-
-            else if(direction == _Direction + 2) // Force the direction to be the same as the previous one if the user wants to move back
-            {                                    // Case Up to Down and Right to Left.
-                _Direction = _LastDirection;
-            }
-
-            else if (direction == _Direction - 2) // Force the direction to be the same as the previous one if the user wants to move back
-            {                                     // Case Down to Up and Left to Right.
-                _Direction = _LastDirection;
-            }
 
             else // Update direction and last direction.
             {
@@ -116,26 +110,12 @@ namespace Snake
             }
 
             if (_Direction == 0)
-                MoveUp();
+                MoveUp(height); // Move up.
             else if (_Direction == 1)
-                MoveRight();
+                MoveRight(width); // Move right.
             else if (_Direction == 2)
-                MoveDown();
-            else MoveLeft();  
-        }
-
-
-        ///////////////////
-        // Check Collision
-
-        public Boolean CheckCollision(int width, int height)
-        {
-            Boolean collision = false;
-
-            if ((_Y < 0) || (_X + _SIDE > width) || (_Y + 10 > height) || (_X < 0))
-                collision = true;
-
-            return collision;
+                MoveDown(height); // Move down.
+            else MoveLeft(width); // Move left. 
         }
 
         #endregion

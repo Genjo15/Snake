@@ -1,6 +1,4 @@
 ﻿using System.Windows.Forms;
-using System.Drawing;
-using System.Drawing.Text;
 
 namespace Snake
 {
@@ -40,13 +38,11 @@ namespace Snake
             this.gameBoard = new Snake.DoubleBufferPanel();
             this.fruitPictureBox = new System.Windows.Forms.PictureBox();
             this.insectPictureBox = new System.Windows.Forms.PictureBox();
-            privateFontCollection.AddFontFile("C:\\Users\\Anthony\\Documents\\Visual Studio 2010\\Projects\\Snake\\Snake\\Resources\\Krabougja.ttf");
-            //privateFontCollection.AddFontFile("\\Snake\\Resources\\Krabougja.ttf"); // Add the font file to the private collection.
-            fontFamilies = privateFontCollection.Families; // Get the array of FontFamily objects.
             this.gameBoard.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fruitPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.insectPictureBox)).BeginInit();
             this.SuspendLayout();
+
             // 
             // shapeContainer1
             // 
@@ -69,7 +65,7 @@ namespace Snake
             // scoreLabel
             // 
             this.scoreLabel.AutoSize = true;
-            this.scoreLabel.Font = new System.Drawing.Font(fontFamilies[0].Name, 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.scoreLabel.Font = new System.Drawing.Font("Kraboudja", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.scoreLabel.Location = new System.Drawing.Point(317, 509);
             this.scoreLabel.Name = "scoreLabel";
             this.scoreLabel.Size = new System.Drawing.Size(118, 38);
@@ -80,8 +76,7 @@ namespace Snake
             // exitLabel
             // 
             this.exitLabel.AutoSize = true;
-            //this.exitLabel.Font = new System.Drawing.Font("Kraboudja", 15F);
-            this.exitLabel.Font = new System.Drawing.Font(fontFamilies[0].Name, 15F);
+            this.exitLabel.Font = new System.Drawing.Font("Kraboudja", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.exitLabel.Location = new System.Drawing.Point(710, 516);
             this.exitLabel.Name = "exitLabel";
             this.exitLabel.Size = new System.Drawing.Size(66, 28);
@@ -162,8 +157,10 @@ namespace Snake
         private PictureBox insectPictureBox;
         private PictureBox fruitPictureBox;
         private DoubleBufferPanel gameBoard;
-        FontFamily[] fontFamilies;
-        PrivateFontCollection privateFontCollection = new PrivateFontCollection(); // Collection of private fonts.
+
+
+
+
 
 
     }

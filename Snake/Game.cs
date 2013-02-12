@@ -14,6 +14,8 @@ namespace Snake
     {
         /********************************************* Declaration of variables *********************************************/
 
+        #region Variables
+
         private FullSnake _FullSnake;             // The complete snake (which is a list of snake elements).
         private Fruit _Fruit;                     // A fruit.
         private Insect _Insect;                   // An insect.
@@ -24,22 +26,24 @@ namespace Snake
         private int _InsectTimerCounter;          // Counter used for the FruitTImerTick
         private Boolean _InsectIsPresent;         // Boolean which indicates if the insect is present or not.
         private Boolean _RefreshItem;             // Boolean for refreshing the item or not.
-        private Boolean _GameOver;                // Boolean to determine if the fame is over or not. 
+        private Boolean _GameOver;                // Boolean which detects if the game is over or not.
         private int _TimerInterval;               // Timer interval.
         private Menu _Menu;                       // The menu.
         private List<Panel> _SnakeGraphicalParts; // List of panel which contains Snake graphical parts.
 
-
-
-
+        #endregion
 
         /**************************************************** Constructor ****************************************************/
+
+        #region Constructor
 
         public Game()
         {
             InitializeComponent(); // Initialize components of the form (essentially the menu).
             LoadMenu(); // Load menu.
         }
+
+        #endregion
 
         /****************************************************** Methods ******************************************************/
 
@@ -57,7 +61,7 @@ namespace Snake
             _SnakeGraphicalParts = new List<Panel>();
 
             _Score = 0;               // Score is set to 0.
-            _TimerInterval = 140;     // Timer interval tick is set to 150 ms.
+            _TimerInterval = 140;     // Timer interval tick is set to 140 ms.
             _Direction = 1;           // First direction is initially set to 1 (right).
             _GameOver = false;        // _GameOver is initialized to false.
             _RefreshItem = false;     //_RefreshItem is initialized to false.
@@ -81,13 +85,13 @@ namespace Snake
 
             if (!_GameOver)
             {
-                _FullSnake.UpdateSnakeMovement(_Direction); // Update the movement of the snake.
+                _FullSnake.UpdateSnake(_Direction, this.gameBoard.Width, this.gameBoard.Height); // Update the movement of the snake.
 
                 _RefreshItem = false; // Set the boolean for the refresh of the item to false.
 
                 if (_Fruit.IsReached(_FullSnake.Get_Snake()[0]))
                 {
-                    _Fruit = new Fruit(this.gameBoard.Width, this.gameBoard.Height);  // Create a new fruit.
+                    _Fruit.MoveFruit(this.gameBoard.Width, this.gameBoard.Height, _FullSnake); // Move fruit positions.
                     _Score = _Score + _Fruit.Get_POINT(); // Increment the score.
                     if (_Timer.Interval <= 150 && _Timer.Interval >= 110)   //////
                         _Timer.Interval -= 5;                               // Increase the difficulty by decreasing the timer interval.
@@ -124,7 +128,7 @@ namespace Snake
 
             if ((_InsectTimerCounter % 8 == 0) && (_InsectIsPresent == false))
             {
-                _Insect = new Insect(this.gameBoard.Width, this.gameBoard.Height);  // Create a new fruit.
+                _Insect.MoveInsect(this.gameBoard.Width, this.gameBoard.Height, _FullSnake); // Move insect.
                 _InsectTimerCounter = 0; // Reset the counter.
                 _InsectIsPresent = true; // Set the boolean to true.
             }
@@ -143,12 +147,12 @@ namespace Snake
 
         private void LoadMenu()
         {
-            _Menu = new Menu(); // Instanciate a new menu;
-            _Menu.Location = new Point(20, 20); // Define the location of the menu.
-            this.gameBoard.Controls.Add(_Menu);  // Add it to the gameboard.
-            _Menu.MainMenu(); // Set the configuration for a game start (hide/show labels).
-            _Menu.playLabel.Click += new EventHandler(playLabel_Click);   ///// 
-            _Menu.retryLabel.Click += new EventHandler(retryLabel_Click); // Define event handlers
+            _Menu = new Menu();                                                 // Instanciate a new menu;
+            _Menu.Location = new Point(20, 20);                                 // Define the location of the menu.
+            this.gameBoard.Controls.Add(_Menu);                                 // Add it to the gameboard.
+            _Menu.MainMenu();                                                   // Set the configuration for a game start (hide/show labels).
+            _Menu.playLabel.Click += new EventHandler(playLabel_Click);         ///// 
+            _Menu.retryLabel.Click += new EventHandler(retryLabel_Click);       // Define event handlers
             _Menu.mainMenuLabel.Click += new EventHandler(mainMenuLabel_Click); // Define event handlers
         }
 
@@ -178,7 +182,6 @@ namespace Snake
 
         #endregion
 
-
         #region Render
 
         ///////////////////////////////////////
@@ -186,10 +189,10 @@ namespace Snake
 
         private void Render()
         {
-            RenderSnake();
-            if ((_FullSnake.Get_Snake().Count == 3) || (_RefreshItem))
+            RenderSnake(); // Refresh the display of the snake
+            if ((_FullSnake.Get_Snake().Count == 3) || (_RefreshItem)) // Refresh the display of the fruit (only if it has been reached or at the begin of the game).
                 RenderFruit();
-            RenderInsect();
+            RenderInsect(); // Refresh the display of the insect
         }
 
         ///////////////////////////////////////////////
@@ -197,8 +200,8 @@ namespace Snake
 
         public void RenderFruit()
         {
-            this.fruitPictureBox.Location = new System.Drawing.Point(_Fruit.Get_X(), _Fruit.Get_Y());
-            this.gameBoard.Controls.Add(this.fruitPictureBox);
+            this.fruitPictureBox.Location = new System.Drawing.Point(_Fruit.Get_X(), _Fruit.Get_Y()); // Change the location of the picture box.
+            this.gameBoard.Controls.Add(this.fruitPictureBox); // Attach the picturebox to the gameboard.
         }
 
         ///////////////////////////////////////////////
@@ -206,8 +209,8 @@ namespace Snake
 
         public void RenderInsect()
         {
-            this.insectPictureBox.Location = new System.Drawing.Point(_Insect.Get_X(), _Insect.Get_Y());
-            this.gameBoard.Controls.Add(this.insectPictureBox);
+            this.insectPictureBox.Location = new System.Drawing.Point(_Insect.Get_X(), _Insect.Get_Y()); // Change the location of the picture box.
+            this.gameBoard.Controls.Add(this.insectPictureBox); // Attach the picturebox to the gameboard.
         }
 
         //////////////////////////////////////////////
@@ -217,19 +220,18 @@ namespace Snake
         {
             for (int i = 0; i < _FullSnake.Get_SnakeSize(); i++)
             {
-                if (_SnakeGraphicalParts.Count < _FullSnake.Get_SnakeSize())
-                    _SnakeGraphicalParts.Add(new Panel());
+                if (_SnakeGraphicalParts.Count < _FullSnake.Get_SnakeSize()) // If there is not enough panel in the pool ...
+                    _SnakeGraphicalParts.Add(new Panel());                   // ...Add it one.
 
                 _SnakeGraphicalParts[i].Location = new System.Drawing.Point(_FullSnake.Get_Snake()[i].Get_X(), _FullSnake.Get_Snake()[i].Get_Y());  // Definition of the panel location.
                 _SnakeGraphicalParts[i].Size = new System.Drawing.Size(_FullSnake.Get_Snake()[i].Get_SIDE(), _FullSnake.Get_Snake()[i].Get_SIDE()); // Definition of the panel size.
-                _SnakeGraphicalParts[i].BackColor = System.Drawing.Color.Black;       // Definition of the panel color.
+                _SnakeGraphicalParts[i].BackColor = System.Drawing.Color.Black; // Definition of the panel color.
 
-                this.gameBoard.Controls.Add(_SnakeGraphicalParts[i]);
+                this.gameBoard.Controls.Add(_SnakeGraphicalParts[i]); // Attach the panel to the gameboard.
             }
         }
 
         #endregion
-
 
         #region Events Methods
 
@@ -254,7 +256,7 @@ namespace Snake
         
         private void exitLabel_Click(object sender, EventArgs e)
         {
-            Close();
+            Close(); // Exit program.
         }
 
         /////////////////////////////////////
@@ -262,7 +264,7 @@ namespace Snake
 
         private void playLabel_Click(object sender, EventArgs e)
         {
-            PlayGame();
+            PlayGame(); // Play game.
             this.insectPictureBox.Visible = true; // Show the insect.
         }
 
@@ -272,15 +274,25 @@ namespace Snake
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Up)
-                _Direction = 0; // Snake will move up.
+            {
+                if(_FullSnake.Get_Snake()[0].Get_Direction() != 2)_Direction = 0; // Snake will move up.
+            }
             else if (e.KeyCode == Keys.Right)
-                _Direction = 1; // Snake will move right.
+            {
+                if (_FullSnake.Get_Snake()[0].Get_Direction() != 3) _Direction = 1; // Snake will move right.
+            }
             else if (e.KeyCode == Keys.Down)
-                _Direction = 2; // Snake will move down.
+            {
+                if (_FullSnake.Get_Snake()[0].Get_Direction() != 0) _Direction = 2; // Snake will move down.
+            }
             else if (e.KeyCode == Keys.Left)
-                _Direction = 3; // Snake will move left.
+            {
+                if (_FullSnake.Get_Snake()[0].Get_Direction() != 1) _Direction = 3; // Snake will move left.
+            }
+
         }
 
         #endregion
+
     }
 }
