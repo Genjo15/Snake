@@ -1,4 +1,8 @@
 ﻿using System.Windows.Forms;
+using System.Runtime.InteropServices; //
+using System.Drawing.Text;            // To use for the fonts
+using System.Drawing;                 //
+
 
 namespace Snake
 {
@@ -42,6 +46,7 @@ namespace Snake
             ((System.ComponentModel.ISupportInitialize)(this.fruitPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.insectPictureBox)).BeginInit();
             this.SuspendLayout();
+            IncludeFont(); // Include font.
 
             // 
             // shapeContainer1
@@ -65,7 +70,7 @@ namespace Snake
             // scoreLabel
             // 
             this.scoreLabel.AutoSize = true;
-            this.scoreLabel.Font = new System.Drawing.Font("Kraboudja", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.scoreLabel.Font = new System.Drawing.Font(kraboudja, 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.scoreLabel.Location = new System.Drawing.Point(317, 509);
             this.scoreLabel.Name = "scoreLabel";
             this.scoreLabel.Size = new System.Drawing.Size(118, 38);
@@ -76,7 +81,7 @@ namespace Snake
             // exitLabel
             // 
             this.exitLabel.AutoSize = true;
-            this.exitLabel.Font = new System.Drawing.Font("Kraboudja", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.exitLabel.Font = new System.Drawing.Font(kraboudja, 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.exitLabel.Location = new System.Drawing.Point(710, 516);
             this.exitLabel.Name = "exitLabel";
             this.exitLabel.Size = new System.Drawing.Size(66, 28);
@@ -147,6 +152,29 @@ namespace Snake
 
         }
 
+        private void IncludeFont()
+        {
+            // Create the byte array and get its length
+            byte[] fontArray = global::Snake.Properties.Resources.Kraboudja;
+            int dataLength = global::Snake.Properties.Resources.Kraboudja.Length;
+
+            // Assign memory and copy byte[] on that memory address
+            System.IntPtr ptrData = Marshal.AllocCoTaskMem(dataLength);
+            Marshal.Copy(fontArray, 0, ptrData, dataLength);
+
+            uint cFonts = 0;
+            AddFontMemResourceEx(ptrData, (uint)fontArray.Length, System.IntPtr.Zero, ref cFonts);
+
+            PrivateFontCollection pfc = new PrivateFontCollection();
+            // Pass the font to the privatefontcollection object
+            pfc.AddMemoryFont(ptrData, dataLength);
+
+            // Free the "unsafe" memory
+            Marshal.FreeCoTaskMem(ptrData);
+
+            kraboudja = pfc.Families[0];
+        }
+
         #endregion
 
         private Microsoft.VisualBasic.PowerPacks.ShapeContainer shapeContainer1;
@@ -157,12 +185,9 @@ namespace Snake
         private PictureBox insectPictureBox;
         private PictureBox fruitPictureBox;
         private DoubleBufferPanel gameBoard;
-
-
-
-
-
-
+        [DllImport("gdi32.dll")]
+        private static extern System.IntPtr AddFontMemResourceEx(System.IntPtr pbFont, uint cbFont, System.IntPtr pdv, [In] ref uint pcFonts);
+        FontFamily kraboudja;
     }
 
     public class DoubleBufferPanel : System.Windows.Forms.Panel
@@ -178,5 +203,6 @@ namespace Snake
             this.UpdateStyles();
         }
     }
+
 }
 

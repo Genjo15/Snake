@@ -83,9 +83,9 @@ namespace Snake.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] Krabougja {
+        internal static byte[] Kraboudja {
             get {
-                object obj = ResourceManager.GetObject("Krabougja", resourceCulture);
+                object obj = ResourceManager.GetObject("Kraboudja", resourceCulture);
                 return ((byte[])(obj));
             }
         }
