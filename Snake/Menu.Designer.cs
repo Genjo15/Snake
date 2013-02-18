@@ -1,7 +1,4 @@
 ﻿using System.Windows.Forms;
-using System.Runtime.InteropServices; //
-using System.Drawing.Text;            // To use for the fonts
-using System.Drawing;                 //
 
 namespace Snake
 {
@@ -33,6 +30,7 @@ namespace Snake
         /// </summary>
         private void InitializeComponent()
         {
+            this.myFont = new Snake.PersonalFont();
             this.menuPanel = new System.Windows.Forms.Panel();
             this.mainMenuLabel = new System.Windows.Forms.Label();
             this.retryLabel = new System.Windows.Forms.Label();
@@ -41,7 +39,7 @@ namespace Snake
             this.titleLabel = new System.Windows.Forms.Label();
             this.menuPanel.SuspendLayout();
             this.SuspendLayout();
-            IncludeFont(); // Include font.
+
             // 
             // menuPanel
             // 
@@ -61,7 +59,7 @@ namespace Snake
             // mainMenuLabel
             // 
             this.mainMenuLabel.AutoSize = true;
-            this.mainMenuLabel.Font = new System.Drawing.Font(kraboudja, 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mainMenuLabel.Font = new System.Drawing.Font(myFont.getPersonalFont(), 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mainMenuLabel.Location = new System.Drawing.Point(257, 272);
             this.mainMenuLabel.Name = "mainMenuLabel";
             this.mainMenuLabel.Size = new System.Drawing.Size(211, 44);
@@ -71,7 +69,7 @@ namespace Snake
             // retryLabel
             // 
             this.retryLabel.AutoSize = true;
-            this.retryLabel.Font = new System.Drawing.Font(kraboudja, 25F);
+            this.retryLabel.Font = new System.Drawing.Font(myFont.getPersonalFont(), 25F);
             this.retryLabel.Location = new System.Drawing.Point(305, 207);
             this.retryLabel.Name = "retryLabel";
             this.retryLabel.Size = new System.Drawing.Size(111, 47);
@@ -81,7 +79,7 @@ namespace Snake
             // gameOverLabel
             // 
             this.gameOverLabel.AutoSize = true;
-            this.gameOverLabel.Font = new System.Drawing.Font(kraboudja, 52F);
+            this.gameOverLabel.Font = new System.Drawing.Font(myFont.getPersonalFont(), 52F);
             this.gameOverLabel.Location = new System.Drawing.Point(142, 97);
             this.gameOverLabel.Name = "gameOverLabel";
             this.gameOverLabel.Size = new System.Drawing.Size(451, 97);
@@ -91,7 +89,7 @@ namespace Snake
             // playLabel
             // 
             this.playLabel.AutoSize = true;
-            this.playLabel.Font = new System.Drawing.Font(kraboudja, 28F);
+            this.playLabel.Font = new System.Drawing.Font(myFont.getPersonalFont(), 28F);
             this.playLabel.Location = new System.Drawing.Point(235, 205);
             this.playLabel.Name = "playLabel";
             this.playLabel.Size = new System.Drawing.Size(267, 53);
@@ -101,7 +99,7 @@ namespace Snake
             // titleLabel
             // 
             this.titleLabel.AutoSize = true;
-            this.titleLabel.Font = new System.Drawing.Font(kraboudja, 63F);
+            this.titleLabel.Font = new System.Drawing.Font(myFont.getPersonalFont(), 63F);
             this.titleLabel.Location = new System.Drawing.Point(115, 69);
             this.titleLabel.Name = "titleLabel";
             this.titleLabel.Size = new System.Drawing.Size(515, 117);
@@ -121,29 +119,6 @@ namespace Snake
 
         }
 
-        private void IncludeFont()
-        {
-            // Create the byte array and get its length
-            byte[] fontArray = global::Snake.Properties.Resources.Kraboudja;
-            int dataLength = global::Snake.Properties.Resources.Kraboudja.Length;
-
-            // Assign memory and copy byte[] on that memory address
-            System.IntPtr ptrData = Marshal.AllocCoTaskMem(dataLength);
-            Marshal.Copy(fontArray, 0, ptrData, dataLength);
-
-            uint cFonts = 0;
-            AddFontMemResourceEx(ptrData, (uint)fontArray.Length, System.IntPtr.Zero, ref cFonts);
-
-            PrivateFontCollection pfc = new PrivateFontCollection();
-            // Pass the font to the privatefontcollection object
-            pfc.AddMemoryFont(ptrData, dataLength);
-
-            // Free the "unsafe" memory
-            Marshal.FreeCoTaskMem(ptrData);
-
-            kraboudja = pfc.Families[0];
-        }
-
         #endregion
 
         private System.Windows.Forms.Panel menuPanel;
@@ -152,8 +127,6 @@ namespace Snake
         private System.Windows.Forms.Label gameOverLabel;
         internal System.Windows.Forms.Label retryLabel;
         internal System.Windows.Forms.Label mainMenuLabel;
-        [DllImport("gdi32.dll")]
-        private static extern System.IntPtr AddFontMemResourceEx(System.IntPtr pbFont, uint cbFont, System.IntPtr pdv, [In] ref uint pcFonts);
-        FontFamily kraboudja;
+        private PersonalFont myFont;
     }
 }
