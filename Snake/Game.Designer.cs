@@ -115,8 +115,8 @@ namespace Snake
             // 
             // insectPictureBox
             // 
-            this.insectPictureBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.insectPictureBox.Image = global::Snake.Properties.Resources.BlackInvader;
+            //this.insectPictureBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.insectPictureBox.Image = global::Snake.Properties.Resources. BlackInvader;
             this.insectPictureBox.InitialImage = null;
             this.insectPictureBox.Location = new System.Drawing.Point(484, 240);
             this.insectPictureBox.Name = "insectPictureBox";

@@ -14,6 +14,7 @@ namespace Snake
         private int _Y;                // Position in Y.
         private const int _POINT = 25; // The points earned when item reached.
         private const int _SIDE = 26;  // Size of the panel side.
+        private Random randomNumber;
 
         #endregion
 
@@ -23,13 +24,14 @@ namespace Snake
 
         public Insect(int width, int height)
         {
-            Random randomNumber = new Random();   // Initialize the generator of random.
+            randomNumber = new Random();   // Initialize the generator of random.
             _X = (_SIDE + 2) * (randomNumber.Next(width - _SIDE) / (_SIDE + 2));  // Set _X thanks to a generated number.
             _Y = (_SIDE + 2) * (randomNumber.Next(height - _SIDE) / (_SIDE + 2)); // Set _Y thanks to another generated number.
         }
 
         public Insect(int width, int height, int x, int y)
         {
+            randomNumber = new Random();   // Initialize the generator of random.
             _X = x;
             _Y = y;
         }
@@ -57,8 +59,7 @@ namespace Snake
         // Move insect
 
         public void MoveInsect(int width, int height, FullSnake fullSnake)
-        {
-            Random randomNumber = new Random();   // Initialize the generator of random.
+        {           
             _X = (_SIDE + 2) * (randomNumber.Next(width - _SIDE) / (_SIDE + 2));  // Set _X thanks to a generated number.
             _Y = (_SIDE + 2) * (randomNumber.Next(height - _SIDE) / (_SIDE + 2)); // Set _Y thanks to another generated number.
 
