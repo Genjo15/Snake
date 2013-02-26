@@ -23,30 +23,30 @@ namespace Snake
 
         internal void MainMenu()
         {
-            this.playLabel.Visible = true;      // Show playLabel.
-            this.titleLabel.Visible = true;     // Show titleLabel.
-            this.gameOverLabel.Visible = false; // Hide gameOverLabel.
-            this.retryLabel.Visible = false;    // Hide retryLabel.
-            this.mainMenuLabel.Visible = false; // Hide mainMenuLabel.
+            this.playPictureBox.Visible = true;      // Show playPictureBox.
+            this.titlePictureBox.Visible = true;     // Show titlePictureBox.
+            this.gameOverPictureBox.Visible = false; // Hide gameOverPictureBox.
+            this.retryPictureBox.Visible = false;    // Hide retryPictureBox.
+            this.mainMenuPictureBox.Visible = false; // Hide mainMenuPictureBox.
         }
 
         internal void InGame()
         {
-            this.playLabel.Visible = false;     // Hide playLabel.
-            this.titleLabel.Visible = false;    // Hide titleLabel.
-            this.gameOverLabel.Visible = false; // Hide gameOverLabel.
-            this.retryLabel.Visible = false;    // Hide retryLabel.
-            this.mainMenuLabel.Visible = false; // Hide mainMenuLabel.
+            this.playPictureBox.Visible = false;     // Hide playPictureBox.
+            this.titlePictureBox.Visible = false;    // Hide titlePictureBox.
+            this.gameOverPictureBox.Visible = false; // Hide gameOverPictureBox.
+            this.retryPictureBox.Visible = false;    // Hide retryPictureBox.
+            this.mainMenuPictureBox.Visible = false; // Hide mainMenuPictureBox.
             this.Visible = false;
         }
 
         internal void GameOver()
         {
-            this.playLabel.Visible = false;    // Hide playLabel.
-            this.titleLabel.Visible = false;   // Hide titleLabel.
-            this.gameOverLabel.Visible = true; // Show gameOverLabel.
-            this.retryLabel.Visible = true;    // Show retryLabel.
-            this.mainMenuLabel.Visible = true; // Show mainMenuLabel.
+            this.playPictureBox.Visible = false;    // Hide playPictureBox.
+            this.titlePictureBox.Visible = false;   // Hide titlePictureBox.
+            this.gameOverPictureBox.Visible = true; // Show gameOverPictureBox.
+            this.retryPictureBox.Visible = true;    // Show retryPictureBox.
+            this.mainMenuPictureBox.Visible = true; // Show mainMenuPictureBox.
         }
 
         #endregion

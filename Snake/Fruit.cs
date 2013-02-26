@@ -14,7 +14,8 @@ namespace Snake
         private int _X;               // Position in X.
         private int _Y;               // Position in Y.
         private const int _POINT = 5; // The points earned when item reached.
-        private const int _SIDE = 12; // Size of the panel side.
+        private int _SIDE;            // Size of the panel side.
+        private Random _RandomNumber; // Random number.
 
         #endregion
 
@@ -24,9 +25,10 @@ namespace Snake
 
         public Fruit(int width, int height)
         {
-            Random randomNumber = new Random();   // Initialize the generator of random.
-            _X = (_SIDE + 2) * (randomNumber.Next(width - _SIDE) / (_SIDE + 2));  // Set _X thanks to a generated number.
-            _Y = (_SIDE + 2) * (randomNumber.Next(height - _SIDE) / (_SIDE + 2)); // Set _Y thanks to another generated number.
+            _SIDE = width / 54 - 2; // Initialize dynamically the side of the fruit.
+            Random _RandomNumber = new Random();   // Initialize the generator of random.
+            _X = (_SIDE + 2) * (_RandomNumber.Next(width - _SIDE) / (_SIDE + 2));  // Set _X thanks to a generated number.
+            _Y = (_SIDE + 2) * (_RandomNumber.Next(height - _SIDE) / (_SIDE + 2)); // Set _Y thanks to another generated number.
         }
 
         #endregion
@@ -53,9 +55,9 @@ namespace Snake
 
         public void MoveFruit(int width, int height, FullSnake fullSnake)
         {
-            Random randomNumber = new Random();   // Initialize the generator of random.
-            _X = (_SIDE + 2) * (randomNumber.Next(width - _SIDE) / (_SIDE + 2));  // Set _X thanks to a generated number.
-            _Y = (_SIDE + 2) * (randomNumber.Next(height - _SIDE) / (_SIDE + 2)); // Set _Y thanks to another generated number.
+            _RandomNumber = new Random(); // Générate a new random number.
+            _X = (_SIDE + 2) * (_RandomNumber.Next(width - _SIDE) / (_SIDE + 2));  // Set _X thanks to a generated number.
+            _Y = (_SIDE + 2) * (_RandomNumber.Next(height - _SIDE) / (_SIDE + 2)); // Set _Y thanks to another generated number.
 
             for (int i = 0; i < fullSnake.Get_SnakeSize(); i++) // Check each snake part.
             {

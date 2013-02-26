@@ -142,6 +142,33 @@
   <ItemGroup>
     <None Include="Resources\Fruit.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Border.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Title.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\GameOver.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Retry.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MainMenu.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Exit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\VerticalBorder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\HorizontalBorder.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

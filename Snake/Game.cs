@@ -29,7 +29,8 @@ namespace Snake
         private Boolean _GameOver;                // Boolean which detects if the game is over or not.
         private int _TimerInterval;               // Timer interval.
         private Menu _Menu;                       // The menu.
-        private List<Panel> _SnakeGraphicalParts; // List of panel which contains Snake graphical parts.
+        private List<RoundedPanel> _SnakeGraphicalParts; // List of panel which contains Snake graphical parts.
+        private PersonalFont _MyFont;              // The special font.
 
         #endregion
 
@@ -40,6 +41,7 @@ namespace Snake
         public Game()
         {
             InitializeComponent(); // Initialize components of the form (essentially the menu).
+            InitializeFont(); // Initialize font.
             LoadMenu(); // Load menu.
         }
 
@@ -54,11 +56,11 @@ namespace Snake
 
         public void InitializeGame()
         {
-            _FullSnake = new FullSnake(); // New FullSnake.
+            _FullSnake = new FullSnake(this.gameBoard.Width); // New FullSnake.
             _Fruit = new Fruit(this.gameBoard.Width, this.gameBoard.Height); // New fruit.
             _Insect = new Insect(this.gameBoard.Width, this.gameBoard.Height,-666, -666); // New insect.
 
-            _SnakeGraphicalParts = new List<Panel>();
+            _SnakeGraphicalParts = new List<RoundedPanel>();
 
             _Score = 0;               // Score is set to 0.
             _TimerInterval = 140;     // Timer interval tick is set to 140 ms.
@@ -85,7 +87,7 @@ namespace Snake
 
             if (!_GameOver)
             {
-                _FullSnake.UpdateSnake(_Direction, this.gameBoard.Width, this.gameBoard.Height); // Update the movement of the snake.
+                _FullSnake.UpdateSnake(_Direction, this.gameBoard.Width); // Update the movement of the snake.
 
                 _RefreshItem = false; // Set the boolean for the refresh of the item to false.
 
@@ -97,7 +99,7 @@ namespace Snake
                         _Timer.Interval -= 5;                               // Increase the difficulty by decreasing the timer interval.
                     else if (_Timer.Interval < 110 && _Timer.Interval > 70) //
                         _Timer.Interval -= 10;                              //
-                    _FullSnake.AddSnakePart(); // Add a Snake part.
+                    _FullSnake.AddSnakePart(this.gameBoard.Width); // Add a Snake part.
                     _RefreshItem = true; // Set the boolean for the refresh of the item to true.
                 }
 
@@ -151,9 +153,9 @@ namespace Snake
             _Menu.Location = new Point(20, 20);                                 // Define the location of the menu.
             this.gameBoard.Controls.Add(_Menu);                                 // Add it to the gameboard.
             _Menu.MainMenu();                                                   // Set the configuration for a game start (hide/show labels).
-            _Menu.playLabel.Click += new EventHandler(playLabel_Click);         ///// 
-            _Menu.retryLabel.Click += new EventHandler(retryLabel_Click);       // Define event handlers
-            _Menu.mainMenuLabel.Click += new EventHandler(mainMenuLabel_Click); // Define event handlers
+            _Menu.playPictureBox.Click += new EventHandler(playPictureBox_Click);         ///// 
+            _Menu.retryPictureBox.Click += new EventHandler(retryPictureBox_Click);       // Define event handlers
+            _Menu.mainMenuPictureBox.Click += new EventHandler(mainMenuPictureBox_Click); // Define event handlers
         }
 
         ////////////////////////
@@ -221,7 +223,8 @@ namespace Snake
             for (int i = 0; i < _FullSnake.Get_SnakeSize(); i++)
             {
                 if (_SnakeGraphicalParts.Count < _FullSnake.Get_SnakeSize()) // If there is not enough panel in the pool ...
-                    _SnakeGraphicalParts.Add(new Panel());                   // ...Add it one.
+                    //_SnakeGraphicalParts.Add(new Panel());                   // ...Add it one.
+                    _SnakeGraphicalParts.Add(new RoundedPanel());                   // ...Add it one.
 
                 _SnakeGraphicalParts[i].Location = new System.Drawing.Point(_FullSnake.Get_Snake()[i].Get_X(), _FullSnake.Get_Snake()[i].Get_Y());  // Definition of the panel location.
                 _SnakeGraphicalParts[i].Size = new System.Drawing.Size(_FullSnake.Get_Snake()[i].Get_SIDE(), _FullSnake.Get_Snake()[i].Get_SIDE()); // Definition of the panel size.
@@ -231,38 +234,50 @@ namespace Snake
             }
         }
 
+        /////////////////////////////
+        // Method to initialize font
+
+        public void InitializeFont()
+        {
+            this._MyFont = new PersonalFont(); // Create new font.
+            this.scoreLabel.Font = new System.Drawing.Font(_MyFont.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+        }
+
         #endregion
 
         #region Events Methods
 
-        /////////////////////////////////////
-        // Event for clicking the exit label
+        /////////////////////////////////////////
+        // Event for clicking the retryPictureBox
 
-        void retryLabel_Click(object sender, EventArgs e)
+        void retryPictureBox_Click(object sender, EventArgs e)
         {
             PlayGame(); // Play game.
         }
 
-        /////////////////////////////////////
-        // Event for clicking the exit label
+        /////////////////////////////////////////////
+        // Event for clicking the mainMenuPictureBox
 
-        void mainMenuLabel_Click(object sender, EventArgs e)
+        void mainMenuPictureBox_Click(object sender, EventArgs e)
         {
             this.gameBoard.Controls.Clear();    // Clear the panel.
             this.gameBoard.Controls.Add(_Menu); // Attach the menu to the gameboard.
             this.scoreLabel.Visible = false;    // Initialize interface: Essentially show the score label. 
             _Menu.MainMenu();                   // Set the configuration for the menu (hide/show labels).
         }
-        
-        private void exitLabel_Click(object sender, EventArgs e)
+
+        /////////////////////////////////////////
+        // Event for clicking the exitPictureBox
+
+        private void exitPictureBox_Click_1(object sender, EventArgs e)
         {
-            Close(); // Exit program.
+            Close(); // Exit program
         }
 
-        /////////////////////////////////////
-        // Event for clicking the play label
+        //////////////////////////////////////////
+        // Event for clicking the playPictureBox
 
-        private void playLabel_Click(object sender, EventArgs e)
+        private void playPictureBox_Click(object sender, EventArgs e)
         {
             PlayGame(); // Play game.
             this.insectPictureBox.Visible = true; // Show the insect.
@@ -293,6 +308,5 @@ namespace Snake
         }
 
         #endregion
-
     }
 }

@@ -17,7 +17,7 @@ namespace Snake
         private int _Y;               // Position in Y.
         private int _Direction;       // Direction.
         private int _LastDirection;   // Last direction.
-        private const int _SIDE = 12; // Size of the panel side.
+        private int _SIDE; // Size of the panel side.
 
         #endregion
 
@@ -25,8 +25,9 @@ namespace Snake
 
         #region Constructors
 
-        public SnakePart()
+        public SnakePart(int width)
         {
+            _SIDE = width / 54 - 2;
             _IsHead = true;
             _X = (_SIDE + 2) * 15;            // Position in X set to 210 (must be a multiple of _SIDE + 2 to be in synchronisation with items).
             _Y = (_SIDE + 2) * 15;            // Position in Y set to 210 (must be a multiple of _SIDE + 2 to be in synchronisation with items).
@@ -35,8 +36,9 @@ namespace Snake
             
         }
 
-        public SnakePart(int x, int y, int direction)
+        public SnakePart(int x, int y, int direction, int width)
         {
+            _SIDE = width / 54 - 2;
             _IsHead = false;
             _X = x;                           // Position in X set to 250.
             _Y = y;                           // Position in Y set to 250.
@@ -53,21 +55,22 @@ namespace Snake
         ///////////
         // Move up
 
-        public void MoveUp(int height)
+        public void MoveUp()
         {
             _Y = _Y - (_SIDE + 2);       // Move 14 px up.
             if (_Y == (0 - _SIDE - 2))   // if the snake part reaches the top edge...
-                _Y = height - _SIDE - 6; // it appears at the opposite of the map.
+                _Y = (33 * (_SIDE + 2)); // it appears at the opposite of the map.
             _Direction = 0;              // Set the direction to 0 (up).
         }
 
         //////////////
         // Move right
 
-        public void MoveRight(int width)
+        public void MoveRight()
         {
             _X = _X + (_SIDE + 2); // Move 14 px right.
-            if (_X == (width + 1)) // if the snake part reaches the right edge...
+            //if (_X == (width + 1)) // if the snake part reaches the right edge...
+            if (_X == (54*(_SIDE+2)))
                 _X = 0;            // it appears at the opposite of the map.
             _Direction = 1;        // Set the direction to 1 (right).
         }
@@ -75,10 +78,10 @@ namespace Snake
         /////////////
         // Move down
 
-        public void MoveDown(int height)
+        public void MoveDown()
         {
             _Y = _Y + (_SIDE + 2); // Move 14 px down.
-            if (_Y == height - 4)  // if the snake part reaches the lower edge...
+            if (_Y == (34 * (_SIDE + 2)))  // if the snake part reaches the lower edge...
                 _Y = 0;            // it appears at the opposite of the map.
             _Direction = 2;        // Set the direction to 2 (down).
         }
@@ -86,18 +89,18 @@ namespace Snake
         /////////////
         // Move left
 
-        public void MoveLeft(int width)
+        public void MoveLeft()
         {
             _X = _X - (_SIDE + 2);      // Move 14 px left.
             if (_X == 0 - _SIDE - 2)    // if the snake part reaches the left edge...
-                _X = width - _SIDE - 1; // it appears at the opposite of the map.
+                _X = 53 * (_SIDE + 2); // it appears at the opposite of the map.
             _Direction = 3;             // Set the direction to 2 (left).
         }
 
         ////////////////
         // Get the part
 
-        public void UpdateSnakePart(int direction, int width, int height)
+        public void UpdateSnakePart(int direction)
         {         
             //  If the user does nothing, direction is the same as the previous one.
             if (direction == -1)
@@ -110,12 +113,12 @@ namespace Snake
             }
 
             if (_Direction == 0)
-                MoveUp(height); // Move up.
+                MoveUp(); // Move up.
             else if (_Direction == 1)
-                MoveRight(width); // Move right.
+                MoveRight(); // Move right.
             else if (_Direction == 2)
-                MoveDown(height); // Move down.
-            else MoveLeft(width); // Move left. 
+                MoveDown(); // Move down.
+            else MoveLeft(); // Move left. 
         }
 
         #endregion

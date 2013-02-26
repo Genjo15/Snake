@@ -20,12 +20,12 @@ namespace Snake
 
         #region Constructor
 
-        public FullSnake()
+        public FullSnake(int width)
         {
             _Snake = new List<SnakePart>(); // Instanciate the list of snake parts.
-            _Snake.Add(new SnakePart());    // Add one part (the first one) of the snake to the list.
-            AddSnakePart();                 // Then add two others parts (the game start with a snake composed of three parts).
-            AddSnakePart();                 // 
+            _Snake.Add(new SnakePart(width));    // Add one part (the first one) of the snake to the list.
+            AddSnakePart(width);                 // Then add two others parts (the game start with a snake composed of three parts).
+            AddSnakePart(width);                 // 
         }
 
         #endregion
@@ -37,7 +37,7 @@ namespace Snake
         ///////////////////////////////////////
         // Method which update snake movement
 
-        public void UpdateSnake(int direction, int width, int height)
+        public void UpdateSnake(int direction, int width)
         {
             int i = 0;
 
@@ -46,14 +46,14 @@ namespace Snake
                 // If the element of the snake is the first one, move it by the direction defined by the event KeyDown.
                 if (element.Get_IsHead() == true)
                 {
-                    element.UpdateSnakePart(direction, width, height);
+                    element.UpdateSnakePart(direction);
                     i++;
                 }
 
                 // Else, if the element is not the head of the snake, move it by the last direction of the previous element.
                 else if (element.Get_IsHead() == false)
                 {
-                    element.UpdateSnakePart(_Snake[i - 1].Get_LastDirection(), width, height);
+                    element.UpdateSnakePart(_Snake[i - 1].Get_LastDirection());
                     i++;
                 }
             }
@@ -62,18 +62,18 @@ namespace Snake
         /////////////////////////////////////////////
         // Method which add a part to the full snake
 
-        public void AddSnakePart()
+        public void AddSnakePart(int width)
         {
             int lastElementIndex = _Snake.Count - 1; // Compute the last element of the snake.
 
             if (_Snake[lastElementIndex].Get_Direction() == 0) // If the last element moves up...
-                _Snake.Add(new SnakePart(_Snake[lastElementIndex].Get_X(), _Snake[lastElementIndex].Get_Y() + (_Snake[lastElementIndex].Get_SIDE() + 2), 0)); // ...then add a part just down on it.
+                _Snake.Add(new SnakePart(_Snake[lastElementIndex].Get_X(), _Snake[lastElementIndex].Get_Y() + (_Snake[lastElementIndex].Get_SIDE() + 2), 0, width)); // ...then add a part just down on it.
             if (_Snake[lastElementIndex].Get_Direction() == 1) // If the last element moves right...
-                _Snake.Add(new SnakePart(_Snake[lastElementIndex].Get_X() - (_Snake[lastElementIndex].Get_SIDE() + 2), _Snake[lastElementIndex].Get_Y(), 1)); // ...then add a part just left on it.
+                _Snake.Add(new SnakePart(_Snake[lastElementIndex].Get_X() - (_Snake[lastElementIndex].Get_SIDE() + 2), _Snake[lastElementIndex].Get_Y(), 1, width)); // ...then add a part just left on it.
             if (_Snake[lastElementIndex].Get_Direction() == 2) // If the last element moves down...
-                _Snake.Add(new SnakePart(_Snake[lastElementIndex].Get_X(), _Snake[lastElementIndex].Get_Y() - (_Snake[lastElementIndex].Get_SIDE() + 2), 2)); // ...then add a part just up on it.
+                _Snake.Add(new SnakePart(_Snake[lastElementIndex].Get_X(), _Snake[lastElementIndex].Get_Y() - (_Snake[lastElementIndex].Get_SIDE() + 2), 2, width)); // ...then add a part just up on it.
             if (_Snake[lastElementIndex].Get_Direction() == 3) // If the last element moves left...
-                _Snake.Add(new SnakePart(_Snake[lastElementIndex].Get_X() + (_Snake[lastElementIndex].Get_SIDE() + 2), _Snake[lastElementIndex].Get_Y(), 3)); // ...then add a part just right on it.
+                _Snake.Add(new SnakePart(_Snake[lastElementIndex].Get_X() + (_Snake[lastElementIndex].Get_SIDE() + 2), _Snake[lastElementIndex].Get_Y(), 3, width)); // ...then add a part just right on it.
         }
 
         //////////////////////////////////////////////

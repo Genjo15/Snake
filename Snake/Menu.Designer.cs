@@ -30,91 +30,101 @@ namespace Snake
         /// </summary>
         private void InitializeComponent()
         {
-            this.myFont = new Snake.PersonalFont();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Menu));
             this.menuPanel = new System.Windows.Forms.Panel();
-            this.mainMenuLabel = new System.Windows.Forms.Label();
-            this.retryLabel = new System.Windows.Forms.Label();
-            this.gameOverLabel = new System.Windows.Forms.Label();
-            this.playLabel = new System.Windows.Forms.Label();
-            this.titleLabel = new System.Windows.Forms.Label();
+            this.mainMenuPictureBox = new System.Windows.Forms.PictureBox();
+            this.retryPictureBox = new System.Windows.Forms.PictureBox();
+            this.gameOverPictureBox = new System.Windows.Forms.PictureBox();
+            this.playPictureBox = new System.Windows.Forms.PictureBox();
+            this.titlePictureBox = new System.Windows.Forms.PictureBox();
             this.menuPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.mainMenuPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.retryPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gameOverPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.playPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.titlePictureBox)).BeginInit();
             this.SuspendLayout();
-
             // 
             // menuPanel
             // 
             this.menuPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.menuPanel.Controls.Add(this.mainMenuLabel);
-            this.menuPanel.Controls.Add(this.retryLabel);
-            this.menuPanel.Controls.Add(this.gameOverLabel);
-            this.menuPanel.Controls.Add(this.playLabel);
-            this.menuPanel.Controls.Add(this.titleLabel);
-            this.menuPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.menuPanel.Controls.Add(this.mainMenuPictureBox);
+            this.menuPanel.Controls.Add(this.retryPictureBox);
+            this.menuPanel.Controls.Add(this.gameOverPictureBox);
+            this.menuPanel.Controls.Add(this.playPictureBox);
+            this.menuPanel.Controls.Add(this.titlePictureBox);
             this.menuPanel.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.menuPanel.Location = new System.Drawing.Point(0, 0);
+            this.menuPanel.Margin = new System.Windows.Forms.Padding(2);
             this.menuPanel.Name = "menuPanel";
-            this.menuPanel.Size = new System.Drawing.Size(755, 480);
+            this.menuPanel.Size = new System.Drawing.Size(756, 476);
             this.menuPanel.TabIndex = 0;
             // 
-            // mainMenuLabel
+            // mainMenuPictureBox
             // 
-            this.mainMenuLabel.AutoSize = true;
-            this.mainMenuLabel.Font = new System.Drawing.Font(myFont.getPersonalFont(), 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.mainMenuLabel.Location = new System.Drawing.Point(257, 272);
-            this.mainMenuLabel.Name = "mainMenuLabel";
-            this.mainMenuLabel.Size = new System.Drawing.Size(211, 44);
-            this.mainMenuLabel.TabIndex = 10;
-            this.mainMenuLabel.Text = "Main Menu";
+            this.mainMenuPictureBox.Image = global::Snake.Properties.Resources.MainMenu;
+            this.mainMenuPictureBox.Location = new System.Drawing.Point(272, 240);
+            this.mainMenuPictureBox.Name = "mainMenuPictureBox";
+            this.mainMenuPictureBox.Size = new System.Drawing.Size(189, 54);
+            this.mainMenuPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.mainMenuPictureBox.TabIndex = 15;
+            this.mainMenuPictureBox.TabStop = false;
             // 
-            // retryLabel
+            // retryPictureBox
             // 
-            this.retryLabel.AutoSize = true;
-            this.retryLabel.Font = new System.Drawing.Font(myFont.getPersonalFont(), 25F);
-            this.retryLabel.Location = new System.Drawing.Point(305, 207);
-            this.retryLabel.Name = "retryLabel";
-            this.retryLabel.Size = new System.Drawing.Size(111, 47);
-            this.retryLabel.TabIndex = 9;
-            this.retryLabel.Text = "Retry";
+            this.retryPictureBox.Image = ((System.Drawing.Image)(resources.GetObject("retryPictureBox.Image")));
+            this.retryPictureBox.Location = new System.Drawing.Point(327, 187);
+            this.retryPictureBox.Name = "retryPictureBox";
+            this.retryPictureBox.Size = new System.Drawing.Size(86, 54);
+            this.retryPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.retryPictureBox.TabIndex = 14;
+            this.retryPictureBox.TabStop = false;
             // 
-            // gameOverLabel
+            // gameOverPictureBox
             // 
-            this.gameOverLabel.AutoSize = true;
-            this.gameOverLabel.Font = new System.Drawing.Font(myFont.getPersonalFont(), 52F);
-            this.gameOverLabel.Location = new System.Drawing.Point(142, 97);
-            this.gameOverLabel.Name = "gameOverLabel";
-            this.gameOverLabel.Size = new System.Drawing.Size(451, 97);
-            this.gameOverLabel.TabIndex = 8;
-            this.gameOverLabel.Text = "Game Over";
+            this.gameOverPictureBox.Image = global::Snake.Properties.Resources.GameOver;
+            this.gameOverPictureBox.Location = new System.Drawing.Point(195, 82);
+            this.gameOverPictureBox.Name = "gameOverPictureBox";
+            this.gameOverPictureBox.Size = new System.Drawing.Size(343, 99);
+            this.gameOverPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.gameOverPictureBox.TabIndex = 13;
+            this.gameOverPictureBox.TabStop = false;
             // 
-            // playLabel
+            // playPictureBox
             // 
-            this.playLabel.AutoSize = true;
-            this.playLabel.Font = new System.Drawing.Font(myFont.getPersonalFont(), 28F);
-            this.playLabel.Location = new System.Drawing.Point(235, 205);
-            this.playLabel.Name = "playLabel";
-            this.playLabel.Size = new System.Drawing.Size(267, 53);
-            this.playLabel.TabIndex = 7;
-            this.playLabel.Text = "Single Player";
+            this.playPictureBox.Image = global::Snake.Properties.Resources.Play;
+            this.playPictureBox.Location = new System.Drawing.Point(318, 181);
+            this.playPictureBox.Name = "playPictureBox";
+            this.playPictureBox.Size = new System.Drawing.Size(89, 72);
+            this.playPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.playPictureBox.TabIndex = 12;
+            this.playPictureBox.TabStop = false;
             // 
-            // titleLabel
+            // titlePictureBox
             // 
-            this.titleLabel.AutoSize = true;
-            this.titleLabel.Font = new System.Drawing.Font(myFont.getPersonalFont(), 63F);
-            this.titleLabel.Location = new System.Drawing.Point(115, 69);
-            this.titleLabel.Name = "titleLabel";
-            this.titleLabel.Size = new System.Drawing.Size(515, 117);
-            this.titleLabel.TabIndex = 6;
-            this.titleLabel.Text = "- SNAKE -";
+            this.titlePictureBox.Image = ((System.Drawing.Image)(resources.GetObject("titlePictureBox.Image")));
+            this.titlePictureBox.Location = new System.Drawing.Point(137, 64);
+            this.titlePictureBox.Name = "titlePictureBox";
+            this.titlePictureBox.Size = new System.Drawing.Size(459, 125);
+            this.titlePictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.titlePictureBox.TabIndex = 11;
+            this.titlePictureBox.TabStop = false;
             // 
             // Menu
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
             this.Controls.Add(this.menuPanel);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Menu";
-            this.Size = new System.Drawing.Size(755, 480);
+            this.Size = new System.Drawing.Size(758, 478);
             this.menuPanel.ResumeLayout(false);
-            this.menuPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.mainMenuPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.retryPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gameOverPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.playPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.titlePictureBox)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -122,11 +132,10 @@ namespace Snake
         #endregion
 
         private System.Windows.Forms.Panel menuPanel;
-        private System.Windows.Forms.Label titleLabel;
-        internal System.Windows.Forms.Label playLabel;
-        private System.Windows.Forms.Label gameOverLabel;
-        internal System.Windows.Forms.Label retryLabel;
-        internal System.Windows.Forms.Label mainMenuLabel;
-        private PersonalFont myFont;
+        internal PictureBox titlePictureBox;
+        internal PictureBox playPictureBox;
+        private PictureBox gameOverPictureBox;
+        internal PictureBox retryPictureBox;
+        internal PictureBox mainMenuPictureBox;
     }
 }
