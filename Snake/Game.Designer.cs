@@ -3,7 +3,6 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Windows.Forms;
 
 namespace Snake
 {
@@ -41,19 +40,17 @@ namespace Snake
             this.topBorderPictureBox = new System.Windows.Forms.PictureBox();
             this.leftBorderPictureBox = new System.Windows.Forms.PictureBox();
             this.exitPictureBox = new System.Windows.Forms.PictureBox();
-            this.gameBoard = new Snake.DoubleBufferPanel();
-            this.fruitPictureBox = new System.Windows.Forms.PictureBox();
-            this.insectPictureBox = new System.Windows.Forms.PictureBox();
             this.bottomBorderPictureBox = new System.Windows.Forms.PictureBox();
             this.rightBorderPictureBox = new System.Windows.Forms.PictureBox();
+            this.gameBoardPictureBox = new System.Windows.Forms.PictureBox();
+            this.miniGameBoardPictureBox = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.topBorderPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.leftBorderPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.exitPictureBox)).BeginInit();
-            this.gameBoard.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.fruitPictureBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.insectPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bottomBorderPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rightBorderPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gameBoardPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.miniGameBoardPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // scoreLabel
@@ -107,52 +104,14 @@ namespace Snake
             this.exitPictureBox.TabStop = false;
             this.exitPictureBox.Click += new System.EventHandler(this.exitPictureBox_Click_1);
             // 
-            // gameBoard
-            // 
-            this.gameBoard.BackColor = System.Drawing.Color.Transparent;
-            this.gameBoard.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.gameBoard.Controls.Add(this.fruitPictureBox);
-            this.gameBoard.Controls.Add(this.insectPictureBox);
-            this.gameBoard.Location = new System.Drawing.Point(14, 15);
-            this.gameBoard.Margin = new System.Windows.Forms.Padding(2);
-            this.gameBoard.Name = "gameBoard";
-            this.gameBoard.Size = new System.Drawing.Size(756, 476);
-            this.gameBoard.TabIndex = 8;
-            // 
-            // fruitPictureBox
-            // 
-            this.fruitPictureBox.Image = global::Snake.Properties.Resources.Fruit;
-            this.fruitPictureBox.Location = new System.Drawing.Point(-533, -533);
-            this.fruitPictureBox.Margin = new System.Windows.Forms.Padding(2);
-            this.fruitPictureBox.Name = "fruitPictureBox";
-            this.fruitPictureBox.Size = new System.Drawing.Size(12, 12);
-            this.fruitPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.fruitPictureBox.TabIndex = 1;
-            this.fruitPictureBox.TabStop = false;
-            // 
-            // insectPictureBox
-            // 
-            this.insectPictureBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.insectPictureBox.Image = global::Snake.Properties.Resources.Insect;
-            this.insectPictureBox.InitialImage = null;
-            this.insectPictureBox.Location = new System.Drawing.Point(387, 192);
-            this.insectPictureBox.Margin = new System.Windows.Forms.Padding(2);
-            this.insectPictureBox.Name = "insectPictureBox";
-            this.insectPictureBox.Size = new System.Drawing.Size(26, 26);
-            this.insectPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.insectPictureBox.TabIndex = 0;
-            this.insectPictureBox.TabStop = false;
-            this.insectPictureBox.Visible = false;
-            // 
             // bottomBorderPictureBox
             // 
-            this.bottomBorderPictureBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.bottomBorderPictureBox.Image = global::Snake.Properties.Resources.HorizontalBorder;
             this.bottomBorderPictureBox.Location = new System.Drawing.Point(11, 491);
             this.bottomBorderPictureBox.Name = "bottomBorderPictureBox";
             this.bottomBorderPictureBox.Size = new System.Drawing.Size(762, 3);
             this.bottomBorderPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.bottomBorderPictureBox.TabIndex = 14;
+            this.bottomBorderPictureBox.TabIndex = 13;
             this.bottomBorderPictureBox.TabStop = false;
             // 
             // rightBorderPictureBox
@@ -165,35 +124,54 @@ namespace Snake
             this.rightBorderPictureBox.TabIndex = 12;
             this.rightBorderPictureBox.TabStop = false;
             // 
+            // gameBoardPictureBox
+            // 
+            this.gameBoardPictureBox.BackColor = System.Drawing.Color.Transparent;
+            this.gameBoardPictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.gameBoardPictureBox.Location = new System.Drawing.Point(14, 15);
+            this.gameBoardPictureBox.Margin = new System.Windows.Forms.Padding(2);
+            this.gameBoardPictureBox.Name = "gameBoardPictureBox";
+            this.gameBoardPictureBox.Size = new System.Drawing.Size(756, 476);
+            this.gameBoardPictureBox.TabIndex = 8;
+            this.gameBoardPictureBox.TabStop = false;
+            // 
+            // miniGameBoardPictureBox
+            // 
+            this.miniGameBoardPictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.miniGameBoardPictureBox.Location = new System.Drawing.Point(790, 253);
+            this.miniGameBoardPictureBox.Name = "miniGameBoardPictureBox";
+            this.miniGameBoardPictureBox.Size = new System.Drawing.Size(378, 238);
+            this.miniGameBoardPictureBox.TabIndex = 16;
+            this.miniGameBoardPictureBox.TabStop = false;
+            // 
             // Game
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.ClientSize = new System.Drawing.Size(784, 531);
+            this.Controls.Add(this.miniGameBoardPictureBox);
             this.Controls.Add(this.bottomBorderPictureBox);
             this.Controls.Add(this.topBorderPictureBox);
             this.Controls.Add(this.rightBorderPictureBox);
             this.Controls.Add(this.leftBorderPictureBox);
             this.Controls.Add(this.exitPictureBox);
             this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.gameBoard);
+            this.Controls.Add(this.gameBoardPictureBox);
             this.Controls.Add(this.scoreLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(2);
-            this.MaximizeBox = false;
             this.Name = "Game";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Tag = "10";
             this.Text = "Snake";
             ((System.ComponentModel.ISupportInitialize)(this.topBorderPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.leftBorderPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.exitPictureBox)).EndInit();
-            this.gameBoard.ResumeLayout(false);
-            this.gameBoard.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.fruitPictureBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.insectPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bottomBorderPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rightBorderPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gameBoardPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.miniGameBoardPictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -203,42 +181,13 @@ namespace Snake
 
         private System.Windows.Forms.Label scoreLabel;
         private System.Windows.Forms.TextBox textBox1;
-        private PictureBox insectPictureBox;
-        private PictureBox fruitPictureBox;
-        private DoubleBufferPanel gameBoard;
+        private PictureBox gameBoardPictureBox;
         private PictureBox exitPictureBox;
         private PictureBox leftBorderPictureBox;
         private PictureBox topBorderPictureBox;
         private PictureBox bottomBorderPictureBox;
         private PictureBox rightBorderPictureBox;
+        private PictureBox miniGameBoardPictureBox;
     }
-
-    public class DoubleBufferPanel : System.Windows.Forms.Panel
-    {
-        public DoubleBufferPanel()
-        {
-            // Set the value of the double-buffering style bits to true.
-            this.SetStyle(ControlStyles.DoubleBuffer |
-            ControlStyles.UserPaint |
-            ControlStyles.AllPaintingInWmPaint,
-            true);
-
-            this.UpdateStyles();
-        }
-    }
-
-    public class RoundedPanel : System.Windows.Forms.Panel
-    {
-        protected override void OnResize(EventArgs e)
-        {
-            using (var path = new GraphicsPath())
-            {
-                path.AddEllipse(new Rectangle(0, 0, this.Width - 1, this.Height - 1));
-                this.Region = new Region(path);
-            }
-            base.OnResize(e);
-        }
-    }
-
 }
 

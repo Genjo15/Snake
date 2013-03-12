@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Snake</RootNamespace>
     <AssemblyName>Snake</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>C:\Users\Anthony\Desktop\test\</PublishUrl>
@@ -28,6 +28,7 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -87,6 +88,7 @@
     <Compile Include="Menu.Designer.cs">
       <DependentUpon>Menu.cs</DependentUpon>
     </Compile>
+    <Compile Include="Network.cs" />
     <Compile Include="PersonalFont.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -107,6 +109,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -149,9 +152,6 @@
     <None Include="Resources\Title.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Play.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\GameOver.png" />
   </ItemGroup>
   <ItemGroup>
@@ -168,6 +168,39 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\HorizontalBorder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\HighScores.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Multiplayer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MultiplayerMenu.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CreateGame.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\JoinGame.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Back.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MiniFruit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MiniInsect.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ConnectionHost.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WaitClient.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

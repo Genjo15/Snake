@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
@@ -27,10 +26,11 @@ namespace Snake
         private Boolean _InsectIsPresent;         // Boolean which indicates if the insect is present or not.
         private Boolean _RefreshItem;             // Boolean for refreshing the item or not.
         private Boolean _GameOver;                // Boolean which detects if the game is over or not.
+        private Boolean _Multiplayer;             // Boolean which determines if the game is multiplayer or not.
         private int _TimerInterval;               // Timer interval.
         private Menu _Menu;                       // The menu.
-        private List<RoundedPanel> _SnakeGraphicalParts; // List of panel which contains Snake graphical parts.
-        private PersonalFont _MyFont;              // The special font.
+
+        private PersonalFont _MyFont;             // The special font.
 
         #endregion
 
@@ -56,18 +56,17 @@ namespace Snake
 
         public void InitializeGame()
         {
-            _FullSnake = new FullSnake(this.gameBoard.Width); // New FullSnake.
-            _Fruit = new Fruit(this.gameBoard.Width, this.gameBoard.Height); // New fruit.
-            _Insect = new Insect(this.gameBoard.Width, this.gameBoard.Height,-666, -666); // New insect.
-
-            _SnakeGraphicalParts = new List<RoundedPanel>();
-
-            _Score = 0;               // Score is set to 0.
-            _TimerInterval = 140;     // Timer interval tick is set to 140 ms.
-            _Direction = 1;           // First direction is initially set to 1 (right).
-            _GameOver = false;        // _GameOver is initialized to false.
-            _RefreshItem = false;     //_RefreshItem is initialized to false.
-            _InsectIsPresent = false; // _InsectIsPresent is initialized to false.
+            _FullSnake = new FullSnake(this.gameBoardPictureBox.Width); // New FullSnake.
+            _Fruit = new Fruit(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height); // New fruit.
+            _Insect = new Insect(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height,-666, -666); // New insect.
+            
+            _Score = 0;                 // Score is set to 0.
+            _TimerInterval = 140;       // Timer interval tick is set to 140 ms.
+            _Direction = 1;             // First direction is initially set to 1 (right).
+            _GameOver = false;          // _GameOver is initialized to false.
+            _RefreshItem = false;       // _RefreshItem is initialized to false.
+            _InsectIsPresent = false;   // _InsectIsPresent is initialized to false.
+            _Multiplayer = false;       // _Multiplayer is initialized to false. BECAUSE NOT IMPLEMENTED YET !!!!!!!!!!!!
 
             _Timer = new Timer();                       // New timer.
             _Timer.Interval = _TimerInterval;           // Interval of the timer is set.
@@ -83,31 +82,30 @@ namespace Snake
 
         public void TimerTick(object sender, EventArgs e)
         {
-            _GameOver = _FullSnake.CheckCollision(this.gameBoard.Width, this.gameBoard.Height); // Check collision.
+            _GameOver = _FullSnake.CheckCollision(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height); // Check collision.
 
             if (!_GameOver)
             {
-                _FullSnake.UpdateSnake(_Direction, this.gameBoard.Width); // Update the movement of the snake.
+                _FullSnake.UpdateSnake(_Direction, this.gameBoardPictureBox.Width); // Update the movement of the snake.
 
                 _RefreshItem = false; // Set the boolean for the refresh of the item to false.
 
                 if (_Fruit.IsReached(_FullSnake.Get_Snake()[0]))
                 {
-                    _Fruit.MoveFruit(this.gameBoard.Width, this.gameBoard.Height, _FullSnake); // Move fruit positions.
+                    _Fruit.MoveFruit(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height, _FullSnake); // Move fruit positions.
                     _Score = _Score + _Fruit.Get_POINT(); // Increment the score.
                     if (_Timer.Interval <= 150 && _Timer.Interval >= 110)   //////
                         _Timer.Interval -= 5;                               // Increase the difficulty by decreasing the timer interval.
                     else if (_Timer.Interval < 110 && _Timer.Interval > 70) //
                         _Timer.Interval -= 10;                              //
-                    _FullSnake.AddSnakePart(this.gameBoard.Width); // Add a Snake part.
-                    _RefreshItem = true; // Set the boolean for the refresh of the item to true.
+                    _FullSnake.AddSnakePart(this.gameBoardPictureBox.Width); // Add a Snake part.
+                    _Fruit.Set_IsReached(true);
                 }
 
                 if (_Insect.IsReached(_FullSnake.Get_Snake()[0]))
                 {
                     _InsectTimerCounter = 0;               // Reset the counter.
-                    _Insect.Set_X(-666);                   // Make the item unreachable for the user by changing its X & Y.
-                    _Insect.Set_Y(-666);                   //        ,,
+                    _Insect.MoveInsect(); // Move the insect (make it unreacheable by the player).
                     _Score = _Score + _Insect.Get_POINT(); // Increment the score.
                     _InsectIsPresent = false;              // Set the boolean to false.
                 }
@@ -122,7 +120,7 @@ namespace Snake
         }
 
         /////////////////////////////
-        // Event for the fruit timer
+        // Event for the insect timer
 
         public void InsectTimerTick(object sender, EventArgs e)
         {
@@ -130,15 +128,14 @@ namespace Snake
 
             if ((_InsectTimerCounter % 8 == 0) && (_InsectIsPresent == false))
             {
-                _Insect.MoveInsect(this.gameBoard.Width, this.gameBoard.Height, _FullSnake); // Move insect.
+                _Insect.MoveInsect(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height, _FullSnake); // Move insect.
                 _InsectTimerCounter = 0; // Reset the counter.
                 _InsectIsPresent = true; // Set the boolean to true.
             }
 
             else if ((_InsectTimerCounter % 3 == 0) && (_InsectIsPresent == true)) // If the user takes too much time to pick up the insect, it will disappear.
             {
-                _Insect.Set_X(-666); // Make the item unreachable for the user by changing its X & Y.
-                _Insect.Set_Y(-666);
+                _Insect.MoveInsect(); // Move the insect (make it unreacheable by the player).
                 _InsectTimerCounter = 0;  // Reset the counter.
                 _InsectIsPresent = false; // Set the boolean to false.
             }
@@ -149,13 +146,18 @@ namespace Snake
 
         private void LoadMenu()
         {
-            _Menu = new Menu();                                                 // Instanciate a new menu;
-            _Menu.Location = new Point(20, 20);                                 // Define the location of the menu.
-            this.gameBoard.Controls.Add(_Menu);                                 // Add it to the gameboard.
+            _Menu = new Menu();                                                 // Instanciate a new menu;         
+            this.gameBoardPictureBox.Controls.Add(_Menu);                       // Add it to the gameboard.
             _Menu.MainMenu();                                                   // Set the configuration for a game start (hide/show labels).
-            _Menu.playPictureBox.Click += new EventHandler(playPictureBox_Click);         ///// 
-            _Menu.retryPictureBox.Click += new EventHandler(retryPictureBox_Click);       // Define event handlers
-            _Menu.mainMenuPictureBox.Click += new EventHandler(mainMenuPictureBox_Click); // Define event handlers
+            _Menu.playPictureBox.Click += new EventHandler(playPictureBox_Click);               ///// 
+            _Menu.retryPictureBox.Click += new EventHandler(retryPictureBox_Click);             // 
+            _Menu.mainMenuPictureBox.Click += new EventHandler(mainMenuPictureBox_Click);       //  
+            _Menu.multiplayerPictureBox.Click += new EventHandler(multiplayerPictureBox_Click); // 
+            _Menu.highScoresPictureBox.Click += new EventHandler(highScoresPictureBox_Click);   // Define event handlers
+            _Menu.backPictureBox.Click += new EventHandler(backPictureBox_Click);               //
+            _Menu.createGamePictureBox.Click += new EventHandler(createGamePictureBox_Click);   //
+            _Menu.joinGamePictureBox.Click += new EventHandler(joinGamePictureBox_Click);       //
+            _Menu.back2PictureBox.Click += new EventHandler(back2PictureBox_Click);             //
         }
 
         ////////////////////////
@@ -164,7 +166,9 @@ namespace Snake
         private void PlayGame()
         {
             InitializeGame();                // Initialize game.
-            this.gameBoard.Controls.Clear(); // Erase the content of the panel.
+            if (_Multiplayer)
+                this.Width = 1200; 
+            this.gameBoardPictureBox.Controls.Clear(); // Erase the content of the panel.
             this.scoreLabel.Visible = true;  // Initialize interface: Essentially show the score label. 
             _Timer.Start();                  // Start timer.
             _InsectTimer.Start();            // Start insect timer.
@@ -191,47 +195,16 @@ namespace Snake
 
         private void Render()
         {
-            RenderSnake(); // Refresh the display of the snake
-            if ((_FullSnake.Get_Snake().Count == 3) || (_RefreshItem)) // Refresh the display of the fruit (only if it has been reached or at the begin of the game).
-                RenderFruit();
-            RenderInsect(); // Refresh the display of the insect
-        }
+            _Fruit.RenderFruit(this.gameBoardPictureBox); // Refresh the display of the fruit.     
+            _Insect.RenderInsect(this.gameBoardPictureBox); // Refresh the display of the insect.
+            _FullSnake.RenderSnake(this.gameBoardPictureBox); // Refresh the display of the snake.
 
-        ///////////////////////////////////////////////
-        // Method to refresh the display of the fruit 
-
-        public void RenderFruit()
-        {
-            this.fruitPictureBox.Location = new System.Drawing.Point(_Fruit.Get_X(), _Fruit.Get_Y()); // Change the location of the picture box.
-            this.gameBoard.Controls.Add(this.fruitPictureBox); // Attach the picturebox to the gameboard.
-        }
-
-        ///////////////////////////////////////////////
-        // Method to refresh the display of the insect 
-
-        public void RenderInsect()
-        {
-            this.insectPictureBox.Location = new System.Drawing.Point(_Insect.Get_X(), _Insect.Get_Y()); // Change the location of the picture box.
-            this.gameBoard.Controls.Add(this.insectPictureBox); // Attach the picturebox to the gameboard.
-        }
-
-        //////////////////////////////////////////////
-        // Method to refresh the display of the snake
-
-        public void RenderSnake()
-        {
-            for (int i = 0; i < _FullSnake.Get_SnakeSize(); i++)
+            // SECTION IN CONSTRUCTION!!!
+            /*if (_Multiplayer)
             {
-                if (_SnakeGraphicalParts.Count < _FullSnake.Get_SnakeSize()) // If there is not enough panel in the pool ...
-                    //_SnakeGraphicalParts.Add(new Panel());                   // ...Add it one.
-                    _SnakeGraphicalParts.Add(new RoundedPanel());                   // ...Add it one.
-
-                _SnakeGraphicalParts[i].Location = new System.Drawing.Point(_FullSnake.Get_Snake()[i].Get_X(), _FullSnake.Get_Snake()[i].Get_Y());  // Definition of the panel location.
-                _SnakeGraphicalParts[i].Size = new System.Drawing.Size(_FullSnake.Get_Snake()[i].Get_SIDE(), _FullSnake.Get_Snake()[i].Get_SIDE()); // Definition of the panel size.
-                _SnakeGraphicalParts[i].BackColor = System.Drawing.Color.Black; // Definition of the panel color.
-
-                this.gameBoard.Controls.Add(_SnakeGraphicalParts[i]); // Attach the panel to the gameboard.
-            }
+                _Insect.RenderMiniInsect(this.miniGameBoardPictureBox); // for test.
+                _FullSnake.RenderMiniSnake(this.miniGameBoardPictureBox); // for test.
+            }*/
         }
 
         /////////////////////////////
@@ -240,7 +213,7 @@ namespace Snake
         public void InitializeFont()
         {
             this._MyFont = new PersonalFont(); // Create new font.
-            this.scoreLabel.Font = new System.Drawing.Font(_MyFont.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.scoreLabel.Font = new System.Drawing.Font(_MyFont.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.
         }
 
         #endregion
@@ -260,10 +233,11 @@ namespace Snake
 
         void mainMenuPictureBox_Click(object sender, EventArgs e)
         {
-            this.gameBoard.Controls.Clear();    // Clear the panel.
-            this.gameBoard.Controls.Add(_Menu); // Attach the menu to the gameboard.
-            this.scoreLabel.Visible = false;    // Initialize interface: Essentially show the score label. 
-            _Menu.MainMenu();                   // Set the configuration for the menu (hide/show labels).
+            this.gameBoardPictureBox.Controls.Clear();    // Clear the panel.
+            this.gameBoardPictureBox.Controls.Add(_Menu); // Attach the menu to the gameboard.
+            this.scoreLabel.Visible = false;              // Initialize interface: Essentially show the score label. 
+            _Menu.MainMenu();                         // Set the configuration for the menu (hide/show labels).
+            this.Width = 800; // for test.
         }
 
         /////////////////////////////////////////
@@ -280,7 +254,54 @@ namespace Snake
         private void playPictureBox_Click(object sender, EventArgs e)
         {
             PlayGame(); // Play game.
-            this.insectPictureBox.Visible = true; // Show the insect.
+        }
+
+        //////////////////////////////////////////
+        // Event for clicking the multiplayerPictureBox
+
+        private void multiplayerPictureBox_Click(object sender, EventArgs e)
+        {
+            _Menu.Multiplayer(); // Set the configuration for the menu (hide/show labels).
+        }
+
+        ///////////////////////////////////////////////
+        // Event for clicking the highScoresPictureBox
+
+        private void highScoresPictureBox_Click(object sender, EventArgs e)
+        {
+            // LOUIS A TOI D'JOUER (YUUUUGIYOOOOOOOO)!!!!!!!
+        }
+
+        //////////////////////////////////////////
+        // Event for clicking the backPictureBox
+
+        private void backPictureBox_Click(object sender, EventArgs e)
+        {
+            _Menu.MainMenu(); // Set the configuration for the menu (hide/show labels).
+        }
+
+        ///////////////////////////////////////////////
+        // Event for clicking the createGamePictureBox
+
+        private void createGamePictureBox_Click(object sender, EventArgs e)
+        {
+            _Menu.Host(); // Set the configuration for the menu (hide/show labels).
+        }
+
+        //////////////////////////////////////////////
+        // Event for clicking the joinGamePictureBox
+
+        private void joinGamePictureBox_Click(object sender, EventArgs e)
+        {
+            _Menu.Client(); // Set the configuration for the menu (hide/show labels).
+        }
+
+        //////////////////////////////////////////
+        // Event for clicking the back2PictureBox
+
+        private void back2PictureBox_Click(object sender, EventArgs e)
+        {
+            _Menu.Multiplayer(); // Set the configuration for the menu (hide/show labels).
         }
 
         //////////////////////////////////////
