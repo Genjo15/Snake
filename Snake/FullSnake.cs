@@ -118,28 +118,28 @@ namespace Snake
 
             if (_Snake[_Snake.Count - 1].Get_Direction() == 0) // If the tail is moving up...
             {
-                MyGraphics.FillEllipse(MyBrush2, new Rectangle(_Snake[_Snake.Count - 1].Get_X(), _Snake[_Snake.Count - 1].Get_Y() + (gameBoardPictureBox.Width / 54), (gameBoardPictureBox.Width / 54 - 2), (gameBoardPictureBox.Width / 54 - 2))); // Recolor below the last part of snake.
+                MyGraphics.FillRectangle(MyBrush2, _Snake[_Snake.Count - 1].Get_X(), _Snake[_Snake.Count - 1].Get_Y() + (gameBoardPictureBox.Width / 54), (gameBoardPictureBox.Width / 54 - 2), (gameBoardPictureBox.Width / 54 - 2)); // Recolor below the last part of snake.
                 if (_Snake[_Snake.Count - 1].Get_Y() == gameBoardPictureBox.Height - (gameBoardPictureBox.Width / 54)) // If the snake goes to the other side of the gameboard the streak to recolor is not behind the snake.
                     MyGraphics.FillRectangle(MyBrush2, _Snake[_Snake.Count - 1].Get_X(), 0, (gameBoardPictureBox.Width / 54), (gameBoardPictureBox.Width / 54)); // Recolor at the opposite side.
             }
 
             if (_Snake[_Snake.Count - 1].Get_Direction() == 1) // If the tail is moving right...
             {
-                MyGraphics.FillEllipse(MyBrush2, new Rectangle(_Snake[_Snake.Count - 1].Get_X() - (gameBoardPictureBox.Width / 54), _Snake[_Snake.Count - 1].Get_Y(), (gameBoardPictureBox.Width / 54 - 2), (gameBoardPictureBox.Width / 54 - 2))); // Recolor at the left of the last part of snake.
+                MyGraphics.FillRectangle(MyBrush2, _Snake[_Snake.Count - 1].Get_X() - (gameBoardPictureBox.Width / 54), _Snake[_Snake.Count - 1].Get_Y(), (gameBoardPictureBox.Width / 54 - 2), (gameBoardPictureBox.Width / 54 - 2)); // Recolor at the left of the last part of snake.
                 if (_Snake[_Snake.Count - 1].Get_X() == 0) // If the snake goes to the other side of the gameboard the streak to recolor is not behind the snake.
                     MyGraphics.FillRectangle(MyBrush2, gameBoardPictureBox.Width - (gameBoardPictureBox.Width / 54), _Snake[_Snake.Count - 1].Get_Y(), (gameBoardPictureBox.Width / 54), (gameBoardPictureBox.Width / 54)); // Recolor at the opposite side.
             }
 
             if (_Snake[_Snake.Count - 1].Get_Direction() == 2) // If the tail is moving down...
             {
-                MyGraphics.FillEllipse(MyBrush2, new Rectangle(_Snake[_Snake.Count - 1].Get_X(), _Snake[_Snake.Count - 1].Get_Y() - (gameBoardPictureBox.Width / 54), (gameBoardPictureBox.Width / 54 - 2), (gameBoardPictureBox.Width / 54 - 2))); // Recolor above the last part of snake.
+                MyGraphics.FillRectangle(MyBrush2, _Snake[_Snake.Count - 1].Get_X(), _Snake[_Snake.Count - 1].Get_Y() - (gameBoardPictureBox.Width / 54), (gameBoardPictureBox.Width / 54 - 2), (gameBoardPictureBox.Width / 54 - 2)); // Recolor above the last part of snake.
                 if (_Snake[_Snake.Count - 1].Get_Y() == 0) // If the snake goes to the other side of the gameboard the streak to recolor is not behind the snake.
                     MyGraphics.FillRectangle(MyBrush2, _Snake[_Snake.Count - 1].Get_X(), gameBoardPictureBox.Height - (gameBoardPictureBox.Width / 54), (gameBoardPictureBox.Width / 54), (gameBoardPictureBox.Width / 54)); // Recolor at the opposite side.
             }
 
             if (_Snake[_Snake.Count - 1].Get_Direction() == 3) // If the tail is moving left...
             {
-                MyGraphics.FillEllipse(MyBrush2, new Rectangle(_Snake[_Snake.Count - 1].Get_X() + (gameBoardPictureBox.Width / 54), _Snake[_Snake.Count - 1].Get_Y(), (gameBoardPictureBox.Width / 54 - 2), (gameBoardPictureBox.Width / 54 - 2))); // Recolor at the right of the last part of snake.
+                MyGraphics.FillRectangle(MyBrush2, _Snake[_Snake.Count - 1].Get_X() + (gameBoardPictureBox.Width / 54), _Snake[_Snake.Count - 1].Get_Y(), (gameBoardPictureBox.Width / 54 - 2), (gameBoardPictureBox.Width / 54 - 2)); // Recolor at the right of the last part of snake.
                 if (_Snake[_Snake.Count - 1].Get_X() == gameBoardPictureBox.Width - (gameBoardPictureBox.Width / 54)) // If the snake goes to the other side of the gameboard the streak to recolor is not behind the snake.
                     MyGraphics.FillRectangle(MyBrush2, 0, _Snake[_Snake.Count - 1].Get_Y(), (gameBoardPictureBox.Width / 54), (gameBoardPictureBox.Width / 54)); // Recolor at the opposite side
             }

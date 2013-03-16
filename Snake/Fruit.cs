@@ -20,6 +20,7 @@ namespace Snake
         private int _SIDE;            // Size of the panel side.
         private Random _RandomNumber; // Random number.
         private Boolean _IsReached;   // Boolean to inform if the fruit has been reached or not.
+        private Boolean _MovedAgain;  // Boolean to inform if the fruit have been moved again (case of the respawn on the snake).
     
         #endregion
 
@@ -30,6 +31,7 @@ namespace Snake
         public Fruit(int width, int height)
         {
             _IsReached = true;
+            _MovedAgain = false;
             _SIDE = width / 54 - 2; // Initialize dynamically the side of the fruit.
             _RandomNumber = new Random();   // Initialize the generator of random.
             _X = (_SIDE + 2) * (_RandomNumber.Next(width - _SIDE) / (_SIDE + 2));  // Set _X thanks to a generated number.
@@ -72,7 +74,11 @@ namespace Snake
             for (int i = 0; i < fullSnake.Get_SnakeSize(); i++) // Check each snake part.
             {
                 if ((_X == fullSnake.Get_Snake()[i].Get_X()) && (_Y == fullSnake.Get_Snake()[i].Get_Y())) // If the fruit is in the same position of one of the snake parts...
+                {
                     MoveFruit(width, height, fullSnake); // Move the fruit again.
+                    _MovedAgain = true;
+                    Console.WriteLine("Fruit appeared on the snake");
+                }
             }
         }
 
@@ -85,22 +91,29 @@ namespace Snake
 
         public void RenderFruit(PictureBox gameBoardPictureBox)
         {
-            if (_IsReached)
-            {
-                Graphics myGraphics;  // Graphics for main drawing.
-                SolidBrush myBrush;   // Brush for filling shapes.
-                SolidBrush myBrush2;  // Second brush for erasing streaks.
-                Image fruitPicture = Snake.Properties.Resources.Fruit;   // The picture of the fruit.
+            Graphics myGraphics;  // Graphics for main drawing.
+            SolidBrush myBrush;   // Brush for filling shapes.
+            SolidBrush myBrush2;  // Second brush for erasing streaks.
+            Image fruitPicture = Snake.Properties.Resources.Fruit;   // The picture of the fruit.
 
-                myGraphics = gameBoardPictureBox.CreateGraphics(); // Initialize the 2nd graphics. 
+
+                myGraphics = gameBoardPictureBox.CreateGraphics(); // Initialize the graphics. 
                 myBrush = new System.Drawing.SolidBrush(Color.Black); // Initialize the first brush.
                 myBrush2 = new System.Drawing.SolidBrush(Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))))); // Initialize the 2nd brush.
 
                 myGraphics.DrawImage(fruitPicture, new System.Drawing.Rectangle(_X, _Y, (gameBoardPictureBox.Width / 54 - 2), (gameBoardPictureBox.Width / 54 - 2))); // Draw fruit.
-                myGraphics.FillRectangle(myBrush2, _LastX, _LastY, (gameBoardPictureBox.Width / 54), (gameBoardPictureBox.Width / 54)); // Erase the streak before moving the fruit.            
 
-                _IsReached = false;
-            }
+                if (_IsReached)
+                {
+                    myGraphics.FillRectangle(myBrush2, _LastX, _LastY, (gameBoardPictureBox.Width / 54), (gameBoardPictureBox.Width / 54)); // Erase the streak before moving the fruit.            
+                    _IsReached = false;
+                }
+
+                if (_MovedAgain)
+                {
+                    myGraphics.FillEllipse(myBrush, new Rectangle(_LastX, _LastY, (gameBoardPictureBox.Width / 54 - 2) - 1, (gameBoardPictureBox.Width / 54 - 2) - 1)); // Draw again the concerned snake part which have been erased.
+                    _MovedAgain = false;
+                }
         }
 
         ///////////////////////////////////////////////////

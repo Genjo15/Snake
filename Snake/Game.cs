@@ -128,7 +128,7 @@ namespace Snake
 
             if ((_InsectTimerCounter % 8 == 0) && (_InsectIsPresent == false))
             {
-                _Insect.MoveInsect(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height, _FullSnake); // Move insect.
+                _Insect.MoveInsect(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height, _FullSnake, _Fruit); // Move insect.
                 _InsectTimerCounter = 0; // Reset the counter.
                 _InsectIsPresent = true; // Set the boolean to true.
             }
