@@ -32,8 +32,9 @@ namespace Snake
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Menu));
             this.menuPanel = new System.Windows.Forms.Panel();
+            this.startGamePictureBox = new System.Windows.Forms.PictureBox();
+            this.connectionEstablishedPictureBox = new System.Windows.Forms.PictureBox();
             this.connectionHostPictureBox = new System.Windows.Forms.PictureBox();
-            this.back2PictureBox = new System.Windows.Forms.PictureBox();
             this.waitClientPictureBox = new System.Windows.Forms.PictureBox();
             this.backPictureBox = new System.Windows.Forms.PictureBox();
             this.joinGamePictureBox = new System.Windows.Forms.PictureBox();
@@ -47,8 +48,9 @@ namespace Snake
             this.playPictureBox = new System.Windows.Forms.PictureBox();
             this.titlePictureBox = new System.Windows.Forms.PictureBox();
             this.menuPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.startGamePictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.connectionEstablishedPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.connectionHostPictureBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.back2PictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.waitClientPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.backPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.joinGamePictureBox)).BeginInit();
@@ -66,8 +68,9 @@ namespace Snake
             // menuPanel
             // 
             this.menuPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.menuPanel.Controls.Add(this.startGamePictureBox);
+            this.menuPanel.Controls.Add(this.connectionEstablishedPictureBox);
             this.menuPanel.Controls.Add(this.connectionHostPictureBox);
-            this.menuPanel.Controls.Add(this.back2PictureBox);
             this.menuPanel.Controls.Add(this.waitClientPictureBox);
             this.menuPanel.Controls.Add(this.backPictureBox);
             this.menuPanel.Controls.Add(this.joinGamePictureBox);
@@ -87,6 +90,24 @@ namespace Snake
             this.menuPanel.Size = new System.Drawing.Size(756, 476);
             this.menuPanel.TabIndex = 0;
             // 
+            // startGamePictureBox
+            // 
+            this.startGamePictureBox.Image = global::Snake.Properties.Resources.StartGame;
+            this.startGamePictureBox.Location = new System.Drawing.Point(320, 252);
+            this.startGamePictureBox.Name = "startGamePictureBox";
+            this.startGamePictureBox.Size = new System.Drawing.Size(164, 43);
+            this.startGamePictureBox.TabIndex = 27;
+            this.startGamePictureBox.TabStop = false;
+            // 
+            // connectionEstablishedPictureBox
+            // 
+            this.connectionEstablishedPictureBox.Image = global::Snake.Properties.Resources.ConnectionEstablished;
+            this.connectionEstablishedPictureBox.Location = new System.Drawing.Point(234, 211);
+            this.connectionEstablishedPictureBox.Name = "connectionEstablishedPictureBox";
+            this.connectionEstablishedPictureBox.Size = new System.Drawing.Size(324, 43);
+            this.connectionEstablishedPictureBox.TabIndex = 26;
+            this.connectionEstablishedPictureBox.TabStop = false;
+            // 
             // connectionHostPictureBox
             // 
             this.connectionHostPictureBox.Image = ((System.Drawing.Image)(resources.GetObject("connectionHostPictureBox.Image")));
@@ -95,15 +116,6 @@ namespace Snake
             this.connectionHostPictureBox.Size = new System.Drawing.Size(337, 40);
             this.connectionHostPictureBox.TabIndex = 25;
             this.connectionHostPictureBox.TabStop = false;
-            // 
-            // back2PictureBox
-            // 
-            this.back2PictureBox.Image = global::Snake.Properties.Resources.Back;
-            this.back2PictureBox.Location = new System.Drawing.Point(365, 322);
-            this.back2PictureBox.Name = "back2PictureBox";
-            this.back2PictureBox.Size = new System.Drawing.Size(66, 33);
-            this.back2PictureBox.TabIndex = 24;
-            this.back2PictureBox.TabStop = false;
             // 
             // waitClientPictureBox
             // 
@@ -227,8 +239,9 @@ namespace Snake
             this.Name = "Menu";
             this.Size = new System.Drawing.Size(758, 478);
             this.menuPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.startGamePictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.connectionEstablishedPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.connectionHostPictureBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.back2PictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.waitClientPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.backPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.joinGamePictureBox)).EndInit();
@@ -259,8 +272,9 @@ namespace Snake
         internal PictureBox createGamePictureBox;
         internal PictureBox backPictureBox;
         internal PictureBox waitClientPictureBox;
-        internal PictureBox back2PictureBox;
         internal PictureBox connectionHostPictureBox;
         internal PictureBox joinGamePictureBox;
+        internal PictureBox connectionEstablishedPictureBox;
+        internal PictureBox startGamePictureBox;
     }
 }

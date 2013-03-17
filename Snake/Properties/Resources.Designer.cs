@@ -73,6 +73,16 @@ namespace Snake.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ConnectionEstablished {
+            get {
+                object obj = ResourceManager.GetObject("ConnectionEstablished", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ConnectionHost {
             get {
                 object obj = ResourceManager.GetObject("ConnectionHost", resourceCulture);
@@ -236,6 +246,16 @@ namespace Snake.Properties {
         internal static System.Drawing.Bitmap Retry {
             get {
                 object obj = ResourceManager.GetObject("Retry", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap StartGame {
+            get {
+                object obj = ResourceManager.GetObject("StartGame", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

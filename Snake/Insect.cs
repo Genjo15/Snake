@@ -79,8 +79,7 @@ namespace Snake
 
             for (int i = 0; i < snake.Get_SnakeSize(); i++)
             {
-                if (((_X == snake.Get_Snake()[i].Get_X()) && (_Y == snake.Get_Snake()[i].Get_Y())) || (((_X + width / 54) == snake.Get_Snake()[i].Get_X()) && (_Y == snake.Get_Snake()[i].Get_Y())) || ((_X == snake.Get_Snake()[i].Get_X()) && ((_Y + width / 24) == fullSnake.Get_Snake()[i].Get_Y())) || (((_X + width / 54) == fullSnake.Get_Snake()[i].Get_X()) && ((_Y + width / 24) == fullSnake.Get_Snake()[i].Get_Y()))) // If the insect is in the same position of one of the snake parts...
-                //if (((snake.Get_Snake()[i].Get_X() == _X) && (snake.Get_Snake()[i].Get_Y() == _Y)) || ((snake.Get_Snake()[i].Get_X() == (_X + (_SIDE / 2 + 1))) && (snake.Get_Snake()[i].Get_Y() == _Y)) || ((snake.Get_Snake()[i].Get_X() == _X) && (snake.Get_Snake()[i].Get_Y() == (_Y + (_SIDE / 2) + 1))) || ((snake.Get_Snake()[i].Get_X() == (_X + (_SIDE / 2 + 1))) && (snake.Get_Snake()[i].Get_Y() == (_Y + (_SIDE / 2) + 1)))) // If the insect is in the same position of one of the snake parts...
+                if (((snake.Get_Snake()[i].Get_X() == _X) && (snake.Get_Snake()[i].Get_Y() == _Y)) || ((snake.Get_Snake()[i].Get_X() == (_X + (_SIDE / 2 + 1))) && (snake.Get_Snake()[i].Get_Y() == _Y)) || ((snake.Get_Snake()[i].Get_X() == _X) && (snake.Get_Snake()[i].Get_Y() == (_Y + (_SIDE / 2) + 1))) || ((snake.Get_Snake()[i].Get_X() == (_X + (_SIDE / 2 + 1))) && (snake.Get_Snake()[i].Get_Y() == (_Y + (_SIDE / 2) + 1)))) // If the insect is in the same position of one of the snake parts...
                 {
                     MoveInsect(width, height, snake, fruit); // Move the insect again.
                     Console.WriteLine("Insect is on the snake");
