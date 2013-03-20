@@ -39,6 +39,7 @@ namespace Snake
         public Insect(int width, int height, int x, int y)
         {
             _Moved = false;
+            _SIDE = width / 27 - 2; // Initialize dynamically the side of the insect.
             _RandomNumber = new Random();   // Initialize the generator of random.
             _X = x;
             _Y = y;
@@ -68,30 +69,23 @@ namespace Snake
 
         public void MoveInsect(int width, int height, FullSnake snake, Fruit fruit)
         {
+            int tmpX; // Temporary X.
+            int tmpY; // Temporary Y. 
+
             _LastX = _X; // Save _X in _LastX.
             _LastY = _Y; // Save _Y in _LastY.
 
-            _SIDE = width / 27 - 2; // Initialize dynamically the side of the insect.
-            _X = (_SIDE + 2) * (_RandomNumber.Next(width - _SIDE) / (_SIDE + 2));  // Set _X thanks to a generated number.
-            _Y = (_SIDE + 2) * (_RandomNumber.Next(height - _SIDE) / (_SIDE + 2)); // Set _Y thanks to another generated number.
-            _LastX = (_SIDE + 2) * (_RandomNumber.Next(width - _SIDE) / (_SIDE + 2));  // Set _LastX thanks to a generated number.
-            _LastY = (_SIDE + 2) * (_RandomNumber.Next(height - _SIDE) / (_SIDE + 2)); // Set _LastY thanks to another generated number.
+            tmpX = Generate_X(width);
+            tmpY = Generate_Y(height);
 
-            for (int i = 0; i < snake.Get_SnakeSize(); i++)
+            while (!CheckPositions(tmpX, tmpY, snake, fruit))
             {
-                if (((snake.Get_Snake()[i].Get_X() == _X) && (snake.Get_Snake()[i].Get_Y() == _Y)) || ((snake.Get_Snake()[i].Get_X() == (_X + (_SIDE / 2 + 1))) && (snake.Get_Snake()[i].Get_Y() == _Y)) || ((snake.Get_Snake()[i].Get_X() == _X) && (snake.Get_Snake()[i].Get_Y() == (_Y + (_SIDE / 2) + 1))) || ((snake.Get_Snake()[i].Get_X() == (_X + (_SIDE / 2 + 1))) && (snake.Get_Snake()[i].Get_Y() == (_Y + (_SIDE / 2) + 1)))) // If the insect is in the same position of one of the snake parts...
-                {
-                    MoveInsect(width, height, snake, fruit); // Move the insect again.
-                    Console.WriteLine("Insect is on the snake");
-                }
+                tmpX = Generate_X(width);
+                tmpY = Generate_Y(height);
             }
 
-            if (((fruit.Get_X() == _X) && (fruit.Get_Y() == _Y)) || ((fruit.Get_X() == (_X + (_SIDE / 2 + 1))) && (fruit.Get_Y() == _Y)) || ((fruit.Get_X() == _X) && (fruit.Get_Y() == (_Y + (_SIDE / 2) + 1))) || ((fruit.Get_X() == (_X + (_SIDE / 2 + 1))) && (fruit.Get_Y() == (_Y + (_SIDE / 2) + 1)))) // If the insect is in the same position of the fruit...
-            {
-                MoveInsect(width, height, snake, fruit); // Move the insect again.
-                Console.WriteLine("Insect moved becoz of the fruit");
-            }
-                
+            _X = tmpX;
+            _Y = tmpY;
 
             _Moved = true;
         }
@@ -107,6 +101,51 @@ namespace Snake
             _Y = -666;
 
             _Moved = true;
+        }
+
+        ///////////////
+        // Generate _X
+
+        private int Generate_X(int width)
+        {
+            int generatedNumber;
+            generatedNumber = (_SIDE + 2) * (_RandomNumber.Next(width - _SIDE) / (_SIDE + 2));  // Set _X thanks to a generated number.
+            return generatedNumber;
+        }
+
+        ///////////////
+        // Generate _Y
+
+        private int Generate_Y(int height)
+        {
+            int generatedNumber;
+            generatedNumber = (_SIDE + 2) * (_RandomNumber.Next(height - _SIDE) / (_SIDE + 2)); // Set _Y thanks to another generated number.
+            return generatedNumber;
+        }
+
+        /////////////////////////////////////////////
+        // Check if temporary X & Y are on the snake
+
+        private Boolean CheckPositions(int x, int y, FullSnake snake, Fruit fruit)
+        {
+            Boolean ok = true;
+
+            for (int i = 0; i < snake.Get_SnakeSize(); i++)
+            {
+                if (((snake.Get_Snake()[i].Get_X() == x) && (snake.Get_Snake()[i].Get_Y() == y)) || ((snake.Get_Snake()[i].Get_X() == (x + (_SIDE / 2 + 1))) && (snake.Get_Snake()[i].Get_Y() == y)) || ((snake.Get_Snake()[i].Get_X() == x) && (snake.Get_Snake()[i].Get_Y() == (y + (_SIDE / 2) + 1))) || ((snake.Get_Snake()[i].Get_X() == (x + (_SIDE / 2 + 1))) && (snake.Get_Snake()[i].Get_Y() == (y + (_SIDE / 2) + 1)))) // If the insect is in the same position of one of the snake parts...
+                {
+                    ok = false;
+                    Console.WriteLine("Insect is on the snake");
+                }
+            }
+
+            if (((fruit.Get_X() == x) && (fruit.Get_Y() == y)) || ((fruit.Get_X() == (x + (_SIDE / 2 + 1))) && (fruit.Get_Y() == y)) || ((fruit.Get_X() == x) && (fruit.Get_Y() == (y + (_SIDE / 2) + 1))) || ((fruit.Get_X() == (x + (_SIDE / 2 + 1))) && (fruit.Get_Y() == (y + (_SIDE / 2) + 1)))) // If the insect is in the same position of the fruit...
+            {
+                ok = false;
+                Console.WriteLine("Insect is on the fruit");
+            }
+
+            return ok;
         }
 
         #endregion

@@ -20,7 +20,6 @@ namespace Snake
         private int _SIDE;            // Size of the panel side.
         private Random _RandomNumber; // Random number.
         private Boolean _IsReached;   // Boolean to inform if the fruit has been reached or not.
-        private Boolean _MovedAgain;  // Boolean to inform if the fruit have been moved again (case of the respawn on the snake).
     
         #endregion
 
@@ -31,7 +30,6 @@ namespace Snake
         public Fruit(int width, int height)
         {
             _IsReached = true;
-            _MovedAgain = false;
             _SIDE = width / 54 - 2; // Initialize dynamically the side of the fruit.
             _RandomNumber = new Random();   // Initialize the generator of random.
             _X = (_SIDE + 2) * (_RandomNumber.Next(width - _SIDE) / (_SIDE + 2));  // Set _X thanks to a generated number.
@@ -65,22 +63,65 @@ namespace Snake
 
         public void MoveFruit(int width, int height, FullSnake fullSnake)
         {
+            int tmpX; // Temporary X.
+            int tmpY; // Temporary Y. 
+
             _LastX = _X; // Save _X in _LastX.
             _LastY = _Y; // Save _Y in _LastY.
 
-            _X = (_SIDE + 2) * (_RandomNumber.Next(width - _SIDE) / (_SIDE + 2));  // Set _X thanks to a generated number.
-            _Y = (_SIDE + 2) * (_RandomNumber.Next(height - _SIDE) / (_SIDE + 2)); // Set _Y thanks to another generated number.
+            tmpX = Generate_X(width);
+            tmpY = Generate_Y(height);
+
+            while (!CheckPositions(tmpX, tmpY, fullSnake))
+            {
+                tmpX = Generate_X(width);
+                tmpY = Generate_Y(height);
+            }
+
+            _X = tmpX;
+            _Y = tmpY;
+        }
+
+        ///////////////
+        // Generate _X
+
+        private int Generate_X(int width)
+        {
+            int generatedNumber;
+            generatedNumber = (_SIDE + 2) * (_RandomNumber.Next(width - _SIDE) / (_SIDE + 2));  // Set _X thanks to a generated number.
+            return generatedNumber;
+        }
+
+        ///////////////
+        // Generate _Y
+
+        private int Generate_Y(int height)
+        {
+            int generatedNumber;
+            generatedNumber = (_SIDE + 2) * (_RandomNumber.Next(height - _SIDE) / (_SIDE + 2)); // Set _Y thanks to another generated number.
+            return generatedNumber;
+        }
+
+        /////////////////////////////////////////////
+        // Check if temporary X & Y are on the snake
+
+        private Boolean CheckPositions(int x, int y, FullSnake fullSnake)
+        {
+            Boolean ok = true;
 
             for (int i = 0; i < fullSnake.Get_SnakeSize(); i++) // Check each snake part.
             {
-                if ((_X == fullSnake.Get_Snake()[i].Get_X()) && (_Y == fullSnake.Get_Snake()[i].Get_Y())) // If the fruit is in the same position of one of the snake parts...
+                if ((x == fullSnake.Get_Snake()[i].Get_X()) && (y == fullSnake.Get_Snake()[i].Get_Y())) // If the fruit is in the same position of one of the snake parts...
                 {
-                    MoveFruit(width, height, fullSnake); // Move the fruit again.
-                    _MovedAgain = true;
+                    ok = false;
                     Console.WriteLine("Fruit appeared on the snake");
                 }
             }
+
+            return ok;
         }
+
+
 
         #endregion
 
@@ -109,11 +150,6 @@ namespace Snake
                     _IsReached = false;
                 }
 
-                if (_MovedAgain)
-                {
-                    myGraphics.FillEllipse(myBrush, new Rectangle(_LastX, _LastY, (gameBoardPictureBox.Width / 54 - 2) - 1, (gameBoardPictureBox.Width / 54 - 2) - 1)); // Draw again the concerned snake part which have been erased.
-                    _MovedAgain = false;
-                }
         }
 
         ///////////////////////////////////////////////////
