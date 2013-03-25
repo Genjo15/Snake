@@ -10,6 +10,8 @@ namespace Snake
 {
     public partial class Menu : UserControl
     {
+        private PersonalFont _Font;
+
         #region Constructor
 
         public Menu()
@@ -20,6 +22,15 @@ namespace Snake
         #endregion
 
         #region Methods
+
+        internal void InitializeFont()
+        {
+            _Font = new PersonalFont();
+            ipTextBox1.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.
+            ipTextBox2.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.
+            ipTextBox3.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.
+            ipTextBox4.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.
+        }
 
         internal void MainMenu()
         {
@@ -38,6 +49,12 @@ namespace Snake
             this.connectionHostPictureBox.Visible = false;        // Hide connectionHostPictureBox.
             this.connectionEstablishedPictureBox.Visible = false; // Hide connectionEstablishedPictureBox.
             this.startGamePictureBox.Visible = false;             // Hide startGamePictureBox.
+            this.enterIpPictureBox.Visible = false;               // Hide enterIpPictureBox.
+            this.okPictureBox.Visible = false;                    // Hide okPictureBox.
+            this.ipTextBox1.Visible = false;                      // Hide ipTextBox1.
+            this.ipTextBox2.Visible = false;                      // Hide ipTextBox2.
+            this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
+            this.ipTextBox4.Visible = false;                      // Hide ipTextBo41.
         }
 
         internal void InGame()
@@ -62,6 +79,12 @@ namespace Snake
             this.connectionHostPictureBox.Visible = false;        // Hide connectionHostPictureBox.
             this.connectionEstablishedPictureBox.Visible = false; // Hide connectionEstablishedPictureBox.
             this.startGamePictureBox.Visible = false;             // Hide startGamePictureBox.
+            this.enterIpPictureBox.Visible = false;               // Hide enterIpPictureBox.
+            this.okPictureBox.Visible = false;                    // Hide okPictureBox.
+            this.ipTextBox1.Visible = false;                      // Hide ipTextBox1.
+            this.ipTextBox2.Visible = false;                      // Hide ipTextBox2.
+            this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
+            this.ipTextBox4.Visible = false;                      // Hide ipTextBox4.
         }
 
         internal void Multiplayer()
@@ -81,6 +104,12 @@ namespace Snake
             this.connectionHostPictureBox.Visible = false;        // Hide connectionHostPictureBox.
             this.connectionEstablishedPictureBox.Visible = false; // Hide connectionEstablishedPictureBox.
             this.startGamePictureBox.Visible = false;             // Hide startGamePictureBox.
+            this.enterIpPictureBox.Visible = false;               // Hide enterIpPictureBox.
+            this.okPictureBox.Visible = false;                    // Hide okPictureBox.
+            this.ipTextBox1.Visible = false;                      // Hide ipTextBox1.
+            this.ipTextBox2.Visible = false;                      // Hide ipTextBox2.
+            this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
+            this.ipTextBox4.Visible = false;                      // Hide ipTextBox4.
         }
 
         internal void Host()
@@ -90,15 +119,43 @@ namespace Snake
             this.waitClientPictureBox.Visible = true;             // Show waitClientPictureBox
             this.connectionEstablishedPictureBox.Visible = false; // Hide connectionEstablishedPictureBox.
             this.startGamePictureBox.Visible = false;             // Hide startGamePictureBox.
+            this.enterIpPictureBox.Visible = false;               // Hide enterIpPictureBox.
+            this.okPictureBox.Visible = false;                    // Hide okPictureBox.
+            this.ipTextBox1.Visible = false;                      // Hide ipTextBox1.
+            this.ipTextBox2.Visible = false;                      // Hide ipTextBox2.
+            this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
+            this.ipTextBox4.Visible = false;                      // Hide ipTextBox4.
         }
 
-        internal void Client()
+        internal void Client1()
+        {
+            this.createGamePictureBox.Visible = false;            // Hide createGamePictureBox.
+            this.joinGamePictureBox.Visible = false;              // Hide joinGamePictureBox.
+            this.connectionHostPictureBox.Visible = false;        // Show connectionHostPictureBox.
+            this.connectionEstablishedPictureBox.Visible = false; // Hide connectionEstablishedPictureBox.
+            this.startGamePictureBox.Visible = false;             // Hide startGamePictureBox.
+            this.enterIpPictureBox.Visible = true;                // Show enterIpPictureBox.
+            this.enterIpPictureBox.SendToBack();                  // Send it to background.
+            this.okPictureBox.Visible = true;                     // Show okPictureBox.
+            this.ipTextBox1.Visible = true;                       // Show ipTextBox1.
+            this.ipTextBox2.Visible = true;                       // Show ipTextBox2.
+            this.ipTextBox3.Visible = true;                       // Show ipTextBox3.
+            this.ipTextBox4.Visible = true;                       // Show ipTextBox4.
+        }
+
+        internal void Client2()
         {
             this.createGamePictureBox.Visible = false;            // Hide createGamePictureBox.
             this.joinGamePictureBox.Visible = false;              // Hide joinGamePictureBox.
             this.connectionHostPictureBox.Visible = true  ;       // Show connectionHostPictureBox.
             this.connectionEstablishedPictureBox.Visible = false; // Hide connectionEstablishedPictureBox.
             this.startGamePictureBox.Visible = false;             // Hide startGamePictureBox.
+            this.enterIpPictureBox.Visible = false;               // Hide enterIpPictureBox.
+            this.okPictureBox.Visible = false;                    // Hide okPictureBox.
+            this.ipTextBox1.Visible = false;                      // Hide ipTextBox1.
+            this.ipTextBox2.Visible = false;                      // Hide ipTextBox2.
+            this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
+            this.ipTextBox4.Visible = false;                      // Hide ipTextBox4.
         }
 
         internal void ConnectionEstablished(Boolean isHost)
@@ -108,10 +165,15 @@ namespace Snake
             this.connectionEstablishedPictureBox.Visible = true; // Show connectionEstablishedPictureBox.
             if (isHost)
                 this.startGamePictureBox.Visible = true;         // Show startGamePictureBox (if host).
+            this.enterIpPictureBox.Visible = false;              // Hide enterIpPictureBox.
+            this.okPictureBox.Visible = false;                   // Hide okPictureBox.
+            this.ipTextBox1.Visible = false;                     // Hide ipTextBox1.
+            this.ipTextBox2.Visible = false;                     // Hide ipTextBox2.
+            this.ipTextBox3.Visible = false;                     // Hide ipTextBox3.
+            this.ipTextBox4.Visible = false;                     // Hide ipTextBox4.
         }
 
         #endregion
-
 
     }
 }

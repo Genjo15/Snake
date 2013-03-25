@@ -30,14 +30,15 @@ namespace Snake
         private int _TimerInterval;               // Timer interval.
         private Menu _Menu;                       // The menu.
 
-        private PersonalFont _MyFont;             // The special font.
+        private PersonalFont _Font;             // The special font.
 
         // Network
 
         Network _Sending;                                     // Network components (for sending data).
         Network _Reception;                                   // Network components (for receiving data).
 
-        NetworkContainer _Container;                          // Temporary container.
+        NetworkContainer _SendingContainer;                   // Temporary container for sending data.
+        NetworkContainer _ReceptionContainer;                 // Reception container for receiving data.
         System.Threading.Thread _ReceptionThread;             // The reception thread.
         System.Threading.Thread _SendingThread;               // The sending thread.
         private Boolean _Multiplayer;                         // Boolean which determines if the game is multiplayer or not.
@@ -190,7 +191,8 @@ namespace Snake
 
         private void LoadMenu()
         {
-            _Menu = new Menu();                                                 // Instanciate a new menu;         
+            _Menu = new Menu();                                                 // Instanciate a new menu;   
+            _Menu.InitializeFont();                                             // Initialize font.
             this.gameBoardPictureBox.Controls.Add(_Menu);                       // Add it to the gameboard.
             _Menu.MainMenu();                                                   // Set the configuration for a game start (hide/show labels).
             _Menu.playPictureBox.Click += new EventHandler(playPictureBox_Click);               ///// 
@@ -201,6 +203,7 @@ namespace Snake
             _Menu.backPictureBox.Click += new EventHandler(backPictureBox_Click);               //
             _Menu.createGamePictureBox.Click += new EventHandler(createGamePictureBox_Click);   //
             _Menu.joinGamePictureBox.Click += new EventHandler(joinGamePictureBox_Click);       //
+            _Menu.okPictureBox.Click += new EventHandler(okPictureBox_Click);                   //
             _Menu.startGamePictureBox.Click += new EventHandler(startGamePictureBox_Click);     //
         }
 
@@ -258,8 +261,8 @@ namespace Snake
 
         public void InitializeFont()
         {
-            this._MyFont = new PersonalFont(); // Create new font.
-            this.scoreLabel.Font = new System.Drawing.Font(_MyFont.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.
+            this._Font = new PersonalFont(); // Create new font.
+            this.scoreLabel.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.
         }
 
         #endregion
@@ -361,7 +364,7 @@ namespace Snake
             {
                 Invoke(_Sending.Get_NetworkDelegate());
                 Invoke(_Reception.Get_NetworkDelegate());
-            }
+            } 
 
             _Multiplayer = false;
         }
@@ -374,9 +377,12 @@ namespace Snake
             _Menu.Host(); // Set the configuration for the menu (hide/show labels).
             _Multiplayer = true;
 
-            _Container = new NetworkContainer();
-            _Sending = new Network(_Container, true, true, _ProcessOnMainThread_Del);
-            _Reception = new Network(_Container, true, false, _ProcessOnMainThread_Del);
+            _SendingContainer = new NetworkContainer();
+            _ReceptionContainer = new NetworkContainer();
+            _Sending = new Network(ref _SendingContainer, true, true, _ProcessOnMainThread_Del);
+            _Reception = new Network(ref _ReceptionContainer, true, false, _ProcessOnMainThread_Del);
+
+            InitializeNetworkThreads();
         }
 
         //////////////////////////////////////////////
@@ -384,12 +390,31 @@ namespace Snake
 
         private void joinGamePictureBox_Click(object sender, EventArgs e)
         {
-            _Menu.Client(); // Set the configuration for the menu (hide/show labels).
+            _Menu.Client1(); // Set the configuration for the menu (hide/show labels).
             _Multiplayer = true;
 
-            _Container = new NetworkContainer();
-            _Sending = new Network(_Container, false, true, _ProcessOnMainThread_Del);
-            _Reception = new Network(_Container, false, false, _ProcessOnMainThread_Del);
+            _SendingContainer = new NetworkContainer();
+            _ReceptionContainer = new NetworkContainer();
+            _Sending = new Network(ref _SendingContainer, false, true, _ProcessOnMainThread_Del);
+            _Reception = new Network(ref _ReceptionContainer, false, false, _ProcessOnMainThread_Del);
+
+            InitializeNetworkThreads();
+        }
+
+        ///////////////////////////////////////
+        // Event for clicking the okPictureBox
+
+        private void okPictureBox_Click(object sender, EventArgs e)
+        {
+            if (!_Sending.Get_IsHost())
+            {
+                _Sending.Set_HostIpAdress(_Menu.ipTextBox1.Text + "." + _Menu.ipTextBox2.Text + "." + _Menu.ipTextBox3.Text + "." + _Menu.ipTextBox4.Text); // Set the entered ip by the user.
+                _SendingContainer.Set_Msg("001");
+                _SendingContainer.Set_HasBeenModified(true);
+            }
+            
+
+            _Menu.Client2(); // Set the configuration for the menu (hide/show labels).
         }
 
         /////////////////////////////////////////////////////
@@ -433,7 +458,7 @@ namespace Snake
 
         private void NetworkProcessOnMainThread()
         {
-            //Console.WriteLine("Coucou je suis la fonction appelée par le delegate");
+            
         }
 
         ////////////////////////////////////////////////////////////////
