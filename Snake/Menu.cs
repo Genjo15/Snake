@@ -30,6 +30,7 @@ namespace Snake
             ipTextBox2.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.
             ipTextBox3.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.
             ipTextBox4.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.
+            highScoresLabel.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.
         }
 
         internal void MainMenu()
@@ -55,6 +56,7 @@ namespace Snake
             this.ipTextBox2.Visible = false;                      // Hide ipTextBox2.
             this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
             this.ipTextBox4.Visible = false;                      // Hide ipTextBo41.
+            this.highScoresLabel.Visible = false;                 // Hide highScoresLabel. 
         }
 
         internal void InGame()
@@ -85,6 +87,7 @@ namespace Snake
             this.ipTextBox2.Visible = false;                      // Hide ipTextBox2.
             this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
             this.ipTextBox4.Visible = false;                      // Hide ipTextBox4.
+            this.highScoresLabel.Visible = false;                 // Hide highScoresLabel.
         }
 
         internal void Multiplayer()
@@ -110,6 +113,7 @@ namespace Snake
             this.ipTextBox2.Visible = false;                      // Hide ipTextBox2.
             this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
             this.ipTextBox4.Visible = false;                      // Hide ipTextBox4.
+            this.highScoresLabel.Visible = false;                 // Hide highScoresLabel.
         }
 
         internal void Host()
@@ -125,6 +129,7 @@ namespace Snake
             this.ipTextBox2.Visible = false;                      // Hide ipTextBox2.
             this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
             this.ipTextBox4.Visible = false;                      // Hide ipTextBox4.
+            this.highScoresLabel.Visible = false;                 // Hide highScoresLabel.
         }
 
         internal void Client1()
@@ -141,6 +146,7 @@ namespace Snake
             this.ipTextBox2.Visible = true;                       // Show ipTextBox2.
             this.ipTextBox3.Visible = true;                       // Show ipTextBox3.
             this.ipTextBox4.Visible = true;                       // Show ipTextBox4.
+            this.highScoresLabel.Visible = false;                 // Hide highScoresLabel.
         }
 
         internal void Client2()
@@ -156,6 +162,33 @@ namespace Snake
             this.ipTextBox2.Visible = false;                      // Hide ipTextBox2.
             this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
             this.ipTextBox4.Visible = false;                      // Hide ipTextBox4.
+            this.highScoresLabel.Visible = false;                 // Hide highScoresLabel.
+        }
+
+        internal void HighScoreShow()
+        {
+            this.playPictureBox.Visible = false;                  // Hide playPictureBox.
+            this.multiplayerPictureBox.Visible = false;           // Hide multiplayerPictureBox.
+            this.highScoresPictureBox.Visible = false;            // Hide highScoresPictureBox;
+            this.titlePictureBox.Visible = false;                 // Hide titlePictureBox.
+            this.gameOverPictureBox.Visible = false;              // Hide gameOverPictureBox.
+            this.retryPictureBox.Visible = false;                 // Hide retryPictureBox.
+            this.mainMenuPictureBox.Visible = true;               // Show mainMenuPictureBox.
+            this.multiplayerMenuPictureBox.Visible = false;       // Hide multiplayerMenuPictureBox.
+            this.createGamePictureBox.Visible = false;            // Hide createGamePictureBox.
+            this.joinGamePictureBox.Visible = false;              // Hide joinGamePictureBox.
+            this.backPictureBox.Visible = false;                  // Hide backPictureBox.
+            this.waitClientPictureBox.Visible = false;            // Hide waitClientPictureBox.
+            this.connectionHostPictureBox.Visible = false;        // Hide connectionHostPictureBox.
+            this.connectionEstablishedPictureBox.Visible = false; // Hide connectionEstablishedPictureBox.
+            this.startGamePictureBox.Visible = false;             // Hide startGamePictureBox.
+            this.enterIpPictureBox.Visible = false;               // Hide enterIpPictureBox.
+            this.okPictureBox.Visible = false;                    // Hide okPictureBox.
+            this.ipTextBox1.Visible = false;                      // Hide ipTextBox1.
+            this.ipTextBox2.Visible = false;                      // Hide ipTextBox2.
+            this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
+            this.ipTextBox4.Visible = false;                      // Hide ipTextBox4.
+            this.highScoresLabel.Visible = true;                  // Show highScoresLabel. 
         }
 
         internal void ConnectionEstablished(Boolean isHost)

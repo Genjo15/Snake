@@ -32,9 +32,13 @@ namespace Snake
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Menu));
             this.menuPanel = new System.Windows.Forms.Panel();
-            this.ipTextBox1 = new System.Windows.Forms.TextBox();
+            this.highScoresLabel = new System.Windows.Forms.Label();
+            this.ipTextBox4 = new System.Windows.Forms.TextBox();
+            this.ipTextBox3 = new System.Windows.Forms.TextBox();
+            this.ipTextBox2 = new System.Windows.Forms.TextBox();
             this.okPictureBox = new System.Windows.Forms.PictureBox();
             this.enterIpPictureBox = new System.Windows.Forms.PictureBox();
+            this.ipTextBox1 = new System.Windows.Forms.TextBox();
             this.startGamePictureBox = new System.Windows.Forms.PictureBox();
             this.connectionEstablishedPictureBox = new System.Windows.Forms.PictureBox();
             this.connectionHostPictureBox = new System.Windows.Forms.PictureBox();
@@ -50,9 +54,6 @@ namespace Snake
             this.gameOverPictureBox = new System.Windows.Forms.PictureBox();
             this.playPictureBox = new System.Windows.Forms.PictureBox();
             this.titlePictureBox = new System.Windows.Forms.PictureBox();
-            this.ipTextBox2 = new System.Windows.Forms.TextBox();
-            this.ipTextBox3 = new System.Windows.Forms.TextBox();
-            this.ipTextBox4 = new System.Windows.Forms.TextBox();
             this.menuPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.okPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.enterIpPictureBox)).BeginInit();
@@ -76,6 +77,7 @@ namespace Snake
             // menuPanel
             // 
             this.menuPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.menuPanel.Controls.Add(this.highScoresLabel);
             this.menuPanel.Controls.Add(this.ipTextBox4);
             this.menuPanel.Controls.Add(this.ipTextBox3);
             this.menuPanel.Controls.Add(this.ipTextBox2);
@@ -104,15 +106,43 @@ namespace Snake
             this.menuPanel.Size = new System.Drawing.Size(756, 476);
             this.menuPanel.TabIndex = 0;
             // 
-            // ipTextBox1
+            // highScoresLabel
             // 
-            this.ipTextBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.ipTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ipTextBox1.Font = new System.Drawing.Font("Calibri", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ipTextBox1.Location = new System.Drawing.Point(278, 257);
-            this.ipTextBox1.Name = "ipTextBox1";
-            this.ipTextBox1.Size = new System.Drawing.Size(55, 47);
-            this.ipTextBox1.TabIndex = 28;
+            this.highScoresLabel.Location = new System.Drawing.Point(198, 28);
+            this.highScoresLabel.Name = "highScoresLabel";
+            this.highScoresLabel.Size = new System.Drawing.Size(400, 250);
+            this.highScoresLabel.TabIndex = 34;
+            this.highScoresLabel.Visible = false;
+            // 
+            // ipTextBox4
+            // 
+            this.ipTextBox4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.ipTextBox4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ipTextBox4.Font = new System.Drawing.Font("Calibri", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ipTextBox4.Location = new System.Drawing.Point(543, 257);
+            this.ipTextBox4.Name = "ipTextBox4";
+            this.ipTextBox4.Size = new System.Drawing.Size(55, 47);
+            this.ipTextBox4.TabIndex = 33;
+            // 
+            // ipTextBox3
+            // 
+            this.ipTextBox3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.ipTextBox3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ipTextBox3.Font = new System.Drawing.Font("Calibri", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ipTextBox3.Location = new System.Drawing.Point(455, 257);
+            this.ipTextBox3.Name = "ipTextBox3";
+            this.ipTextBox3.Size = new System.Drawing.Size(55, 47);
+            this.ipTextBox3.TabIndex = 32;
+            // 
+            // ipTextBox2
+            // 
+            this.ipTextBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.ipTextBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ipTextBox2.Font = new System.Drawing.Font("Calibri", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ipTextBox2.Location = new System.Drawing.Point(368, 257);
+            this.ipTextBox2.Name = "ipTextBox2";
+            this.ipTextBox2.Size = new System.Drawing.Size(55, 47);
+            this.ipTextBox2.TabIndex = 31;
             // 
             // okPictureBox
             // 
@@ -131,6 +161,16 @@ namespace Snake
             this.enterIpPictureBox.Size = new System.Drawing.Size(536, 46);
             this.enterIpPictureBox.TabIndex = 29;
             this.enterIpPictureBox.TabStop = false;
+            // 
+            // ipTextBox1
+            // 
+            this.ipTextBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.ipTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ipTextBox1.Font = new System.Drawing.Font("Calibri", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ipTextBox1.Location = new System.Drawing.Point(278, 257);
+            this.ipTextBox1.Name = "ipTextBox1";
+            this.ipTextBox1.Size = new System.Drawing.Size(55, 47);
+            this.ipTextBox1.TabIndex = 28;
             // 
             // startGamePictureBox
             // 
@@ -271,36 +311,6 @@ namespace Snake
             this.titlePictureBox.TabIndex = 11;
             this.titlePictureBox.TabStop = false;
             // 
-            // ipTextBox2
-            // 
-            this.ipTextBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.ipTextBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ipTextBox2.Font = new System.Drawing.Font("Calibri", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ipTextBox2.Location = new System.Drawing.Point(368, 257);
-            this.ipTextBox2.Name = "ipTextBox2";
-            this.ipTextBox2.Size = new System.Drawing.Size(55, 47);
-            this.ipTextBox2.TabIndex = 31;
-            // 
-            // ipTextBox3
-            // 
-            this.ipTextBox3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.ipTextBox3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ipTextBox3.Font = new System.Drawing.Font("Calibri", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ipTextBox3.Location = new System.Drawing.Point(455, 257);
-            this.ipTextBox3.Name = "ipTextBox3";
-            this.ipTextBox3.Size = new System.Drawing.Size(55, 47);
-            this.ipTextBox3.TabIndex = 32;
-            // 
-            // ipTextBox4
-            // 
-            this.ipTextBox4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.ipTextBox4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ipTextBox4.Font = new System.Drawing.Font("Calibri", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ipTextBox4.Location = new System.Drawing.Point(543, 257);
-            this.ipTextBox4.Name = "ipTextBox4";
-            this.ipTextBox4.Size = new System.Drawing.Size(55, 47);
-            this.ipTextBox4.TabIndex = 33;
-            // 
             // Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -357,5 +367,6 @@ namespace Snake
         internal TextBox ipTextBox4;
         internal TextBox ipTextBox3;
         internal TextBox ipTextBox2;
+        internal Label highScoresLabel;
     }
 }

@@ -73,6 +73,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HighScore.cs" />
     <Compile Include="Insect.cs" />
     <Compile Include="Fruit.cs" />
     <Compile Include="Game.cs">

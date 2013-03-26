@@ -350,7 +350,27 @@ namespace Snake
 
         private void highScoresPictureBox_Click(object sender, EventArgs e)
         {
-            // LOUIS A TOI D'JOUER (YUUUUGIYOOOOOOOO)!!!!!!!
+            HighScoreData sample = HighScore.LoadHighScores();
+            if (sample.Equals(null))
+            {
+                sample = new HighScoreData(1);
+                sample.PlayerName[0] = "Test";
+                sample.Score[0] = 2;
+                sample.time[0] = 4;
+                sample.PlayerName[1] = "John";
+                sample.Score[1] = 20;
+                sample.time[1] = 400;
+                HighScore.SaveHighScores(sample);
+            }
+
+            _Menu.highScoresLabel.Text = "Player".PadRight(20) + "Score".PadRight(20) + "Time";
+            for(int i=0;i<sample.Count;i++)
+            {
+                _Menu.highScoresLabel.Text+="\n"+sample.PlayerName[i].ToString().PadRight(25) + sample.Score[i].ToString().PadRight(21) + sample.time[i].ToString(); 
+            }                             
+            _Menu.HighScoreShow();
+
+
         }
 
         //////////////////////////////////////////
