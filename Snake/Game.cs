@@ -205,6 +205,7 @@ namespace Snake
             _Menu.joinGamePictureBox.Click += new EventHandler(joinGamePictureBox_Click);       //
             _Menu.okPictureBox.Click += new EventHandler(okPictureBox_Click);                   //
             _Menu.startGamePictureBox.Click += new EventHandler(startGamePictureBox_Click);     //
+            _Menu.submitScoreButton.Click += new EventHandler(submitScore_Click);
         }
 
 
@@ -233,6 +234,20 @@ namespace Snake
             _InsectTimer.Stop(); // Stop insect timer.
             LoadMenu();          // Load the menu.
             _Menu.GameOver();    // Set the configuration for a game end (hide/show labels).
+        }
+
+        private void submitScore_Click(object sender, EventArgs e)
+        {
+            String text = _Menu.highScoreNameText.Text;
+            HighScoreData data = HighScore.LoadHighScores();
+            for (int i = 0; i < data.Count; i++)
+            {
+                if (data.PlayerName[i] == text)
+                {
+
+                }
+            }
+
         }
 
         #endregion
@@ -351,22 +366,14 @@ namespace Snake
         private void highScoresPictureBox_Click(object sender, EventArgs e)
         {
             HighScoreData sample = HighScore.LoadHighScores();
-            if (sample.Equals(null))
-            {
-                sample = new HighScoreData(1);
-                sample.PlayerName[0] = "Test";
-                sample.Score[0] = 2;
-                sample.time[0] = 4;
-                sample.PlayerName[1] = "John";
-                sample.Score[1] = 20;
-                sample.time[1] = 400;
-                HighScore.SaveHighScores(sample);
-            }
+            
+            _Menu.highScoresName.Text = "Players\n";
+            _Menu.highScoresScore.Text = "Score\n";
 
-            _Menu.highScoresLabel.Text = "Player".PadRight(20) + "Score".PadRight(20) + "Time";
             for(int i=0;i<sample.Count;i++)
             {
-                _Menu.highScoresLabel.Text+="\n"+sample.PlayerName[i].ToString().PadRight(25) + sample.Score[i].ToString().PadRight(21) + sample.time[i].ToString(); 
+                _Menu.highScoresName.Text += "\n" + sample.PlayerName[i].ToString();
+                _Menu.highScoresScore.Text += "\n" + sample.Score[i].ToString();               
             }                             
             _Menu.HighScoreShow();
 
@@ -436,6 +443,8 @@ namespace Snake
 
             _Menu.Client2(); // Set the configuration for the menu (hide/show labels).
         }
+
+
 
         /////////////////////////////////////////////////////
         // Event for pressing the startGamePictureBox button

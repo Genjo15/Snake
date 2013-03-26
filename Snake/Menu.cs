@@ -30,7 +30,9 @@ namespace Snake
             ipTextBox2.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.
             ipTextBox3.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.
             ipTextBox4.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.
-            highScoresLabel.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.
+            highScoresName.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.
+            highScoresScore.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.            
+            highScoreNameText.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.
         }
 
         internal void MainMenu()
@@ -56,7 +58,10 @@ namespace Snake
             this.ipTextBox2.Visible = false;                      // Hide ipTextBox2.
             this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
             this.ipTextBox4.Visible = false;                      // Hide ipTextBo41.
-            this.highScoresLabel.Visible = false;                 // Hide highScoresLabel. 
+            this.highScoresName.Visible = false;                  // Hide highScoresLabel.             
+            this.highScoresScore.Visible = false;                 // Hide highScoresLabel. 
+            this.highScoreNameText.Visible = false;               // Hide highScoreNameText.
+            this.submitScoreButton.Visible = false;               // Hide submitScoreButton.
         }
 
         internal void InGame()
@@ -87,7 +92,10 @@ namespace Snake
             this.ipTextBox2.Visible = false;                      // Hide ipTextBox2.
             this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
             this.ipTextBox4.Visible = false;                      // Hide ipTextBox4.
-            this.highScoresLabel.Visible = false;                 // Hide highScoresLabel.
+            this.highScoresName.Visible = false;                  // Hide highScoresLabel.            
+            this.highScoresScore.Visible = false;                 // Hide highScoresLabel.
+            this.highScoreNameText.Visible = true;               // True highScoreNameText.
+            this.submitScoreButton.Visible = true;               // True submitScoreButton.
         }
 
         internal void Multiplayer()
@@ -113,7 +121,10 @@ namespace Snake
             this.ipTextBox2.Visible = false;                      // Hide ipTextBox2.
             this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
             this.ipTextBox4.Visible = false;                      // Hide ipTextBox4.
-            this.highScoresLabel.Visible = false;                 // Hide highScoresLabel.
+            this.highScoresName.Visible = false;                  // Hide highScoresLabel.            
+            this.highScoresScore.Visible = false;                 // Hide highScoresLabel.
+            this.highScoreNameText.Visible = false;               // Hide highScoreNameText.
+            this.submitScoreButton.Visible = false;               // Hide submitScoreButton.
         }
 
         internal void Host()
@@ -129,7 +140,10 @@ namespace Snake
             this.ipTextBox2.Visible = false;                      // Hide ipTextBox2.
             this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
             this.ipTextBox4.Visible = false;                      // Hide ipTextBox4.
-            this.highScoresLabel.Visible = false;                 // Hide highScoresLabel.
+            this.highScoresName.Visible = false;                  // Hide highScoresLabel.            
+            this.highScoresScore.Visible = false;                 // Hide highScoresLabel.
+            this.highScoreNameText.Visible = false;               // Hide highScoreNameText.
+            this.submitScoreButton.Visible = false;               // Hide submitScoreButton.
         }
 
         internal void Client1()
@@ -146,7 +160,10 @@ namespace Snake
             this.ipTextBox2.Visible = true;                       // Show ipTextBox2.
             this.ipTextBox3.Visible = true;                       // Show ipTextBox3.
             this.ipTextBox4.Visible = true;                       // Show ipTextBox4.
-            this.highScoresLabel.Visible = false;                 // Hide highScoresLabel.
+            this.highScoresName.Visible = false;                  // Hide highScoresLabel.            
+            this.highScoresScore.Visible = false;                 // Hide highScoresLabel.
+            this.highScoreNameText.Visible = false;               // Hide highScoreNameText.
+            this.submitScoreButton.Visible = false;               // Hide submitScoreButton.
         }
 
         internal void Client2()
@@ -162,7 +179,10 @@ namespace Snake
             this.ipTextBox2.Visible = false;                      // Hide ipTextBox2.
             this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
             this.ipTextBox4.Visible = false;                      // Hide ipTextBox4.
-            this.highScoresLabel.Visible = false;                 // Hide highScoresLabel.
+            this.highScoresName.Visible = false;                  // Hide highScoresLabel.            
+            this.highScoresScore.Visible = false;                 // Hide highScoresLabel.
+            this.highScoreNameText.Visible = false;               // Hide highScoreNameText.
+            this.submitScoreButton.Visible = false;               // Hide submitScoreButton.
         }
 
         internal void HighScoreShow()
@@ -188,7 +208,10 @@ namespace Snake
             this.ipTextBox2.Visible = false;                      // Hide ipTextBox2.
             this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
             this.ipTextBox4.Visible = false;                      // Hide ipTextBox4.
-            this.highScoresLabel.Visible = true;                  // Show highScoresLabel. 
+            this.highScoresName.Visible = true;                   // Show highScoresLabel.            
+            this.highScoresScore.Visible = true;                 // Show highScoresLabel.
+            this.highScoreNameText.Visible = false;               // Hide highScoreNameText.
+            this.submitScoreButton.Visible = false;               // Hide submitScoreButton.
         }
 
         internal void ConnectionEstablished(Boolean isHost)
@@ -207,6 +230,8 @@ namespace Snake
         }
 
         #endregion
+
+       
 
     }
 }
