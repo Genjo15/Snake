@@ -52,6 +52,8 @@ namespace Snake
         private processOnMainThread _PlayGameDel;             // The play game delegate.
         private String _HostIpAdress;                         //
 
+        System.Threading.Thread _RenderThread; // The render thread.
+
         #endregion
 
         /**************************************************** Constructor ****************************************************/
@@ -101,6 +103,10 @@ namespace Snake
             _InsectTimer = new Timer();                             // New timer.
             _InsectTimer.Interval = 1000;                           // Interval of the timer is set to 1s.
             _InsectTimer.Tick += new EventHandler(InsectTimerTick); // New EventHandler. 
+
+             _RenderThread = new System.Threading.Thread(new System.Threading.ThreadStart(Render)); // Initialize the thread.
+             _RenderThread.Name = "RenderThread";                                                             // Set its name.
+             _RenderThread.IsBackground = true;                                                                // Make it background runnable.
         }
 
         /////////////////////////////
@@ -133,7 +139,7 @@ namespace Snake
                 //this.textBox1.Focus(); // Focus on the textbox (this invisible textbox has been created to manage keyDown events).
                 this.scoreLabel.Text = "Score : " + _Score; // Show the score.
 
-                Render(); // Refresh the display.
+                //Render(); // Refresh the display.
             }
 
             else EndGame(); // end game if _GameOver is true.
@@ -198,6 +204,8 @@ namespace Snake
             _Timer.Start();                  // Start timer.
             _InsectTimer.Start();            // Start insect timer.
             _Menu.InGame();                  // Set the configuration for a game end (hide/show labels).
+            _RenderThread.Start();
+            _InGame = true;
         }
 
         //////////////////////////
@@ -209,6 +217,8 @@ namespace Snake
             _InsectTimer.Stop(); // Stop insect timer.
             LoadMenu();          // Load the menu.
             _Menu.GameOver();    // Set the configuration for a game end (hide/show labels).
+
+            _RenderThread.Abort();
 
             _InGame = false;
         }
@@ -222,19 +232,22 @@ namespace Snake
 
         private void Render()
         {
-            _Fruit.RenderFruit(this.gameBoardPictureBox); // Refresh the display of the fruit.     
-            _Insect.RenderInsect(this.gameBoardPictureBox); // Refresh the display of the insect.
-            _FullSnake.RenderSnake(this.gameBoardPictureBox); // Refresh the display of the snake.
-
-            //_FullSnake.RenderMiniSnake(this.miniGameBoardPictureBox);
-
-            // SECTION IN CONSTRUCTION!!!
-            if (_Multiplayer && _InGame)
+            while (_InGame)
             {
-                //_Insect.RenderMiniInsect(this.miniGameBoardPictureBox); // for test.
-                //RenderMiniSnake();
+                _Fruit.RenderFruit(this.gameBoardPictureBox); // Refresh the display of the fruit.     
+                _Insect.RenderInsect(this.gameBoardPictureBox); // Refresh the display of the insect.
+                _FullSnake.RenderSnake(this.gameBoardPictureBox); // Refresh the display of the snake.
+
+                //_FullSnake.RenderMiniSnake(this.miniGameBoardPictureBox);
+
+                // SECTION IN CONSTRUCTION!!!
+                if (_Multiplayer && _InGame)
+                {
+                    //_Insect.RenderMiniInsect(this.miniGameBoardPictureBox); // for test.
+                    //RenderMiniSnake();
                     //_ReceptionContainer.Get_Snake().RenderMiniSnake(this.miniGameBoardPictureBox); // for test.
                     _Reception.Get_Container().Get_Snake().RenderMiniSnake(this.miniGameBoardPictureBox); // for test.
+                }
             }
         }
 
@@ -418,7 +431,7 @@ namespace Snake
             {
                 _SendingContainer.Set_Msg("100");
                 _SendingContainer.Set_HasBeenModified(true);
-                _InGame = true;
+                //_InGame = true;
             }
 
             PlayGame();
@@ -473,7 +486,7 @@ namespace Snake
                 case "100": if (!_InGame)
                             {
                                 Invoke(_PlayGameDel);
-                                _InGame = true;
+                                //_InGame = true;
                             }
 
                             _SendingContainer.Set_Msg("100");
