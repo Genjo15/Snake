@@ -31,6 +31,7 @@ namespace Snake
         internal void InitializeFont()
         {
             _Font = new PersonalFont();
+            nicknameTextBox.Font = new System.Drawing.Font(_Font.getPersonalFont(), 16, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.
             ipTextBox1.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.
             ipTextBox2.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.
             ipTextBox3.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.
@@ -64,6 +65,7 @@ namespace Snake
             this.highScoresLabel.Visible = false;                 // Hide highScoresLabel. 
             this.nicknamePictureBox.Visible = true;               // Show nicknamePictureBox.
             this.nicknameTextBox.Visible = true;                  // Show nicknameTextBox.
+            this.playPictureBox.Select();
 
         }
 

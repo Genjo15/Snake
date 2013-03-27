@@ -6,6 +6,7 @@ using System.Windows.Forms;
 
 namespace Snake
 {
+    [Serializable] 
     class Insect
     {
         /********************************************* Declaration of variables *********************************************/
@@ -19,7 +20,8 @@ namespace Snake
         private const int _POINT = 25; // The points earned when item reached.
         private int _SIDE;             // Size of the insect.
         private Random _RandomNumber;  // Random number.
-        private Boolean _Moved;        // Boolean which informs if the insect has been moved.
+        private Boolean _SinglePlayerEraseStreak;        // Boolean which informs if the insect has been moved.
+        private Boolean _TwoPlayersEraseStreak;
 
         #endregion
 
@@ -29,7 +31,7 @@ namespace Snake
 
         public Insect(int width, int height)
         {
-            _Moved = false;
+            Set_EraseStreaks(false);
             _SIDE = width / 27 - 2; // Initialize dynamically the side of the insect.
             _RandomNumber = new Random();   // Initialize the generator of random.
             _X = (_SIDE + 2) * (_RandomNumber.Next(width - _SIDE) / (_SIDE + 2));  // Set _X thanks to a generated number.
@@ -38,11 +40,16 @@ namespace Snake
 
         public Insect(int width, int height, int x, int y)
         {
-            _Moved = false;
+            Set_EraseStreaks(false);
             _SIDE = width / 27 - 2; // Initialize dynamically the side of the insect.
             _RandomNumber = new Random();   // Initialize the generator of random.
             _X = x;
             _Y = y;
+        }
+
+        public Insect()
+        {
+
         }
 
         #endregion
@@ -87,7 +94,7 @@ namespace Snake
             _X = tmpX;
             _Y = tmpY;
 
-            _Moved = true;
+            Set_EraseStreaks(true);
         }
 
         ////////////////////////////////////
@@ -100,7 +107,7 @@ namespace Snake
             _X = -666; // Make the item unreachable for the user by changing its X & Y.
             _Y = -666;
 
-            _Moved = true;
+            Set_EraseStreaks(true);
         }
 
         ///////////////
@@ -166,10 +173,10 @@ namespace Snake
             myBrush = new System.Drawing.SolidBrush(Color.Black); // Initialize the first brush.
             myBrush2 = new System.Drawing.SolidBrush(Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))))); // Initialize the 2nd brush.
 
-            if (_Moved)
+            if (_SinglePlayerEraseStreak)
             {
                 myGraphics.FillRectangle(myBrush2, new Rectangle(_LastX, _LastY, (gameBoardPictureBox.Width / 27 - 2), (gameBoardPictureBox.Width / 27 - 2))); // Erase the streak.
-                _Moved = false;
+                _SinglePlayerEraseStreak = false;
             }
 
             myGraphics.DrawImage(_InsectPicture, new Rectangle(_X, _Y, (gameBoardPictureBox.Width / 27 - 2), (gameBoardPictureBox.Width / 27 - 2))); // Draw insect.
@@ -189,11 +196,12 @@ namespace Snake
             myBrush = new System.Drawing.SolidBrush(Color.Black); // Initialize the first brush.
             myBrush2 = new System.Drawing.SolidBrush(Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))))); // Initialize the 2nd brush.
 
-            //if (_InsectMoved)
-            //{
+            if (_TwoPlayersEraseStreak)
+            {
                 myGraphics.FillRectangle(myBrush2, new Rectangle(_LastX/2, _LastY/2, (gameBoardPictureBox.Width / 27 - 1), (gameBoardPictureBox.Width / 27 - 1))); // Erase the streak.
-                //_InsectMoved = false;
-            //}
+                _TwoPlayersEraseStreak = false;
+            }
+
             myGraphics.DrawImage(_InsectPicture, new Rectangle(_X/2, _Y/2, (gameBoardPictureBox.Width / 27 - 1), (gameBoardPictureBox.Width / 27 - 1))); // Draw insect.
         }
 
@@ -247,6 +255,15 @@ namespace Snake
         public void Set_Y(int y)
         {
             _Y = y;
+        }
+
+        ///////////////////////////
+        // Set EraseStreaks (both)
+
+        public void Set_EraseStreaks(Boolean b)
+        {
+            _SinglePlayerEraseStreak = b;
+            _TwoPlayersEraseStreak = b;
         }
 
         #endregion

@@ -52,6 +52,7 @@ namespace Snake
         private processOnMainThread _PlayGameDel;             // The play game delegate.
         private String _HostIpAdress;                         //
 
+
         System.Threading.Thread _RenderThread; // The render thread.
 
         #endregion
@@ -125,7 +126,7 @@ namespace Snake
                     _Fruit.MoveFruit(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height, _FullSnake); // Move fruit positions.
                     _Score = _Score + _Fruit.Get_POINT(); // Increment the score.
                     _FullSnake.AddSnakePart(this.gameBoardPictureBox.Width); // Add a Snake part.
-                    _Fruit.Set_IsReached(true);
+                    _Fruit.Set_EraseStreaks(true);
                 }
 
                 if (_Insect.IsReached(_FullSnake.Get_Snake()[0]))
@@ -238,34 +239,17 @@ namespace Snake
                 _Insect.RenderInsect(this.gameBoardPictureBox); // Refresh the display of the insect.
                 _FullSnake.RenderSnake(this.gameBoardPictureBox); // Refresh the display of the snake.
 
-                //_FullSnake.RenderMiniSnake(this.miniGameBoardPictureBox);
-
-                // SECTION IN CONSTRUCTION!!!
-                if (_Multiplayer && _InGame)
+                if (_Multiplayer)
                 {
-                    //_Insect.RenderMiniInsect(this.miniGameBoardPictureBox); // for test.
-                    //RenderMiniSnake();
-                    //_ReceptionContainer.Get_Snake().RenderMiniSnake(this.miniGameBoardPictureBox); // for test.
-                    _Reception.Get_Container().Get_Snake().RenderMiniSnake(this.miniGameBoardPictureBox); // for test.
+                    _Reception.Get_Container().Get_Snake().RenderMiniSnake(this.miniGameBoardPictureBox);
+                    _Reception.Get_Container().Get_Fruit().RenderMiniFruit(this.miniGameBoardPictureBox);
+                    _Reception.Get_Container().Get_Insect().RenderMiniInsect(this.miniGameBoardPictureBox);
+
+
+                    //_FullSnake.RenderMiniSnake(this.miniGameBoardPictureBox);
+                    //_Fruit.RenderMiniFruit(this.miniGameBoardPictureBox);
+                    //_Insect.RenderMiniInsect(this.miniGameBoardPictureBox);
                 }
-            }
-        }
-
-        //////////////////////////
-        // Display the mini snake
-
-        public void RenderMiniSnake()
-        {
-            for (int i = 0; i < _Reception.Get_Container().Get_Snake().Get_SnakeSize(); i++)
-            {
-                if (_SnakeGraphicalParts.Count < _Reception.Get_Container().Get_Snake().Get_SnakeSize()) // If there is not enough panel in the pool ...
-                    _SnakeGraphicalParts.Add(new Panel());                   // ...Add it one.
-
-                _SnakeGraphicalParts[i].Location = new System.Drawing.Point(_Reception.Get_Container().Get_Snake().Get_Snake()[i].Get_X() / 2, _Reception.Get_Container().Get_Snake().Get_Snake()[i].Get_Y() / 2);  // Definition of the panel location.
-                _SnakeGraphicalParts[i].Size = new System.Drawing.Size(_Reception.Get_Container().Get_Snake().Get_Snake()[i].Get_SIDE() / 2, _Reception.Get_Container().Get_Snake().Get_Snake()[i].Get_SIDE() / 2); // Definition of the panel size.
-                _SnakeGraphicalParts[i].BackColor = System.Drawing.Color.Black; // Definition of the panel color.
-
-                this.miniGameBoardPictureBox.Controls.Add(_SnakeGraphicalParts[i]); // Attach the panel to the gameboard.
             }
         }
 
@@ -366,7 +350,7 @@ namespace Snake
         {
             _Menu.MainMenu(); // Set the configuration for the menu (hide/show labels).
 
-            if (_Multiplayer)
+            if (_Multiplayer && _Sending != null && _Reception != null)
             {
                 Invoke(_Sending.Get_NetworkDelegate());
                 Invoke(_Reception.Get_NetworkDelegate());
@@ -381,14 +365,7 @@ namespace Snake
         private void createGamePictureBox_Click(object sender, EventArgs e)
         {
             _Menu.Host(); // Set the configuration for the menu (hide/show labels).
-            _Multiplayer = true;
-
-            _SendingContainer = new NetworkContainer();
-            _ReceptionContainer = new NetworkContainer();
-            _Sending = new Network(ref _SendingContainer, true, true, _CommandDispatcherDel);
-            _Reception = new Network(ref _ReceptionContainer, true, false, _CommandDispatcherDel);
-
-            InitializeNetworkThreads();
+            InitializeNetwork(true);
         }
 
         //////////////////////////////////////////////
@@ -397,14 +374,7 @@ namespace Snake
         private void joinGamePictureBox_Click(object sender, EventArgs e)
         {
             _Menu.Client1(); // Set the configuration for the menu (hide/show labels).
-            _Multiplayer = true;
-
-            _SendingContainer = new NetworkContainer();
-            _ReceptionContainer = new NetworkContainer();
-            _Sending = new Network(ref _SendingContainer, false, true, _CommandDispatcherDel);
-            _Reception = new Network(ref _ReceptionContainer, false, false, _CommandDispatcherDel);
-
-            InitializeNetworkThreads();
+            InitializeNetwork(false);
         }
 
         ///////////////////////////////////////
@@ -431,7 +401,6 @@ namespace Snake
             {
                 _SendingContainer.Set_Msg("100");
                 _SendingContainer.Set_HasBeenModified(true);
-                //_InGame = true;
             }
 
             PlayGame();
@@ -484,18 +453,40 @@ namespace Snake
                             break;
 
                 case "100": if (!_InGame)
-                            {
                                 Invoke(_PlayGameDel);
-                                //_InGame = true;
-                            }
 
                             _SendingContainer.Set_Msg("100");
                             _SendingContainer.Set_Snake(_FullSnake);
+                            _SendingContainer.Set_Fruit(_Fruit);
+                            _SendingContainer.Set_Insect(_Insect);
                             _SendingContainer.Set_HasBeenModified(true);
 
                             break;
             }
         }
+
+        //////////////////////////////////////////
+        // Function initializing network elements
+
+        private void InitializeNetwork(Boolean isHost)
+        {
+            _Multiplayer = true;
+
+            /*_MiniFruitPictureBox = new PictureBox();
+            _MiniFruitPictureBox.BackColor = System.Drawing.Color.Black; // Definition of the panel color.
+            _MiniFruitPictureBox.Size = new System.Drawing.Size(6, 6);
+            _MiniFruitPictureBox.Image = global::Snake.Properties.Resources.MiniFruit;
+            this.Controls.Add(_MiniFruitPictureBox);*/
+
+            _SendingContainer = new NetworkContainer();
+            _ReceptionContainer = new NetworkContainer();
+
+            _Sending = new Network(ref _SendingContainer, isHost, true, _CommandDispatcherDel);
+            _Reception = new Network(ref _ReceptionContainer, isHost, false, _CommandDispatcherDel);
+
+            InitializeNetworkThreads();
+        }
+
 
         ////////////////////////////////////////////////////////////////
         // Function initializing threads for sending and receiving data

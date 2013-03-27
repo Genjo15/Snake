@@ -15,8 +15,10 @@ namespace Snake
 
         #region Variables
   
-        private String _Msg;        // The message (in String).
+        private String _Msg;        // The message.
         private FullSnake _Snake;   // Temporary snake.
+        private Fruit _Fruit;       // Temporary fruit.
+        private Insect _Insect;     // Temporary insect.
 
         private Boolean _HasBeenModified;
 
@@ -31,8 +33,10 @@ namespace Snake
         {
             _Msg = "000";
             _Snake = new FullSnake();
+            _Fruit = new Fruit();
+            _Insect = new Insect();
+
             _HasBeenModified = false;
-            //test = 0;
         }
 
         #endregion
@@ -123,7 +127,38 @@ namespace Snake
         {
             _Snake = snake;
         }
-        
+
+        //////////////
+        // Get _Fruit
+
+        public Fruit Get_Fruit()
+        {
+            return _Fruit;
+        }
+
+        //////////////
+        // Set _Fruit
+
+        public void Set_Fruit(Fruit fruit)
+        {
+            _Fruit = fruit;
+        }
+
+        ///////////////
+        // Get _Insect
+
+        public Insect Get_Insect()
+        {
+            return _Insect;
+        }
+
+        //////////////
+        // Set _Insect
+
+        public void Set_Insect(Insect insect)
+        {
+            _Insect = insect;
+        }
 
         #endregion
     }

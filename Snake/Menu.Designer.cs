@@ -32,15 +32,15 @@ namespace Snake
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Menu));
             this.menuPanel = new System.Windows.Forms.Panel();
+            this.nicknameTextBox = new System.Windows.Forms.TextBox();
+            this.nicknamePictureBox = new System.Windows.Forms.PictureBox();
             this.highScoresLabel = new System.Windows.Forms.Label();
             this.ipTextBox4 = new System.Windows.Forms.TextBox();
             this.ipTextBox3 = new System.Windows.Forms.TextBox();
             this.ipTextBox2 = new System.Windows.Forms.TextBox();
-            this.ipTextBox1 = new System.Windows.Forms.TextBox();
-            this.nicknameTextBox = new System.Windows.Forms.TextBox();
-            this.nicknamePictureBox = new System.Windows.Forms.PictureBox();
             this.okPictureBox = new System.Windows.Forms.PictureBox();
             this.enterIpPictureBox = new System.Windows.Forms.PictureBox();
+            this.ipTextBox1 = new System.Windows.Forms.TextBox();
             this.startGamePictureBox = new System.Windows.Forms.PictureBox();
             this.connectionEstablishedPictureBox = new System.Windows.Forms.PictureBox();
             this.connectionHostPictureBox = new System.Windows.Forms.PictureBox();
@@ -111,6 +111,26 @@ namespace Snake
             this.menuPanel.Size = new System.Drawing.Size(756, 476);
             this.menuPanel.TabIndex = 0;
             // 
+            // nicknameTextBox
+            // 
+            this.nicknameTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.nicknameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.nicknameTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nicknameTextBox.Location = new System.Drawing.Point(142, 405);
+            this.nicknameTextBox.Name = "nicknameTextBox";
+            this.nicknameTextBox.Size = new System.Drawing.Size(176, 19);
+            this.nicknameTextBox.TabIndex = 36;
+            this.nicknameTextBox.Text = "Unknown Player 1";
+            // 
+            // nicknamePictureBox
+            // 
+            this.nicknamePictureBox.Image = ((System.Drawing.Image)(resources.GetObject("nicknamePictureBox.Image")));
+            this.nicknamePictureBox.Location = new System.Drawing.Point(28, 404);
+            this.nicknamePictureBox.Name = "nicknamePictureBox";
+            this.nicknamePictureBox.Size = new System.Drawing.Size(305, 35);
+            this.nicknamePictureBox.TabIndex = 35;
+            this.nicknamePictureBox.TabStop = false;
+            // 
             // highScoresLabel
             // 
             this.highScoresLabel.Location = new System.Drawing.Point(198, 28);
@@ -149,36 +169,6 @@ namespace Snake
             this.ipTextBox2.Size = new System.Drawing.Size(55, 47);
             this.ipTextBox2.TabIndex = 31;
             // 
-            // ipTextBox1
-            // 
-            this.ipTextBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.ipTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ipTextBox1.Font = new System.Drawing.Font("Calibri", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ipTextBox1.Location = new System.Drawing.Point(278, 257);
-            this.ipTextBox1.Name = "ipTextBox1";
-            this.ipTextBox1.Size = new System.Drawing.Size(55, 47);
-            this.ipTextBox1.TabIndex = 28;
-            // 
-            // nicknameTextBox
-            // 
-            this.nicknameTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.nicknameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.nicknameTextBox.Font = new System.Drawing.Font("Kraboudja", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nicknameTextBox.Location = new System.Drawing.Point(142, 405);
-            this.nicknameTextBox.Name = "nicknameTextBox";
-            this.nicknameTextBox.Size = new System.Drawing.Size(176, 25);
-            this.nicknameTextBox.TabIndex = 36;
-            this.nicknameTextBox.Text = "Unknown Player 1";
-            // 
-            // nicknamePictureBox
-            // 
-            this.nicknamePictureBox.Image = ((System.Drawing.Image)(resources.GetObject("nicknamePictureBox.Image")));
-            this.nicknamePictureBox.Location = new System.Drawing.Point(28, 404);
-            this.nicknamePictureBox.Name = "nicknamePictureBox";
-            this.nicknamePictureBox.Size = new System.Drawing.Size(305, 35);
-            this.nicknamePictureBox.TabIndex = 35;
-            this.nicknamePictureBox.TabStop = false;
-            // 
             // okPictureBox
             // 
             this.okPictureBox.Image = global::Snake.Properties.Resources.OK;
@@ -196,6 +186,16 @@ namespace Snake
             this.enterIpPictureBox.Size = new System.Drawing.Size(536, 46);
             this.enterIpPictureBox.TabIndex = 29;
             this.enterIpPictureBox.TabStop = false;
+            // 
+            // ipTextBox1
+            // 
+            this.ipTextBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.ipTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.ipTextBox1.Font = new System.Drawing.Font("Calibri", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ipTextBox1.Location = new System.Drawing.Point(278, 257);
+            this.ipTextBox1.Name = "ipTextBox1";
+            this.ipTextBox1.Size = new System.Drawing.Size(55, 47);
+            this.ipTextBox1.TabIndex = 28;
             // 
             // startGamePictureBox
             // 

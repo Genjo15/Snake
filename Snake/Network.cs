@@ -70,6 +70,8 @@ namespace Snake
 
         private void AbortConnection()
         {
+            IAsyncResult a;
+
             _Socket.Close();
             _Continue = false;
         }
@@ -96,7 +98,7 @@ namespace Snake
                     Console.WriteLine("Client has received : " + _Container.Get_Msg() + " from : " + _EndPoint.Address.ToString().Split(':')[0]);
                 }
 
-                System.Threading.Thread.Sleep(70);
+                //System.Threading.Thread.Sleep(5);
 
                 _Delegate.DynamicInvoke();
 
