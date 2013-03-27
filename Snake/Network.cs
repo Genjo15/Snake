@@ -126,7 +126,7 @@ namespace Snake
                     Console.WriteLine("Server has sent : " + _Container.Get_Msg() + " to " + _EndPoint.Address.ToString().Split(':')[0]);
                 }
 
-                System.Threading.Thread.Sleep(0); // Sleep for 1s.
+                System.Threading.Thread.Sleep(35); // Sleep for 1s.
 
             }
         }

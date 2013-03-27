@@ -62,6 +62,9 @@ namespace Snake
             this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
             this.ipTextBox4.Visible = false;                      // Hide ipTextBo41.
             this.highScoresLabel.Visible = false;                 // Hide highScoresLabel. 
+            this.nicknamePictureBox.Visible = true;               // Show nicknamePictureBox.
+            this.nicknameTextBox.Visible = true;                  // Show nicknameTextBox.
+
         }
 
         internal void InGame()
@@ -93,6 +96,8 @@ namespace Snake
             this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
             this.ipTextBox4.Visible = false;                      // Hide ipTextBox4.
             this.highScoresLabel.Visible = false;                 // Hide highScoresLabel.
+            this.nicknamePictureBox.Visible = false;              // Hide nicknamePictureBox.
+            this.nicknameTextBox.Visible = false;                 // Hide nicknameTextBox.
         }
 
         internal void Multiplayer()
@@ -119,6 +124,8 @@ namespace Snake
             this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
             this.ipTextBox4.Visible = false;                      // Hide ipTextBox4.
             this.highScoresLabel.Visible = false;                 // Hide highScoresLabel.
+            this.nicknamePictureBox.Visible = false;              // Hide nicknamePictureBox.
+            this.nicknameTextBox.Visible = false;                 // Hide nicknameTextBox.
         }
 
         internal void Host()
@@ -135,6 +142,8 @@ namespace Snake
             this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
             this.ipTextBox4.Visible = false;                      // Hide ipTextBox4.
             this.highScoresLabel.Visible = false;                 // Hide highScoresLabel.
+            this.nicknamePictureBox.Visible = false;              // Hide nicknamePictureBox.
+            this.nicknameTextBox.Visible = false;                 // Hide nicknameTextBox.
         }
 
         internal void Client1()
@@ -152,6 +161,8 @@ namespace Snake
             this.ipTextBox3.Visible = true;                       // Show ipTextBox3.
             this.ipTextBox4.Visible = true;                       // Show ipTextBox4.
             this.highScoresLabel.Visible = false;                 // Hide highScoresLabel.
+            this.nicknamePictureBox.Visible = false;              // Hide nicknamePictureBox.
+            this.nicknameTextBox.Visible = false;                 // Hide nicknameTextBox.
         }
 
         internal void Client2()
@@ -168,6 +179,8 @@ namespace Snake
             this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
             this.ipTextBox4.Visible = false;                      // Hide ipTextBox4.
             this.highScoresLabel.Visible = false;                 // Hide highScoresLabel.
+            this.nicknamePictureBox.Visible = false;              // Hide nicknamePictureBox.
+            this.nicknameTextBox.Visible = false;                 // Hide nicknameTextBox.
         }
 
         internal void HighScoreShow()
@@ -194,6 +207,8 @@ namespace Snake
             this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
             this.ipTextBox4.Visible = false;                      // Hide ipTextBox4.
             this.highScoresLabel.Visible = true;                  // Show highScoresLabel. 
+            this.nicknamePictureBox.Visible = false;              // Hide nicknamePictureBox.
+            this.nicknameTextBox.Visible = false;                 // Hide nicknameTextBox.
         }
 
         private void ConnectionEstablished(Boolean isHost)
@@ -209,6 +224,8 @@ namespace Snake
             this.ipTextBox2.Visible = false;                     // Hide ipTextBox2.
             this.ipTextBox3.Visible = false;                     // Hide ipTextBox3.
             this.ipTextBox4.Visible = false;                     // Hide ipTextBox4.
+            this.nicknamePictureBox.Visible = false;             // Hide nicknamePictureBox.
+            this.nicknameTextBox.Visible = false;                // Hide nicknameTextBox.
         }
 
 

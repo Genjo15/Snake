@@ -167,7 +167,7 @@ namespace Snake
 
 
 
-        public void RenderMiniSnake2(PictureBox miniGameBoardPictureBox)
+        public void RenderMiniSnake(PictureBox miniGameBoardPictureBox)
         {
 
             Graphics MyGraphics;  // Graphics for main drawing.

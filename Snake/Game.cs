@@ -23,6 +23,7 @@ namespace Snake
         private Fruit _Fruit;                     // A fruit.
         private Insect _Insect;                   // An insect.
         private int _Score;                       // The score.
+        private String _Nickname;                 // The nickname.
         private int _Direction;                   // The direction.
         private Timer _Timer;                     // The timer.
         private Timer _InsectTimer;               // The timer for the fruit.
@@ -63,6 +64,7 @@ namespace Snake
             InitializeFont(); // Initialize font.
             _CommandDispatcherDel = new processOnMainThread(NetworkProcessOnMainThread); // Initialize delegate.
             _PlayGameDel = new processOnMainThread(PlayGame);
+            _Nickname = "";
             _HostIpAdress = "";
             _Multiplayer = false;
             _InGame = false;
@@ -128,7 +130,7 @@ namespace Snake
                     _InsectIsPresent = false;              // Set the boolean to false.
                 }
 
-                this.textBox1.Focus(); // Focus on the textbox (this invisible textbox has been created to manage keyDown events).
+                //this.textBox1.Focus(); // Focus on the textbox (this invisible textbox has been created to manage keyDown events).
                 this.scoreLabel.Text = "Score : " + _Score; // Show the score.
 
                 Render(); // Refresh the display.
@@ -224,12 +226,15 @@ namespace Snake
             _Insect.RenderInsect(this.gameBoardPictureBox); // Refresh the display of the insect.
             _FullSnake.RenderSnake(this.gameBoardPictureBox); // Refresh the display of the snake.
 
+            //_FullSnake.RenderMiniSnake(this.miniGameBoardPictureBox);
+
             // SECTION IN CONSTRUCTION!!!
             if (_Multiplayer && _InGame)
             {
                 //_Insect.RenderMiniInsect(this.miniGameBoardPictureBox); // for test.
-                RenderMiniSnake();
+                //RenderMiniSnake();
                     //_ReceptionContainer.Get_Snake().RenderMiniSnake(this.miniGameBoardPictureBox); // for test.
+                    _Reception.Get_Container().Get_Snake().RenderMiniSnake(this.miniGameBoardPictureBox); // for test.
             }
         }
 
@@ -300,6 +305,7 @@ namespace Snake
 
         private void playPictureBox_Click(object sender, EventArgs e)
         {
+            _Nickname = _Menu.nicknameTextBox.Text; // Fetch the nickname entered on the textbox.
             PlayGame(); // Play game.
         }
 
@@ -308,8 +314,8 @@ namespace Snake
 
         private void multiplayerPictureBox_Click(object sender, EventArgs e)
         {
-            _Menu.Multiplayer(); // Set the configuration for the menu (hide/show labels).
-                                                                    // Start the thread.*/
+            _Nickname = _Menu.nicknameTextBox.Text; // Fetch the nickname entered on the textbox.
+            _Menu.Multiplayer(); // Set the configuration for the menu (hide/show labels).                                                             
         }
 
         ///////////////////////////////////////////////
@@ -400,7 +406,6 @@ namespace Snake
                 _SendingContainer.Set_HasBeenModified(true);
             }
             
-
             _Menu.Client2(); // Set the configuration for the menu (hide/show labels).
         }
 
