@@ -5,6 +5,8 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 
+using Snake;
+
 
 
 
@@ -30,7 +32,8 @@ namespace Snake
         private int _TimerInterval;               // Timer interval.
         private Menu _Menu;                       // The menu.
 
-        private PersonalFont _Font;             // The special font.
+        private List<Panel> _SnakeGraphicalParts;
+        private PersonalFont _Font;               // The special font.
 
         // Network
 
@@ -42,41 +45,11 @@ namespace Snake
         System.Threading.Thread _ReceptionThread;             // The reception thread.
         System.Threading.Thread _SendingThread;               // The sending thread.
         private Boolean _Multiplayer;                         // Boolean which determines if the game is multiplayer or not.
+        private Boolean _InGame;                              // Boolean which determines if the multiplayer match is running or not.
         private delegate void processOnMainThread();          // The delegate
-        private processOnMainThread _ProcessOnMainThread_Del; // The delegate variable.
+        private processOnMainThread _CommandDispatcherDel;    // The command dispatcher delegate.
+        private processOnMainThread _PlayGameDel;             // The play game delegate.
         private String _HostIpAdress;                         //
-
-        /*///////////
-        // Network
-
-        System.Net.Sockets.UdpClient _Socket;                 // The socket. (client to server)
-        System.Net.IPEndPoint _EndPoint;                      // Client IP Endpoint.
-
-        System.Net.Sockets.UdpClient _Socket2;                // The 2nd socket. (server to client)
-        System.Net.IPEndPoint _EndPoint2;                     // Server IP Endpoint.
-
-        System.Threading.Thread _ReceptionThread;             // The reception thread.
-        System.Threading.Thread _SendingThread;               // The sending thread.
-        Byte[] _Message;                                      // The message sent/received.
-        private String _Msg;                                  // The message (in String).
-        private delegate void processOnMainThread();          // The delegate
-        private processOnMainThread _ProcessOnMainThread_Del; // The delegate variable.
-
-        private Boolean _Multiplayer;             // Boolean which determines if the game is multiplayer or not.
-        private Boolean _ConnectionEstablished;   // Boolean which determines if the connection is established or not.
-        private Boolean _StartGameWanted;         // Boolean which determines if the player wants to play (once connection established).
-        private Boolean _InGame;                  // Boolean which determines we are in game or not.
-        private Boolean _IsHost;                  // Boolean which determines if we are the host or not.
-        private Boolean _IsGuest;                 // Boolean which determines if we are the guest or not.*/
-
-        
-
-
-
-
-
-
-
 
         #endregion
 
@@ -88,8 +61,11 @@ namespace Snake
         {
             InitializeComponent(); // Initialize components of the form (essentially the menu).
             InitializeFont(); // Initialize font.
-            _ProcessOnMainThread_Del = new processOnMainThread(NetworkProcessOnMainThread); // Initialize delegate.
+            _CommandDispatcherDel = new processOnMainThread(NetworkProcessOnMainThread); // Initialize delegate.
+            _PlayGameDel = new processOnMainThread(PlayGame);
             _HostIpAdress = "";
+            _Multiplayer = false;
+            _InGame = false;
             LoadMenu(); // Load menu.
         }
 
@@ -108,13 +84,14 @@ namespace Snake
             _Fruit = new Fruit(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height); // New fruit.
             _Insect = new Insect(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height, -666, -666); // New insect.
 
+            _SnakeGraphicalParts = new List<Panel>();
+
             _Score = 0;                 // Score is set to 0.
-            _TimerInterval = 140;       // Timer interval tick is set to 140 ms.
+            _TimerInterval = 70;        // Timer interval tick is set to 140 ms.
             _Direction = 1;             // First direction is initially set to 1 (right).
             _GameOver = false;          // _GameOver is initialized to false.
             _InsectIsPresent = false;   // _InsectIsPresent is initialized to false.
-            _Multiplayer = false;       // _Multiplayer is initialized to false. BECAUSE NOT IMPLEMENTED YET !!!!!!!!!!!!
-
+        
             _Timer = new Timer();                       // New timer.
             _Timer.Interval = _TimerInterval;           // Interval of the timer is set.
             _Timer.Tick += new EventHandler(TimerTick); // New EventHandler. 
@@ -139,10 +116,6 @@ namespace Snake
                 {
                     _Fruit.MoveFruit(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height, _FullSnake); // Move fruit positions.
                     _Score = _Score + _Fruit.Get_POINT(); // Increment the score.
-                    if (_Timer.Interval <= 150 && _Timer.Interval >= 110)   //////
-                        _Timer.Interval -= 5;                               // Increase the difficulty by decreasing the timer interval.
-                    else if (_Timer.Interval < 110 && _Timer.Interval > 70) //
-                        _Timer.Interval -= 10;                              //
                     _FullSnake.AddSnakePart(this.gameBoardPictureBox.Width); // Add a Snake part.
                     _Fruit.Set_IsReached(true);
                 }
@@ -192,7 +165,6 @@ namespace Snake
         private void LoadMenu()
         {
             _Menu = new Menu();                                                 // Instanciate a new menu;   
-            _Menu.InitializeFont();                                             // Initialize font.
             this.gameBoardPictureBox.Controls.Add(_Menu);                       // Add it to the gameboard.
             _Menu.MainMenu();                                                   // Set the configuration for a game start (hide/show labels).
             _Menu.playPictureBox.Click += new EventHandler(playPictureBox_Click);               ///// 
@@ -214,10 +186,12 @@ namespace Snake
         private void PlayGame()
         {
             InitializeGame();                // Initialize game.
-            /*if (_Multiplayer)
-                this.Width = 1200; */
-            // test
-            this.gameBoardPictureBox.Controls.Clear(); // Erase the content of the panel.
+            if (_Multiplayer)
+            {
+                this.Width = 1200;
+            }
+            this.CenterToScreen();
+            this.gameBoardPictureBox.Controls.Clear(); // Erase the content of the picture Box.
             this.scoreLabel.Visible = true;  // Initialize interface: Essentially show the score label. 
             _Timer.Start();                  // Start timer.
             _InsectTimer.Start();            // Start insect timer.
@@ -233,6 +207,8 @@ namespace Snake
             _InsectTimer.Stop(); // Stop insect timer.
             LoadMenu();          // Load the menu.
             _Menu.GameOver();    // Set the configuration for a game end (hide/show labels).
+
+            _InGame = false;
         }
 
         #endregion
@@ -249,11 +225,30 @@ namespace Snake
             _FullSnake.RenderSnake(this.gameBoardPictureBox); // Refresh the display of the snake.
 
             // SECTION IN CONSTRUCTION!!!
-            /*if (_Multiplayer)
+            if (_Multiplayer && _InGame)
             {
-                _Insect.RenderMiniInsect(this.miniGameBoardPictureBox); // for test.
-                _FullSnake.RenderMiniSnake(this.miniGameBoardPictureBox); // for test.
-            }*/
+                //_Insect.RenderMiniInsect(this.miniGameBoardPictureBox); // for test.
+                RenderMiniSnake();
+                    //_ReceptionContainer.Get_Snake().RenderMiniSnake(this.miniGameBoardPictureBox); // for test.
+            }
+        }
+
+        //////////////////////////
+        // Display the mini snake
+
+        public void RenderMiniSnake()
+        {
+            for (int i = 0; i < _Reception.Get_Container().Get_Snake().Get_SnakeSize(); i++)
+            {
+                if (_SnakeGraphicalParts.Count < _Reception.Get_Container().Get_Snake().Get_SnakeSize()) // If there is not enough panel in the pool ...
+                    _SnakeGraphicalParts.Add(new Panel());                   // ...Add it one.
+
+                _SnakeGraphicalParts[i].Location = new System.Drawing.Point(_Reception.Get_Container().Get_Snake().Get_Snake()[i].Get_X() / 2, _Reception.Get_Container().Get_Snake().Get_Snake()[i].Get_Y() / 2);  // Definition of the panel location.
+                _SnakeGraphicalParts[i].Size = new System.Drawing.Size(_Reception.Get_Container().Get_Snake().Get_Snake()[i].Get_SIDE() / 2, _Reception.Get_Container().Get_Snake().Get_Snake()[i].Get_SIDE() / 2); // Definition of the panel size.
+                _SnakeGraphicalParts[i].BackColor = System.Drawing.Color.Black; // Definition of the panel color.
+
+                this.miniGameBoardPictureBox.Controls.Add(_SnakeGraphicalParts[i]); // Attach the panel to the gameboard.
+            }
         }
 
         /////////////////////////////
@@ -286,7 +281,10 @@ namespace Snake
             this.gameBoardPictureBox.Controls.Add(_Menu); // Attach the menu to the gameboard.
             this.scoreLabel.Visible = false;              // Initialize interface: Essentially show the score label. 
             _Menu.MainMenu();                             // Set the configuration for the menu (hide/show labels).
-            this.Width = 800; // for test.
+            this.Width = 800;
+            this.CenterToScreen();
+            this.miniGameBoardPictureBox.Controls.Clear();
+            
         }
 
         /////////////////////////////////////////
@@ -311,38 +309,7 @@ namespace Snake
         private void multiplayerPictureBox_Click(object sender, EventArgs e)
         {
             _Menu.Multiplayer(); // Set the configuration for the menu (hide/show labels).
-
-            /*
-            _ConnectionEstablished = false;
-            _StartGameWanted = false;
-            _InGame = false;
-            _IsGuest = false;
-            _IsHost = false;
-
-
-            _Msg = "000";
-
-            _ProcessOnMainThread_Del = new processOnMainThread(ProcessDataOnMainThread); // Initialization of the delegate.
-
-            _Socket = new System.Net.Sockets.UdpClient(); // Initialization of the socket.
-            _Socket.EnableBroadcast = false; // Disable broadcast.
-            _Socket.Client.Bind(new System.Net.IPEndPoint(0, 1337));
-            _EndPoint = new System.Net.IPEndPoint(0, 1337);
-
-            _Socket2 = new System.Net.Sockets.UdpClient(); // Initialization of the socket.
-            _Socket2.EnableBroadcast = false; // Disable broadcast.
-            _Socket2.Client.Bind(new System.Net.IPEndPoint(0, 1338));
-            _EndPoint2 = new System.Net.IPEndPoint(0, 1338);
-
-            _ReceptionThread = new System.Threading.Thread(new System.Threading.ThreadStart(ReceiveLoop)); // Initialize the thread.
-            _ReceptionThread.Name = "ReceptionThread";                                                     // Set its name.
-            _ReceptionThread.IsBackground = true;                                                          // Make it background runnable.
-            _ReceptionThread.Start();                                                                      // Start the thread.
-
-            _SendingThread = new System.Threading.Thread(new System.Threading.ThreadStart(SendLoop));    // Initialize the thread.
-            _SendingThread.Name = "SendingThread";                                                       // Set its name.
-            _SendingThread.IsBackground = true;                                                          // Make it background runnable.
-            _SendingThread.Start();                                                                      // Start the thread.*/
+                                                                    // Start the thread.*/
         }
 
         ///////////////////////////////////////////////
@@ -379,8 +346,8 @@ namespace Snake
 
             _SendingContainer = new NetworkContainer();
             _ReceptionContainer = new NetworkContainer();
-            _Sending = new Network(ref _SendingContainer, true, true, _ProcessOnMainThread_Del);
-            _Reception = new Network(ref _ReceptionContainer, true, false, _ProcessOnMainThread_Del);
+            _Sending = new Network(ref _SendingContainer, true, true, _CommandDispatcherDel);
+            _Reception = new Network(ref _ReceptionContainer, true, false, _CommandDispatcherDel);
 
             InitializeNetworkThreads();
         }
@@ -395,8 +362,8 @@ namespace Snake
 
             _SendingContainer = new NetworkContainer();
             _ReceptionContainer = new NetworkContainer();
-            _Sending = new Network(ref _SendingContainer, false, true, _ProcessOnMainThread_Del);
-            _Reception = new Network(ref _ReceptionContainer, false, false, _ProcessOnMainThread_Del);
+            _Sending = new Network(ref _SendingContainer, false, true, _CommandDispatcherDel);
+            _Reception = new Network(ref _ReceptionContainer, false, false, _CommandDispatcherDel);
 
             InitializeNetworkThreads();
         }
@@ -422,7 +389,14 @@ namespace Snake
 
         private void startGamePictureBox_Click(object sender, EventArgs e)
         {
-            
+            if (_Sending.Get_IsHost())
+            {
+                _SendingContainer.Set_Msg("100");
+                _SendingContainer.Set_HasBeenModified(true);
+                _InGame = true;
+            }
+
+            PlayGame();
         }
 
         //////////////////////////////////////
@@ -458,7 +432,31 @@ namespace Snake
 
         private void NetworkProcessOnMainThread()
         {
-            
+            _Sending.Set_EndPoint(_Reception.Get_EndPoint());
+
+            //switch (_ReceptionContainer.Get_Msg())
+            switch(_Reception.Get_Container().Get_Msg())
+            {
+                case "001": _SendingContainer.Set_Msg("010");
+                            _SendingContainer.Set_HasBeenModified(true);
+                            Invoke(_Menu.Get_ProcessOnMenuThread_Del(), _Sending.Get_IsHost());
+                            break;
+
+                case "010": Invoke(_Menu.Get_ProcessOnMenuThread_Del(), _Sending.Get_IsHost());
+                            break;
+
+                case "100": if (!_InGame)
+                            {
+                                Invoke(_PlayGameDel);
+                                _InGame = true;
+                            }
+
+                            _SendingContainer.Set_Msg("100");
+                            _SendingContainer.Set_Snake(_FullSnake);
+                            _SendingContainer.Set_HasBeenModified(true);
+
+                            break;
+            }
         }
 
         ////////////////////////////////////////////////////////////////

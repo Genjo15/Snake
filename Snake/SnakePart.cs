@@ -6,6 +6,7 @@ using System.Windows.Forms;
 
 namespace Snake
 {
+    [Serializable] 
     public class SnakePart
     {
         /********************************************* Declaration of variables *********************************************/

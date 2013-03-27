@@ -20,7 +20,7 @@ namespace Snake
         private int _SIDE;            // Size of the panel side.
         private Random _RandomNumber; // Random number.
         private Boolean _IsReached;   // Boolean to inform if the fruit has been reached or not.
-    
+
         #endregion
 
         /**************************************************** Constructors ****************************************************/

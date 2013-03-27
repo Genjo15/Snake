@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Net;
 
 namespace Snake
 {
@@ -22,13 +23,10 @@ namespace Snake
         private Boolean _IsHost;                       // Boolean which determines if we are the host or not.
 
         private System.Net.Sockets.UdpClient _Socket;  // The socket (for sending data / receiving data, depends on the context)
-        private System.Net.IPEndPoint _EndPoint;       // IP Endpoint.
+        private IPEndPoint _EndPoint;                  // IP Endpoint.
 
         private String _HostIpAdress;                  // Host Ip Adress.
-
-        //private Boolean _ConnectionEstablished;   // Boolean which determines if the connection is established or not.
-        
-
+    
         #endregion
 
 
@@ -43,8 +41,6 @@ namespace Snake
 
             _HostIpAdress = "";
             _Continue = true;
-
-            //_ConnectionEstablished = false;
 
             _Delegate = del;
             _NetworkDelegate = new networkDelegate(AbortConnection);
@@ -83,8 +79,6 @@ namespace Snake
 
         public void ReceiveLoop()
         {
-            //_Container.test++;
-            //Console.WriteLine("here the receive loop : " + _Container.test);
             while (_Continue)
             {
                 if (_IsHost)
@@ -92,6 +86,7 @@ namespace Snake
                     _Buffer = _Socket.Receive(ref _EndPoint);
                     _Container = _Container.DeserializeContainer(_Buffer);
                     Console.WriteLine("Server has received : " + _Container.Get_Msg() + " from : " + _EndPoint.Address.ToString().Split(':')[0]);
+                    Console.WriteLine("Server has received a snake of size : " + _Container.Get_Snake().Get_SnakeSize());
                 }
 
                 if (!_IsHost)
@@ -101,7 +96,7 @@ namespace Snake
                     Console.WriteLine("Client has received : " + _Container.Get_Msg() + " from : " + _EndPoint.Address.ToString().Split(':')[0]);
                 }
 
-                System.Threading.Thread.Sleep(1000);
+                System.Threading.Thread.Sleep(70);
 
                 _Delegate.DynamicInvoke();
 
@@ -113,8 +108,6 @@ namespace Snake
 
         public void SendLoop()
         {
-            //_Container.test++;
-            //Console.WriteLine("here the send loop : " + _Container.test);
             while (_Continue)
             {
                 if (!_IsHost && _Container.Get_HasBeenModified())
@@ -122,27 +115,18 @@ namespace Snake
                     _Buffer = _Container.SerializeContainer();
                     _Socket.Send(_Buffer, _Buffer.Length, _HostIpAdress, 5001);
                     _Container.Set_HasBeenModified(false);
+                    Console.WriteLine("Client has sent : " + _Container.Get_Msg() + " to " + _HostIpAdress);
                 }
                 
-                /*if (!_IsHost && !_ConnectionEstablished)
+                if (_IsHost && _Container.Get_HasBeenModified())
                 {
-                    _Container.Set_Msg("001");
                     _Buffer = _Container.SerializeContainer();
-                    _Socket.Send(_Buffer, _Buffer.Length, _HostIpAdress, 5001);
-                }*/
-
-                /*if (_IsHost && !_ConnectionEstablished && _Container.Get_Msg().Equals("001"))
-                {
-                    _Container.Set_Msg("010");
-                    _Buffer = _Container.SerializeContainer();
-                    Console.WriteLine("server sender : " + _EndPoint.Address.ToString().Split(':')[0]);
                     _Socket.Send(_Buffer, _Buffer.Length, _EndPoint.Address.ToString().Split(':')[0], 5001);
-                    _ConnectionEstablished = true;
-                }*/
+                    _Container.Set_HasBeenModified(false);
+                    Console.WriteLine("Server has sent : " + _Container.Get_Msg() + " to " + _EndPoint.Address.ToString().Split(':')[0]);
+                }
 
-
-                //Console.WriteLine("container is : " + _Container.Get_Msg());
-                System.Threading.Thread.Sleep(1000); // Sleep for 1s.
+                System.Threading.Thread.Sleep(0); // Sleep for 1s.
 
             }
         }
@@ -179,12 +163,20 @@ namespace Snake
             _HostIpAdress = str;
         }
 
-        //////////////////////////////
-        // Set _ConnectionEstablished
+        /////////////////
+        // Get _EndPoint
 
-        public void Set_ConnectionEstablished(Boolean b)
+        public IPEndPoint Get_EndPoint()
         {
-            //_ConnectionEstablished = b;
+            return _EndPoint;
+        }
+
+        /////////////////
+        // Set _EndPoint
+
+        public void Set_EndPoint(IPEndPoint ep)
+        {
+            _EndPoint = ep;
         }
 
         #endregion

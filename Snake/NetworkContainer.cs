@@ -16,8 +16,7 @@ namespace Snake
         #region Variables
   
         private String _Msg;        // The message (in String).
-        //public int test;
-        //private FullSnake _Snake; // Temporary snake.
+        private FullSnake _Snake;   // Temporary snake.
 
         private Boolean _HasBeenModified;
 
@@ -31,7 +30,7 @@ namespace Snake
         public NetworkContainer()
         {
             _Msg = "000";
-
+            _Snake = new FullSnake();
             _HasBeenModified = false;
             //test = 0;
         }
@@ -107,6 +106,22 @@ namespace Snake
         public void Set_HasBeenModified(Boolean b)
         {
             _HasBeenModified = b;
+        }
+
+        //////////////
+        // Get _Snake
+
+        public FullSnake Get_Snake()
+        {
+            return _Snake;
+        }
+
+        //////////////
+        // Set _Snake
+
+        public void Set_Snake(FullSnake snake)
+        {
+            _Snake = snake;
         }
         
 

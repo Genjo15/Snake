@@ -11,13 +11,18 @@ namespace Snake
     public partial class Menu : UserControl
     {
         private PersonalFont _Font;
+        private delegate void processOnMenuThread(Boolean b);
+        private processOnMenuThread _ConnectionEstablishedDel;
 
         #region Constructor
 
         public Menu()
         {
             InitializeComponent();
+            InitializeFont();
+            _ConnectionEstablishedDel = new processOnMenuThread(ConnectionEstablished);
         }
+
 
         #endregion
 
@@ -158,9 +163,9 @@ namespace Snake
             this.ipTextBox4.Visible = false;                      // Hide ipTextBox4.
         }
 
-        internal void ConnectionEstablished(Boolean isHost)
+        private void ConnectionEstablished(Boolean isHost)
         {
-            this.connectionHostPictureBox.Visible = false;       // Hide connectionHostPictureBox.
+ 	        this.connectionHostPictureBox.Visible = false;       // Hide connectionHostPictureBox.
             this.waitClientPictureBox.Visible = false;           // Hide waitClientPictureBox
             this.connectionEstablishedPictureBox.Visible = true; // Show connectionEstablishedPictureBox.
             if (isHost)
@@ -171,6 +176,16 @@ namespace Snake
             this.ipTextBox2.Visible = false;                     // Hide ipTextBox2.
             this.ipTextBox3.Visible = false;                     // Hide ipTextBox3.
             this.ipTextBox4.Visible = false;                     // Hide ipTextBox4.
+        }
+
+
+        #endregion
+
+        #region Accessors
+
+        public Delegate Get_ProcessOnMenuThread_Del()
+        {
+            return _ConnectionEstablishedDel;
         }
 
         #endregion
