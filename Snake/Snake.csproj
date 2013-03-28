@@ -83,6 +83,7 @@
       <DependentUpon>Game.cs</DependentUpon>
     </Compile>
     <Compile Include="FullSnake.cs" />
+    <Compile Include="ListWalls.cs" />
     <Compile Include="Menu.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -100,6 +101,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="SnakePart.cs" />
+    <Compile Include="Wall.cs" />
     <EmbeddedResource Include="Game.resx">
       <DependentUpon>Game.cs</DependentUpon>
     </EmbeddedResource>
@@ -218,6 +220,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Nickname.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Win.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Loose.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Arrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Snake.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

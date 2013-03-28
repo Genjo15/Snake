@@ -7,7 +7,7 @@ using System.Windows.Forms;
 namespace Snake
 {
     [Serializable] 
-    class Insect
+    public class Insect
     {
         /********************************************* Declaration of variables *********************************************/
 
@@ -18,10 +18,10 @@ namespace Snake
         private int _LastX;            // Last position in X.
         private int _LastY;            // Last position in Y.
         private const int _POINT = 25; // The points earned when item reached.
-        private int _SIDE;             // Size of the insect.
+        private int _Side;             // Size of the insect.
         private Random _RandomNumber;  // Random number.
         private Boolean _SinglePlayerEraseStreak;        // Boolean which informs if the insect has been moved.
-        private Boolean _TwoPlayersEraseStreak;
+        //private Boolean _TwoPlayersEraseStreak;
 
         #endregion
 
@@ -32,16 +32,16 @@ namespace Snake
         public Insect(int width, int height)
         {
             Set_EraseStreaks(false);
-            _SIDE = width / 27 - 2; // Initialize dynamically the side of the insect.
+            _Side = width / 27 - 2; // Initialize dynamically the side of the insect.
             _RandomNumber = new Random();   // Initialize the generator of random.
-            _X = (_SIDE + 2) * (_RandomNumber.Next(width - _SIDE) / (_SIDE + 2));  // Set _X thanks to a generated number.
-            _Y = (_SIDE + 2) * (_RandomNumber.Next(height - _SIDE) / (_SIDE + 2)); // Set _Y thanks to another generated number.
+            _X = (_Side + 2) * (_RandomNumber.Next(width - _Side) / (_Side + 2));  // Set _X thanks to a generated number.
+            _Y = (_Side + 2) * (_RandomNumber.Next(height - _Side) / (_Side + 2)); // Set _Y thanks to another generated number.
         }
 
         public Insect(int width, int height, int x, int y)
         {
             Set_EraseStreaks(false);
-            _SIDE = width / 27 - 2; // Initialize dynamically the side of the insect.
+            _Side = width / 27 - 2; // Initialize dynamically the side of the insect.
             _RandomNumber = new Random();   // Initialize the generator of random.
             _X = x;
             _Y = y;
@@ -49,7 +49,8 @@ namespace Snake
 
         public Insect()
         {
-
+            _X = -666;
+            _Y = -666;
         }
 
         #endregion
@@ -65,7 +66,7 @@ namespace Snake
         {
             Boolean isReached = false;
 
-            if (((snakePart.Get_X() == _X) && (snakePart.Get_Y() == _Y)) || ((snakePart.Get_X() == (_X + (_SIDE / 2 + 1))) && (snakePart.Get_Y() == _Y)) || ((snakePart.Get_X() == _X) && (snakePart.Get_Y() == (_Y + (_SIDE / 2) + 1))) || ((snakePart.Get_X() == (_X + (_SIDE / 2 + 1))) && (snakePart.Get_Y() == (_Y + (_SIDE / 2) + 1))))
+            if (((snakePart.Get_X() == _X) && (snakePart.Get_Y() == _Y)) || ((snakePart.Get_X() == (_X + (_Side / 2 + 1))) && (snakePart.Get_Y() == _Y)) || ((snakePart.Get_X() == _X) && (snakePart.Get_Y() == (_Y + (_Side / 2) + 1))) || ((snakePart.Get_X() == (_X + (_Side / 2 + 1))) && (snakePart.Get_Y() == (_Y + (_Side / 2) + 1))))
                 isReached = true;
     
             return isReached;
@@ -75,6 +76,32 @@ namespace Snake
         // Move insect
 
         public void MoveInsect(int width, int height, FullSnake snake, Fruit fruit)
+        {
+            int tmpX; // Temporary X.
+            int tmpY; // Temporary Y. 
+
+            _LastX = _X; // Save _X in _LastX.
+            _LastY = _Y; // Save _Y in _LastY.
+
+            tmpX = Generate_X(width);
+            tmpY = Generate_Y(height);
+
+            while (!CheckPositions(tmpX, tmpY, snake, fruit))
+            {
+                tmpX = Generate_X(width);
+                tmpY = Generate_Y(height);
+            }
+
+            _X = tmpX;
+            _Y = tmpY;
+
+            Set_EraseStreaks(true);
+        }
+
+        //////////////////////////////
+        // Move insect (multiplayers)
+
+        public void MoveInsect(int width, int height, FullSnake snake, Fruit fruit, List<Wall> listWalls)
         {
             int tmpX; // Temporary X.
             int tmpY; // Temporary Y. 
@@ -116,7 +143,7 @@ namespace Snake
         private int Generate_X(int width)
         {
             int generatedNumber;
-            generatedNumber = (_SIDE + 2) * (_RandomNumber.Next(width - _SIDE) / (_SIDE + 2));  // Set _X thanks to a generated number.
+            generatedNumber = (_Side + 2) * (_RandomNumber.Next(width - _Side) / (_Side + 2));  // Set _X thanks to a generated number.
             return generatedNumber;
         }
 
@@ -126,12 +153,12 @@ namespace Snake
         private int Generate_Y(int height)
         {
             int generatedNumber;
-            generatedNumber = (_SIDE + 2) * (_RandomNumber.Next(height - _SIDE) / (_SIDE + 2)); // Set _Y thanks to another generated number.
+            generatedNumber = (_Side + 2) * (_RandomNumber.Next(height - _Side) / (_Side + 2)); // Set _Y thanks to another generated number.
             return generatedNumber;
         }
 
-        /////////////////////////////////////////////
-        // Check if temporary X & Y are on the snake
+        /////////////////////////////////////////////////////////
+        // Check if temporary X & Y are on the snake or the fruit
 
         private Boolean CheckPositions(int x, int y, FullSnake snake, Fruit fruit)
         {
@@ -139,17 +166,52 @@ namespace Snake
 
             for (int i = 0; i < snake.Get_SnakeSize(); i++)
             {
-                if (((snake.Get_Snake()[i].Get_X() == x) && (snake.Get_Snake()[i].Get_Y() == y)) || ((snake.Get_Snake()[i].Get_X() == (x + (_SIDE / 2 + 1))) && (snake.Get_Snake()[i].Get_Y() == y)) || ((snake.Get_Snake()[i].Get_X() == x) && (snake.Get_Snake()[i].Get_Y() == (y + (_SIDE / 2) + 1))) || ((snake.Get_Snake()[i].Get_X() == (x + (_SIDE / 2 + 1))) && (snake.Get_Snake()[i].Get_Y() == (y + (_SIDE / 2) + 1)))) // If the insect is in the same position of one of the snake parts...
+                if (((snake.Get_Snake()[i].Get_X() == x) && (snake.Get_Snake()[i].Get_Y() == y)) || ((snake.Get_Snake()[i].Get_X() == (x + (_Side / 2 + 1))) && (snake.Get_Snake()[i].Get_Y() == y)) || ((snake.Get_Snake()[i].Get_X() == x) && (snake.Get_Snake()[i].Get_Y() == (y + (_Side / 2) + 1))) || ((snake.Get_Snake()[i].Get_X() == (x + (_Side / 2 + 1))) && (snake.Get_Snake()[i].Get_Y() == (y + (_Side / 2) + 1)))) // If the insect is in the same position of one of the snake parts...
                 {
                     ok = false;
                     Console.WriteLine("Insect is on the snake");
                 }
             }
 
-            if (((fruit.Get_X() == x) && (fruit.Get_Y() == y)) || ((fruit.Get_X() == (x + (_SIDE / 2 + 1))) && (fruit.Get_Y() == y)) || ((fruit.Get_X() == x) && (fruit.Get_Y() == (y + (_SIDE / 2) + 1))) || ((fruit.Get_X() == (x + (_SIDE / 2 + 1))) && (fruit.Get_Y() == (y + (_SIDE / 2) + 1)))) // If the insect is in the same position of the fruit...
+            if (((fruit.Get_X() == x) && (fruit.Get_Y() == y)) || ((fruit.Get_X() == (x + (_Side / 2 + 1))) && (fruit.Get_Y() == y)) || ((fruit.Get_X() == x) && (fruit.Get_Y() == (y + (_Side / 2) + 1))) || ((fruit.Get_X() == (x + (_Side / 2 + 1))) && (fruit.Get_Y() == (y + (_Side / 2) + 1)))) // If the insect is in the same position of the fruit...
             {
                 ok = false;
                 Console.WriteLine("Insect is on the fruit");
+            }
+
+            return ok;
+        }
+
+        //////////////////////////////////////////////////////////////////////////////////
+        // Check if temporary X & Y are on the snake, the fruit, or a wall (multiplayers)
+
+        private Boolean CheckPositions(int x, int y, FullSnake snake, Fruit fruit, List<Wall> listWalls)
+        {
+            Boolean ok = true;
+
+            for (int i = 0; i < snake.Get_SnakeSize(); i++)
+            {
+                if (((snake.Get_Snake()[i].Get_X() == x) && (snake.Get_Snake()[i].Get_Y() == y)) || ((snake.Get_Snake()[i].Get_X() == (x + (_Side / 2 + 1))) && (snake.Get_Snake()[i].Get_Y() == y)) || ((snake.Get_Snake()[i].Get_X() == x) && (snake.Get_Snake()[i].Get_Y() == (y + (_Side / 2) + 1))) || ((snake.Get_Snake()[i].Get_X() == (x + (_Side / 2 + 1))) && (snake.Get_Snake()[i].Get_Y() == (y + (_Side / 2) + 1)))) // If the insect is in the same position of one of the snake parts...
+                {
+                    ok = false;
+                    Console.WriteLine("Insect is on the snake");
+                }
+            }
+
+            if (((fruit.Get_X() == x) && (fruit.Get_Y() == y)) || ((fruit.Get_X() == (x + (_Side / 2 + 1))) && (fruit.Get_Y() == y)) || ((fruit.Get_X() == x) && (fruit.Get_Y() == (y + (_Side / 2) + 1))) || ((fruit.Get_X() == (x + (_Side / 2 + 1))) && (fruit.Get_Y() == (y + (_Side / 2) + 1)))) // If the insect is in the same position than the fruit...
+            {
+                ok = false;
+                Console.WriteLine("Insect is on the fruit");
+            }
+
+            foreach (Wall element in listWalls)
+            {
+                if (((element.Get_X() == x) && (element.Get_Y() == y)) || ((element.Get_X() == (x + (_Side / 2 + 1))) && (element.Get_Y() == y)) || ((element.Get_X() == x) && (element.Get_Y() == (y + (_Side / 2) + 1))) || ((element.Get_X() == (x + (_Side / 2 + 1))) && (element.Get_Y() == (y + (_Side / 2) + 1)))) // If the insect is in the same position than a wall...
+                {
+                    ok = false;
+                    Console.WriteLine("Insect is on a wall");
+                }
+            
             }
 
             return ok;
@@ -169,17 +231,22 @@ namespace Snake
             SolidBrush myBrush2;  // Second brush for erasing streaks.
             Image _InsectPicture = Snake.Properties.Resources.Insect; // The picture of the insect.
 
-            myGraphics = gameBoardPictureBox.CreateGraphics(); // Initialize the 2nd graphics. 
-            myBrush = new System.Drawing.SolidBrush(Color.Black); // Initialize the first brush.
-            myBrush2 = new System.Drawing.SolidBrush(Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))))); // Initialize the 2nd brush.
-
-            if (_SinglePlayerEraseStreak)
+            try
             {
-                myGraphics.FillRectangle(myBrush2, new Rectangle(_LastX, _LastY, (gameBoardPictureBox.Width / 27 - 2), (gameBoardPictureBox.Width / 27 - 2))); // Erase the streak.
-                _SinglePlayerEraseStreak = false;
+                myGraphics = gameBoardPictureBox.CreateGraphics(); // Initialize the 2nd graphics. 
+                myBrush = new System.Drawing.SolidBrush(Color.Black); // Initialize the first brush.
+                myBrush2 = new System.Drawing.SolidBrush(Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))))); // Initialize the 2nd brush.
+
+                if (_SinglePlayerEraseStreak)
+                {
+                    myGraphics.FillRectangle(myBrush2, new Rectangle(_LastX, _LastY, (gameBoardPictureBox.Width / 27 - 2), (gameBoardPictureBox.Width / 27 - 2))); // Erase the streak.
+                    _SinglePlayerEraseStreak = false;
+                }
+
+                myGraphics.DrawImage(_InsectPicture, new Rectangle(_X, _Y, (gameBoardPictureBox.Width / 27 - 2), (gameBoardPictureBox.Width / 27 - 2))); // Draw insect.
             }
 
-            myGraphics.DrawImage(_InsectPicture, new Rectangle(_X, _Y, (gameBoardPictureBox.Width / 27 - 2), (gameBoardPictureBox.Width / 27 - 2))); // Draw insect.
+            catch (Exception e) { Console.WriteLine(e); }
         }
 
         ////////////////////////////////////////////////////
@@ -192,17 +259,22 @@ namespace Snake
             SolidBrush myBrush2;  // Second brush for erasing streaks.
             Image _InsectPicture = Snake.Properties.Resources.Insect; // The picture of the insect.
 
-            myGraphics = gameBoardPictureBox.CreateGraphics(); // Initialize the 2nd graphics. 
-            myBrush = new System.Drawing.SolidBrush(Color.Black); // Initialize the first brush.
-            myBrush2 = new System.Drawing.SolidBrush(Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))))); // Initialize the 2nd brush.
-
-            if (_TwoPlayersEraseStreak)
+            try
             {
-                myGraphics.FillRectangle(myBrush2, new Rectangle(_LastX/2, _LastY/2, (gameBoardPictureBox.Width / 27 - 1), (gameBoardPictureBox.Width / 27 - 1))); // Erase the streak.
-                _TwoPlayersEraseStreak = false;
+                myGraphics = gameBoardPictureBox.CreateGraphics(); // Initialize the 2nd graphics. 
+                myBrush = new System.Drawing.SolidBrush(Color.Black); // Initialize the first brush.
+                myBrush2 = new System.Drawing.SolidBrush(Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))))); // Initialize the 2nd brush.
+
+                //if (_TwoPlayersEraseStreak)
+                //{
+                    myGraphics.FillRectangle(myBrush2, new Rectangle(_LastX / 2, _LastY / 2, (gameBoardPictureBox.Width / 27 - 1), (gameBoardPictureBox.Width / 27 - 1))); // Erase the streak.
+                 //   _TwoPlayersEraseStreak = false;
+                //}
+
+                myGraphics.DrawImage(_InsectPicture, new Rectangle(_X / 2, _Y / 2, (gameBoardPictureBox.Width / 27 - 1), (gameBoardPictureBox.Width / 27 - 1))); // Draw insect.
             }
 
-            myGraphics.DrawImage(_InsectPicture, new Rectangle(_X/2, _Y/2, (gameBoardPictureBox.Width / 27 - 1), (gameBoardPictureBox.Width / 27 - 1))); // Draw insect.
+            catch (Exception e) { Console.WriteLine(e); }
         }
 
         #endregion
@@ -238,7 +310,7 @@ namespace Snake
 
         public int Get_SIDE()
         {
-            return _SIDE;
+            return _Side;
         }
 
         //////////
@@ -263,7 +335,7 @@ namespace Snake
         public void Set_EraseStreaks(Boolean b)
         {
             _SinglePlayerEraseStreak = b;
-            _TwoPlayersEraseStreak = b;
+            //_TwoPlayersEraseStreak = b;
         }
 
         #endregion

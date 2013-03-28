@@ -12,7 +12,9 @@ namespace Snake
     {
         private PersonalFont _Font;
         private delegate void processOnMenuThread(Boolean b);
+        private delegate void processOnMenuThread2(Boolean b, Boolean b2);
         private processOnMenuThread _ConnectionEstablishedDel;
+        private processOnMenuThread2 _GameOverDel;
 
         #region Constructor
 
@@ -21,6 +23,7 @@ namespace Snake
             InitializeComponent();
             InitializeFont();
             _ConnectionEstablishedDel = new processOnMenuThread(ConnectionEstablished);
+            _GameOverDel = new processOnMenuThread2(GameOver);
         }
 
 
@@ -66,6 +69,8 @@ namespace Snake
             this.nicknamePictureBox.Visible = true;               // Show nicknamePictureBox.
             this.nicknameTextBox.Visible = true;                  // Show nicknameTextBox.
             this.playPictureBox.Select();
+            this.winPictureBox.Visible = false;
+            this.loosePictureBox.Visible = false;
 
         }
 
@@ -74,14 +79,12 @@ namespace Snake
             this.Visible = false;
         }
 
-        internal void GameOver()
+        internal void GameOver(Boolean multiplayer, Boolean victory)
         {
             this.playPictureBox.Visible = false;                  // Hide playPictureBox.
             this.multiplayerPictureBox.Visible = false;           // Hide multiplayerPictureBox.
             this.highScoresPictureBox.Visible = false;            // Hide highScoresPictureBox;
             this.titlePictureBox.Visible = false;                 // Hide titlePictureBox.
-            this.gameOverPictureBox.Visible = true;               // Show gameOverPictureBox.
-            this.retryPictureBox.Visible = true;                  // Show retryPictureBox.
             this.mainMenuPictureBox.Visible = true;               // Show mainMenuPictureBox.
             this.multiplayerMenuPictureBox.Visible = false;       // Hide multiplayerMenuPictureBox.
             this.createGamePictureBox.Visible = false;            // Hide createGamePictureBox.
@@ -100,6 +103,15 @@ namespace Snake
             this.highScoresLabel.Visible = false;                 // Hide highScoresLabel.
             this.nicknamePictureBox.Visible = false;              // Hide nicknamePictureBox.
             this.nicknameTextBox.Visible = false;                 // Hide nicknameTextBox.
+            if (!multiplayer)
+            {
+                this.gameOverPictureBox.Visible = true;           // Show gameOverPictureBox.
+                this.retryPictureBox.Visible = true;              // Show retryPictureBox.
+            }
+            if (multiplayer && victory)
+                this.winPictureBox.Visible = true;
+            else if(multiplayer && !victory)
+                this.loosePictureBox.Visible = true;
         }
 
         internal void Multiplayer()
@@ -128,6 +140,8 @@ namespace Snake
             this.highScoresLabel.Visible = false;                 // Hide highScoresLabel.
             this.nicknamePictureBox.Visible = false;              // Hide nicknamePictureBox.
             this.nicknameTextBox.Visible = false;                 // Hide nicknameTextBox.
+            this.winPictureBox.Visible = false;
+            this.loosePictureBox.Visible = false;
         }
 
         internal void Host()
@@ -146,6 +160,8 @@ namespace Snake
             this.highScoresLabel.Visible = false;                 // Hide highScoresLabel.
             this.nicknamePictureBox.Visible = false;              // Hide nicknamePictureBox.
             this.nicknameTextBox.Visible = false;                 // Hide nicknameTextBox.
+            this.winPictureBox.Visible = false;
+            this.loosePictureBox.Visible = false;
         }
 
         internal void Client1()
@@ -165,6 +181,8 @@ namespace Snake
             this.highScoresLabel.Visible = false;                 // Hide highScoresLabel.
             this.nicknamePictureBox.Visible = false;              // Hide nicknamePictureBox.
             this.nicknameTextBox.Visible = false;                 // Hide nicknameTextBox.
+            this.winPictureBox.Visible = false;
+            this.loosePictureBox.Visible = false;
         }
 
         internal void Client2()
@@ -183,6 +201,8 @@ namespace Snake
             this.highScoresLabel.Visible = false;                 // Hide highScoresLabel.
             this.nicknamePictureBox.Visible = false;              // Hide nicknamePictureBox.
             this.nicknameTextBox.Visible = false;                 // Hide nicknameTextBox.
+            this.winPictureBox.Visible = false;
+            this.loosePictureBox.Visible = false;
         }
 
         internal void HighScoreShow()
@@ -211,6 +231,8 @@ namespace Snake
             this.highScoresLabel.Visible = true;                  // Show highScoresLabel. 
             this.nicknamePictureBox.Visible = false;              // Hide nicknamePictureBox.
             this.nicknameTextBox.Visible = false;                 // Hide nicknameTextBox.
+            this.winPictureBox.Visible = false;
+            this.loosePictureBox.Visible = false;
         }
 
         private void ConnectionEstablished(Boolean isHost)
@@ -228,6 +250,8 @@ namespace Snake
             this.ipTextBox4.Visible = false;                     // Hide ipTextBox4.
             this.nicknamePictureBox.Visible = false;             // Hide nicknamePictureBox.
             this.nicknameTextBox.Visible = false;                // Hide nicknameTextBox.
+            this.winPictureBox.Visible = false;
+            this.loosePictureBox.Visible = false;
         }
 
 
@@ -238,6 +262,11 @@ namespace Snake
         public Delegate Get_ProcessOnMenuThread_Del()
         {
             return _ConnectionEstablishedDel;
+        }
+
+        public Delegate Get_GameOverDel()
+        {
+            return _GameOverDel;
         }
 
         #endregion

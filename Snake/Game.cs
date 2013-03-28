@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-
 using Snake;
 
 
@@ -19,6 +19,9 @@ namespace Snake
 
         #region Variables
 
+        ///////////////////////
+        // Common variables :
+
         private FullSnake _FullSnake;             // The complete snake (which is a list of snake elements).
         private Fruit _Fruit;                     // A fruit.
         private Insect _Insect;                   // An insect.
@@ -32,11 +35,11 @@ namespace Snake
         private Boolean _GameOver;                // Boolean which detects if the game is over or not.
         private int _TimerInterval;               // Timer interval.
         private Menu _Menu;                       // The menu.
-
-        private List<Panel> _SnakeGraphicalParts;
         private PersonalFont _Font;               // The special font.
 
-        // Network
+
+        ///////////////////////////
+        // Multiplayer variables :
 
         Network _Sending;                                     // Network components (for sending data).
         Network _Reception;                                   // Network components (for receiving data).
@@ -48,9 +51,13 @@ namespace Snake
         private Boolean _Multiplayer;                         // Boolean which determines if the game is multiplayer or not.
         private Boolean _InGame;                              // Boolean which determines if the multiplayer match is running or not.
         private delegate void processOnMainThread();          // The delegate
+        private delegate void processOnMainThread2(Boolean b);   // The delegate
         private processOnMainThread _CommandDispatcherDel;    // The command dispatcher delegate.
         private processOnMainThread _PlayGameDel;             // The play game delegate.
-        private String _HostIpAdress;                         //
+        private processOnMainThread2 _EndGameDel;
+        //private String _HostIpAdress;                         //
+
+        private ListWalls _ListWalls;                      // List of walls.
 
 
         System.Threading.Thread _RenderThread; // The render thread.
@@ -67,10 +74,12 @@ namespace Snake
             InitializeFont(); // Initialize font.
             _CommandDispatcherDel = new processOnMainThread(NetworkProcessOnMainThread); // Initialize delegate.
             _PlayGameDel = new processOnMainThread(PlayGame);
+            _EndGameDel = new processOnMainThread2(EndGame);
             _Nickname = "";
-            _HostIpAdress = "";
-            _Multiplayer = false;
+            //_HostIpAdress = "";
+            _Multiplayer = true;
             _InGame = false;
+   
             LoadMenu(); // Load menu.
         }
 
@@ -88,8 +97,8 @@ namespace Snake
             _FullSnake = new FullSnake(this.gameBoardPictureBox.Width); // New FullSnake.
             _Fruit = new Fruit(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height); // New fruit.
             _Insect = new Insect(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height, -666, -666); // New insect.
-
-            _SnakeGraphicalParts = new List<Panel>();
+            if (_Multiplayer)
+                _ListWalls = new ListWalls();
 
             _Score = 0;                 // Score is set to 0.
             _TimerInterval = 70;        // Timer interval tick is set to 140 ms.
@@ -115,7 +124,10 @@ namespace Snake
 
         public void TimerTick(object sender, EventArgs e)
         {
-            _GameOver = _FullSnake.CheckCollision(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height); // Check collision.
+            if (_Multiplayer)
+                _GameOver = _FullSnake.CheckCollision(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height, _ListWalls.Get_ListWalls()); // Check collision.
+            else
+                _GameOver = _FullSnake.CheckCollision(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height); // Check collision.
 
             if (!_GameOver)
             {
@@ -123,10 +135,19 @@ namespace Snake
 
                 if (_Fruit.IsReached(_FullSnake.Get_Snake()[0]))
                 {
-                    _Fruit.MoveFruit(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height, _FullSnake); // Move fruit positions.
+                    if (_Multiplayer)
+                    {
+                        _Fruit.MoveFruit(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height, _FullSnake, _ListWalls.Get_ListWalls()); // Move fruit positions.
+                        while (!_Reception.Get_Container().Get_Msg().Equals("102"))
+                        {
+                            _SendingContainer.Set_Msg("101");
+                            _SendingContainer.Set_HasBeenModified(true);
+                        }
+                    }
+                    else _Fruit.MoveFruit(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height, _FullSnake); // Move fruit positions.
                     _Score = _Score + _Fruit.Get_POINT(); // Increment the score.
                     _FullSnake.AddSnakePart(this.gameBoardPictureBox.Width); // Add a Snake part.
-                    _Fruit.Set_EraseStreaks(true);
+                    _Fruit.Set_EraseStreaks(true); 
                 }
 
                 if (_Insect.IsReached(_FullSnake.Get_Snake()[0]))
@@ -139,11 +160,12 @@ namespace Snake
 
                 //this.textBox1.Focus(); // Focus on the textbox (this invisible textbox has been created to manage keyDown events).
                 this.scoreLabel.Text = "Score : " + _Score; // Show the score.
+                if(_Multiplayer)
+                    this.opponentScoreLabel.Text = _Reception.Get_Container().Get_Nickname() + " score : " + _Reception.Get_Container().Get_Score();
 
-                //Render(); // Refresh the display.
             }
 
-            else EndGame(); // end game if _GameOver is true.
+            else EndGame(false); // end game if _GameOver is true.
         }
 
         /////////////////////////////
@@ -155,7 +177,10 @@ namespace Snake
 
             if ((_InsectTimerCounter % 8 == 0) && (_InsectIsPresent == false))
             {
-                _Insect.MoveInsect(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height, _FullSnake, _Fruit); // Move insect.
+                if (_Multiplayer)
+                    _Insect.MoveInsect(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height, _FullSnake, _Fruit, _ListWalls.Get_ListWalls()); // Move insect.
+                else
+                    _Insect.MoveInsect(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height, _FullSnake, _Fruit); // Move insect.
                 _InsectTimerCounter = 0; // Reset the counter.
                 _InsectIsPresent = true; // Set the boolean to true.
             }
@@ -196,9 +221,7 @@ namespace Snake
         {
             InitializeGame();                // Initialize game.
             if (_Multiplayer)
-            {
                 this.Width = 1200;
-            }
             this.CenterToScreen();
             this.gameBoardPictureBox.Controls.Clear(); // Erase the content of the picture Box.
             this.scoreLabel.Visible = true;  // Initialize interface: Essentially show the score label. 
@@ -212,16 +235,23 @@ namespace Snake
         //////////////////////////
         // Method for ending game
 
-        private void EndGame()
+        private void EndGame(Boolean victory)
         {
             _Timer.Stop();       // Stop the timer.
             _InsectTimer.Stop(); // Stop insect timer.
             LoadMenu();          // Load the menu.
-            _Menu.GameOver();    // Set the configuration for a game end (hide/show labels).
+            Invoke(_Menu.Get_GameOverDel(), _Multiplayer, victory);    // Set the configuration for a game end (hide/show labels).
 
-            _RenderThread.Abort();
+            if (_Multiplayer)
+            {
+                while (!_Reception.Get_Container().Get_Msg().Equals("112"))
+                {
+                    _SendingContainer.Set_Msg("111");
+                    _SendingContainer.Set_HasBeenModified(true);
+                }
+            }
 
-            _InGame = false;
+            _RenderThread.Abort();       
         }
 
         #endregion
@@ -244,13 +274,29 @@ namespace Snake
                     _Reception.Get_Container().Get_Snake().RenderMiniSnake(this.miniGameBoardPictureBox);
                     _Reception.Get_Container().Get_Fruit().RenderMiniFruit(this.miniGameBoardPictureBox);
                     _Reception.Get_Container().Get_Insect().RenderMiniInsect(this.miniGameBoardPictureBox);
+                    _Reception.Get_Container().Get_ListWalls().RenderMiniWalls(this.miniGameBoardPictureBox);
+                    _ListWalls.RenderWalls(this.gameBoardPictureBox);
 
 
                     //_FullSnake.RenderMiniSnake(this.miniGameBoardPictureBox);
                     //_Fruit.RenderMiniFruit(this.miniGameBoardPictureBox);
                     //_Insect.RenderMiniInsect(this.miniGameBoardPictureBox);
+
                 }
             }
+        }
+
+        //////////////////////////////////////
+        // Method to clean the miniPictureBox
+
+        public void CleanMiniPictureBox()
+        {
+            Graphics myGraphics;  // Graphics for main drawing.
+            SolidBrush myBrush;   // Brush for filling shapes.
+
+            myGraphics = this.miniGameBoardPictureBox.CreateGraphics(); // Initialize the graphics. 
+            myBrush = new System.Drawing.SolidBrush(Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))))); // Initialize the 2nd brush.
+            myGraphics.FillRectangle(myBrush, 790, 140, this.miniGameBoardPictureBox.Width, this.miniGameBoardPictureBox.Height);
         }
 
         /////////////////////////////
@@ -260,6 +306,7 @@ namespace Snake
         {
             this._Font = new PersonalFont(); // Create new font.
             this.scoreLabel.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.
+            this.opponentScoreLabel.Font = new System.Drawing.Font(_Font.getPersonalFont(), 16, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.
         }
 
         #endregion
@@ -279,13 +326,21 @@ namespace Snake
 
         void mainMenuPictureBox_Click(object sender, EventArgs e)
         {
+            if (_Multiplayer)
+            {
+                Invoke(_Sending.Get_NetworkDelegate());
+                Invoke(_Reception.Get_NetworkDelegate());
+            } 
+
             this.gameBoardPictureBox.Controls.Clear();    // Clear the panel.
             this.gameBoardPictureBox.Controls.Add(_Menu); // Attach the menu to the gameboard.
             this.scoreLabel.Visible = false;              // Initialize interface: Essentially show the score label. 
             _Menu.MainMenu();                             // Set the configuration for the menu (hide/show labels).
             this.Width = 800;
             this.CenterToScreen();
-            this.miniGameBoardPictureBox.Controls.Clear();
+            _InGame = false;
+            _Multiplayer = false;
+            CleanMiniPictureBox();
             
         }
 
@@ -294,7 +349,11 @@ namespace Snake
 
         private void exitPictureBox_Click_1(object sender, EventArgs e)
         {
-            Close(); // Exit program
+            try
+            {
+                this.Close();
+            }
+            catch (Exception exitException) { Console.WriteLine(exitException); }
         }
 
         //////////////////////////////////////////
@@ -459,8 +518,40 @@ namespace Snake
                             _SendingContainer.Set_Snake(_FullSnake);
                             _SendingContainer.Set_Fruit(_Fruit);
                             _SendingContainer.Set_Insect(_Insect);
+                            _SendingContainer.Set_ListWalls(_ListWalls);
+                            _SendingContainer.Set_Nickname(_Nickname);
+                            _SendingContainer.Set_Score(_Score);
                             _SendingContainer.Set_HasBeenModified(true);
 
+                            break;
+
+                case "101": _ListWalls.Get_ListWalls().Add(new Wall(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height, _FullSnake, _Fruit, _Insect, _ListWalls.Get_ListWalls()));
+
+                            _SendingContainer.Set_Msg("102");
+                            _SendingContainer.Set_Snake(_FullSnake);
+                            _SendingContainer.Set_Fruit(_Fruit);
+                            _SendingContainer.Set_Insect(_Insect);
+                            _SendingContainer.Set_ListWalls(_ListWalls);
+                            _SendingContainer.Set_Nickname(_Nickname);
+                            _SendingContainer.Set_Score(_Score);
+                            _SendingContainer.Set_HasBeenModified(true);
+
+                            break;
+
+                case "102": _SendingContainer.Set_Msg("100");
+                            _SendingContainer.Set_Snake(_FullSnake);
+                            _SendingContainer.Set_Fruit(_Fruit);
+                            _SendingContainer.Set_Insect(_Insect);
+                            _SendingContainer.Set_ListWalls(_ListWalls);
+                            _SendingContainer.Set_Nickname(_Nickname);
+                            _SendingContainer.Set_Score(_Score);
+                            _SendingContainer.Set_HasBeenModified(true);
+
+                            break;
+
+                case "111": Invoke(_EndGameDel, true);
+                            _SendingContainer.Set_Msg("112");
+                            _SendingContainer.Set_HasBeenModified(true);
                             break;
             }
         }
@@ -471,12 +562,6 @@ namespace Snake
         private void InitializeNetwork(Boolean isHost)
         {
             _Multiplayer = true;
-
-            /*_MiniFruitPictureBox = new PictureBox();
-            _MiniFruitPictureBox.BackColor = System.Drawing.Color.Black; // Definition of the panel color.
-            _MiniFruitPictureBox.Size = new System.Drawing.Size(6, 6);
-            _MiniFruitPictureBox.Image = global::Snake.Properties.Resources.MiniFruit;
-            this.Controls.Add(_MiniFruitPictureBox);*/
 
             _SendingContainer = new NetworkContainer();
             _ReceptionContainer = new NetworkContainer();

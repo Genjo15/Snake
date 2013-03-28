@@ -193,6 +193,16 @@ namespace Snake.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Loose {
+            get {
+                object obj = ResourceManager.GetObject("Loose", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap MainMenu {
             get {
                 object obj = ResourceManager.GetObject("MainMenu", resourceCulture);
@@ -316,6 +326,16 @@ namespace Snake.Properties {
         internal static System.Drawing.Bitmap WaitClient {
             get {
                 object obj = ResourceManager.GetObject("WaitClient", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Win {
+            get {
+                object obj = ResourceManager.GetObject("Win", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

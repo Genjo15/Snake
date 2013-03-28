@@ -70,11 +70,42 @@ namespace Snake
 
         private void AbortConnection()
         {
-            IAsyncResult a;
-
-            _Socket.Close();
             _Continue = false;
+            System.Threading.Thread.Sleep(5);
+
+            try
+            {
+                _Socket.Close();
+            }
+            catch (Exception e) { Console.WriteLine(e); }
+
         }
+
+        /*////////////////////////////////////////////////////
+        // Function called when _ReceptionThread starts  FAIL
+
+        public void ReceiveLoop()
+        {
+            while (_Continue)
+            {
+                _Socket.BeginReceive(new AsyncCallback(Callback), _Socket);
+            }
+        }
+
+        private void Callback(IAsyncResult result)
+        {
+            _Buffer = _Socket.EndReceive(result, ref _EndPoint);
+            _Container = _Container.DeserializeContainer(_Buffer);
+
+            if(_IsHost)
+                Console.WriteLine("Server has received : " + _Container.Get_Msg() + " from : " + _EndPoint.Address.ToString().Split(':')[0]);
+            else if(!_IsHost)
+                Console.WriteLine("Client has received : " + _Container.Get_Msg() + " from : " + _EndPoint.Address.ToString().Split(':')[0]);
+
+            _Socket.BeginReceive(new AsyncCallback(Callback), _Socket);
+
+        }*/
+
 
         //////////////////////////////////////////////
         // Function called when _ReceptionThread starts
@@ -85,15 +116,24 @@ namespace Snake
             {
                 if (_IsHost)
                 {
-                    _Buffer = _Socket.Receive(ref _EndPoint);
+                    try
+                    {
+                        _Buffer = _Socket.Receive(ref _EndPoint);
+                    }
+                    catch (Exception e) { Console.WriteLine(e); }
+
                     _Container = _Container.DeserializeContainer(_Buffer);
                     Console.WriteLine("Server has received : " + _Container.Get_Msg() + " from : " + _EndPoint.Address.ToString().Split(':')[0]);
-                    Console.WriteLine("Server has received a snake of size : " + _Container.Get_Snake().Get_SnakeSize());
                 }
 
                 if (!_IsHost)
                 {
-                    _Buffer = _Socket.Receive(ref _EndPoint);
+                    try
+                    {
+                        _Buffer = _Socket.Receive(ref _EndPoint);
+                    }
+                    catch (Exception e) { Console.WriteLine(e); }
+
                     _Container = _Container.DeserializeContainer(_Buffer);
                     Console.WriteLine("Client has received : " + _Container.Get_Msg() + " from : " + _EndPoint.Address.ToString().Split(':')[0]);
                 }
@@ -183,4 +223,5 @@ namespace Snake
 
         #endregion
     }
+
 }
