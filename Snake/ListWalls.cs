@@ -24,7 +24,7 @@ namespace Snake
 
         public ListWalls()
         {
-            _ListWalls = new List<Wall>();
+            _ListWalls = new List<Wall>(); // new list of walls.
         }
 
         #endregion
@@ -32,8 +32,6 @@ namespace Snake
         /****************************************************** Methods ******************************************************/
 
         #region Methods
-
-        
 
         #endregion
 
@@ -45,16 +43,15 @@ namespace Snake
         public void RenderWalls(PictureBox gameBoardPictureBox)
         {
             Graphics myGraphics;  // Graphics for main drawing.
-            Pen pen; 
+            Pen pen;              // Pen.
 
             try
             {
                 myGraphics = gameBoardPictureBox.CreateGraphics(); // Initialize the graphics. 
-                pen = new Pen(Color.Black, 2);
+                pen = new Pen(Color.Black, 2);                     // Initialize pen.
                 
                 foreach(Wall element in _ListWalls)
-                    myGraphics.DrawRectangle(pen, element.Get_X(), element.Get_Y(), element.Get_Side(), element.Get_Side());
-      
+                    myGraphics.DrawRectangle(pen, element.Get_X(), element.Get_Y(), element.Get_Side(), element.Get_Side()); // Draw a rectangle for each element of the list of walls.
             }
 
             catch (Exception e) { Console.WriteLine(e); }
@@ -66,16 +63,15 @@ namespace Snake
         public void RenderMiniWalls(PictureBox gameBoardPictureBox)
         {
             Graphics myGraphics;  // Graphics for main drawing.
-            Pen pen;
+            Pen pen;              // Pen.
 
             try
             {
                 myGraphics = gameBoardPictureBox.CreateGraphics(); // Initialize the graphics. 
-                pen = new Pen(Color.Black, 1);
+                pen = new Pen(Color.Black, 1);                     // Initialize pen.
 
                 foreach (Wall element in _ListWalls)
-                    myGraphics.DrawRectangle(pen, element.Get_X()/2, element.Get_Y()/2, element.Get_Side()/2, element.Get_Side()/2);
-
+                    myGraphics.DrawRectangle(pen, element.Get_X() / 2, element.Get_Y() / 2, element.Get_Side() / 2, element.Get_Side() / 2); // Draw a rectangle for each element of the list of walls.
             }
 
             catch (Exception e) { Console.WriteLine(e); }
@@ -92,7 +88,6 @@ namespace Snake
         {
             return _ListWalls;
         }
-
 
         #endregion
     }

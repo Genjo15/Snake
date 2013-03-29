@@ -16,10 +16,9 @@ namespace Snake
 
         private List<SnakePart> _Snake; // List of snake parts.
         
-
         #endregion
 
-        /**************************************************** Constructor ****************************************************/
+        /**************************************************** Constructors ****************************************************/
 
         #region Constructor
 
@@ -142,7 +141,7 @@ namespace Snake
 
             try
             {
-                MyGraphics = gameBoardPictureBox.CreateGraphics(); // Initialize the 2nd graphics. 
+                MyGraphics = gameBoardPictureBox.CreateGraphics(); // Initialize the graphics. 
                 MyBrush = new System.Drawing.SolidBrush(Color.Black); // Initialize the first brush.
                 MyBrush2 = new System.Drawing.SolidBrush(Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))))); // Initialize the 2nd brush.
 
@@ -197,7 +196,6 @@ namespace Snake
             catch (Exception e) { Console.WriteLine(e); }
         }
 
-
         ////////////////////////////////////////////////////
         // Method to refresh the display of the mini snake
 
@@ -210,7 +208,7 @@ namespace Snake
 
             try
             {
-                MyGraphics = miniGameBoardPictureBox.CreateGraphics(); // Initialize the 2nd graphics. 
+                MyGraphics = miniGameBoardPictureBox.CreateGraphics(); // Initialize the graphics. 
                 MyBrush = new System.Drawing.SolidBrush(Color.Black); // Initialize the first brush.
                 MyBrush2 = new System.Drawing.SolidBrush(Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))))); // Initialize the 2nd brush.
 

@@ -18,7 +18,7 @@ namespace Snake
         private int _Y;               // Position in Y.
         private int _Direction;       // Direction.
         private int _LastDirection;   // Last direction.
-        private int _SIDE; // Size of the panel side.
+        private int _SIDE;            // Size of the pictureBox side.
 
         #endregion
 
@@ -28,8 +28,8 @@ namespace Snake
 
         public SnakePart(int width)
         {
-            _SIDE = width / 54 - 2;
-            _IsHead = true;
+            _SIDE = width / 54 - 2;           // Determinate dynamically the side.
+            _IsHead = true;                   // Initialize _IsHead to TRUE.
             _X = (_SIDE + 2) * 15;            // Position in X set to 210 (must be a multiple of _SIDE + 2 to be in synchronisation with items).
             _Y = (_SIDE + 2) * 15;            // Position in Y set to 210 (must be a multiple of _SIDE + 2 to be in synchronisation with items).
             _Direction = 1;                   // Direction is set to 1 (right).
@@ -39,8 +39,8 @@ namespace Snake
 
         public SnakePart(int x, int y, int direction, int width)
         {
-            _SIDE = width / 54 - 2;
-            _IsHead = false;
+            _SIDE = width / 54 - 2;           // Determinate dynamically the side.
+            _IsHead = false;                  // Initialize _IsHead to FALSE.
             _X = x;                           // Position in X set to 250.
             _Y = y;                           // Position in Y set to 250.
             _Direction = direction;           // Direction is set to 1 (right).
@@ -69,11 +69,10 @@ namespace Snake
 
         public void MoveRight()
         {
-            _X = _X + (_SIDE + 2); // Move 14 px right.
-            //if (_X == (width + 1)) // if the snake part reaches the right edge...
-            if (_X == (54*(_SIDE+2)))
-                _X = 0;            // it appears at the opposite of the map.
-            _Direction = 1;        // Set the direction to 1 (right).
+            _X = _X + (_SIDE + 2);    // Move 14 px right.
+            if (_X == (54*(_SIDE+2))) // if the snake part reaches the right edge...
+                _X = 0;               // it appears at the opposite of the map.
+            _Direction = 1;           // Set the direction to 1 (right).
         }
 
         /////////////
@@ -81,10 +80,10 @@ namespace Snake
 
         public void MoveDown()
         {
-            _Y = _Y + (_SIDE + 2); // Move 14 px down.
+            _Y = _Y + (_SIDE + 2);         // Move 14 px down.
             if (_Y == (34 * (_SIDE + 2)))  // if the snake part reaches the lower edge...
-                _Y = 0;            // it appears at the opposite of the map.
-            _Direction = 2;        // Set the direction to 2 (down).
+                _Y = 0;                    // it appears at the opposite of the map.
+            _Direction = 2;                // Set the direction to 2 (down).
         }
 
         /////////////
@@ -94,7 +93,7 @@ namespace Snake
         {
             _X = _X - (_SIDE + 2);      // Move 14 px left.
             if (_X == 0 - _SIDE - 2)    // if the snake part reaches the left edge...
-                _X = 53 * (_SIDE + 2); // it appears at the opposite of the map.
+                _X = 53 * (_SIDE + 2);  // it appears at the opposite of the map.
             _Direction = 3;             // Set the direction to 2 (left).
         }
 
@@ -134,7 +133,6 @@ namespace Snake
             return _IsHead;
         }
 
-
         //////////
         // Get _X
 
@@ -143,7 +141,6 @@ namespace Snake
             return _X;
         }
 
-
         //////////
         // Get _Y
 
@@ -151,7 +148,6 @@ namespace Snake
         {
             return _Y;
         }
-
 
         //////////////////////
         // Get _Direction
@@ -168,7 +164,6 @@ namespace Snake
         {
             return _LastDirection;
         }
-
 
         /////////////
         // Get _SIDE

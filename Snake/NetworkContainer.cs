@@ -23,7 +23,7 @@ namespace Snake
         private String _Nickname;     // Temporary nickname.
         private int _Score;           // Temporary score.
 
-        private Boolean _HasBeenModified;
+        private Boolean _HasBeenModified; // Boolean which indicates if the container has been modified or not.
 
         #endregion
 
@@ -34,18 +34,19 @@ namespace Snake
 
         public NetworkContainer()
         {
-            _Msg = "000";
-            _Snake = new FullSnake();
-            _Fruit = new Fruit();
-            _Insect = new Insect();
-            _ListWalls = new ListWalls();
-            _Nickname = "";
-            _Score = 0;
+            _Msg = "000";                 // Initialize _Msg.
+            _Snake = new FullSnake();     // Initialize _Snake.
+            _Fruit = new Fruit();         // Initialize _Fruit.
+            _Insect = new Insect();       // Initialize _Insect.
+            _ListWalls = new ListWalls(); // Initialize _ListWalls.
+            _Nickname = "";               // Initialize _Nickname.
+            _Score = 0;                   // Initialize _Score.
 
-            _HasBeenModified = false;
+            _HasBeenModified = false; // Initlialize _HasBeenModified to FALSE.
         }
 
         #endregion
+
 
         /****************************************************** Methods ******************************************************/
 
@@ -56,12 +57,12 @@ namespace Snake
 
         public Byte[] SerializeContainer()
         {
-            BinaryFormatter binaryFormater = new BinaryFormatter();
-            MemoryStream memoryStream = new MemoryStream();
+            BinaryFormatter binaryFormater = new BinaryFormatter(); // Binary formatter.
+            MemoryStream memoryStream = new MemoryStream();         // Memory stream.
 
-            binaryFormater.Serialize(memoryStream, this);
+            binaryFormater.Serialize(memoryStream, this); // Serialize data.
 
-            return memoryStream.ToArray();
+            return memoryStream.ToArray(); // Return memory stream to array of bytes.
         }
 
 
@@ -70,26 +71,23 @@ namespace Snake
 
         public NetworkContainer DeserializeContainer(byte[] arrayOfBytes)
         {
-            MemoryStream memoryStream = new MemoryStream();
-            BinaryFormatter binaryFormater = new BinaryFormatter();
-            NetworkContainer obj = new NetworkContainer();
+            MemoryStream memoryStream = new MemoryStream();         // Memory stream.
+            BinaryFormatter binaryFormater = new BinaryFormatter(); // Binary formatter.
+            NetworkContainer obj = new NetworkContainer();          // Network Container.
 
             try
             {
-                memoryStream.Write(arrayOfBytes, 0, arrayOfBytes.Length);
+                memoryStream.Write(arrayOfBytes, 0, arrayOfBytes.Length); // Get the array of bytes .
                 memoryStream.Seek(0, SeekOrigin.Begin);
-                obj = (NetworkContainer)binaryFormater.Deserialize(memoryStream);
+                obj = (NetworkContainer)binaryFormater.Deserialize(memoryStream); // Deserialize container.
                 
             }
             catch (Exception e) { Console.WriteLine(e); }
 
-                return obj;
-            
+            return obj; // Return object.   
         }
 
-
         #endregion
-
 
         #region Accessors&Mutators
 

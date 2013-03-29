@@ -36,7 +36,6 @@ namespace Snake
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Game));
             this.scoreLabel = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.opponentScoreLabel = new System.Windows.Forms.Label();
             this.miniGameBoardPictureBox = new System.Windows.Forms.PictureBox();
             this.bottomBorderPictureBox = new System.Windows.Forms.PictureBox();
@@ -45,6 +44,7 @@ namespace Snake
             this.leftBorderPictureBox = new System.Windows.Forms.PictureBox();
             this.exitPictureBox = new System.Windows.Forms.PictureBox();
             this.gameBoardPictureBox = new System.Windows.Forms.PictureBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.miniGameBoardPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bottomBorderPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.topBorderPictureBox)).BeginInit();
@@ -64,15 +64,6 @@ namespace Snake
             this.scoreLabel.TabIndex = 4;
             this.scoreLabel.Text = "Score : ";
             this.scoreLabel.Visible = false;
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(16, 415);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(2);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(1, 20);
-            this.textBox1.TabIndex = 9;
-            this.textBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
             // 
             // opponentScoreLabel
             // 
@@ -155,6 +146,15 @@ namespace Snake
             this.gameBoardPictureBox.TabIndex = 8;
             this.gameBoardPictureBox.TabStop = false;
             // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(16, 415);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(2);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(1, 20);
+            this.textBox1.TabIndex = 9;
+            this.textBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
+            // 
             // Game
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -192,7 +192,6 @@ namespace Snake
         #endregion
 
         private System.Windows.Forms.Label scoreLabel;
-        private System.Windows.Forms.TextBox textBox1;
         private PictureBox gameBoardPictureBox;
         private PictureBox exitPictureBox;
         private PictureBox leftBorderPictureBox;
@@ -201,6 +200,7 @@ namespace Snake
         private PictureBox rightBorderPictureBox;
         private PictureBox miniGameBoardPictureBox;
         private Label opponentScoreLabel;
+        private TextBox textBox1;
     }
 
 }

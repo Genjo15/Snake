@@ -14,9 +14,9 @@ namespace Snake
 
         #region Variables
 
-        private int _X;
-        private int _Y;
-        private int _Side;
+        private int _X;                // Position in X.
+        private int _Y;                // Position in Y.
+        private int _Side;             // Side.
         private Random _RandomNumber;  // Random number.
 
         #endregion
@@ -34,14 +34,14 @@ namespace Snake
             tmpX = Generate_X(width);     // First generate a X.
             tmpY = Generate_Y(height);    // First generate a Y.
 
-            while(!CheckPositions(tmpX,tmpY,snake,fruit,insect,listWall))
+            while(!CheckPositions(tmpX,tmpY,snake,fruit,insect,listWall)) // Check positions regarding snake, fruit, insect and list of walls.
             {
-                tmpX = Generate_X(width);     // First generate a X.
-                tmpY = Generate_Y(height);    // First generate a Y.
+                tmpX = Generate_X(width);     //  generate a X.
+                tmpY = Generate_Y(height);    //  generate a Y.
             }
 
-            _X = tmpX;
-            _Y = tmpY;
+            _X = tmpX; // Finally assign X & Y.
+            _Y = tmpY; //
         }
 
         #endregion
@@ -75,40 +75,40 @@ namespace Snake
 
         private Boolean CheckPositions(int x, int y, FullSnake fullSnake, Fruit fruit, Insect insect, List<Wall> listWalls)
         {
-            Boolean ok = true;
+            Boolean ok = true; // Boolean
 
             for (int i = 0; i < fullSnake.Get_SnakeSize(); i++) // Check each snake part.
             {
                 if ((x == fullSnake.Get_Snake()[i].Get_X()) && (y == fullSnake.Get_Snake()[i].Get_Y())) // If the fruit is in the same position of one of the snake parts...
                 {
-                    ok = false;
-                    Console.WriteLine("Wall appeared on the snake");
+                    ok = false; // Set the boolean to false.
+                    //Console.WriteLine("Wall appeared on the snake");
                 }
             }
 
             if (x == fruit.Get_X() && y == fruit.Get_Y())
             {
-                ok = false;
-                Console.WriteLine("Wall appeared on the fruit");
+                ok = false; // Set the boolean to false.
+                //Console.WriteLine("Wall appeared on the fruit");
             }
 
             if (((insect.Get_X() == x) && (insect.Get_Y() == y)) || ((insect.Get_X() == (x + (_Side / 2 + 1))) && (insect.Get_Y() == y)) || ((insect.Get_X() == x) && (insect.Get_Y() == (y + (_Side / 2) + 1))) || ((insect.Get_X() == (x + (_Side / 2 + 1))) && (insect.Get_Y() == (y + (_Side / 2) + 1)))) // If the insect is in the same position than the wall...
             {
-                ok = false;
-                Console.WriteLine("Wall appeared on the insect");
+                ok = false; // Set the boolean to false.
+                //Console.WriteLine("Wall appeared on the insect");
             }
 
-            if(listWalls != null)
+            if(listWalls != null) 
                 for (int z = 0; z < listWalls.Count(); z++)
                 {
                     if ((x == listWalls[z].Get_X()) && (z == listWalls[z].Get_Y())) // If the fruit is in the same position of one of the snake parts...
                     {
-                        ok = false;
-                        Console.WriteLine("Wall appeared on a wall");
+                        ok = false; // Set the boolean to false.
+                        //Console.WriteLine("Wall appeared on a wall");
                     }
                 }
 
-            return ok;
+            return ok; // Return boolean.
         }
 
         #endregion
