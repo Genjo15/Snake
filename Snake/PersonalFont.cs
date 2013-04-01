@@ -11,7 +11,7 @@ namespace Snake
     {
         /********************************************* Declaration of variables *********************************************/
 
-        [DllImport("gdi32.dll")]
+        [DllImport("gdi32.dll")] // Make a call to gdi32.dll
         private static extern System.IntPtr AddFontMemResourceEx(System.IntPtr pbFont, uint cbFont, System.IntPtr pdv, [In] ref uint pcFonts);
         FontFamily kraboudja;
 

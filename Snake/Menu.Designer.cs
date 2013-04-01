@@ -32,6 +32,7 @@ namespace Snake
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Menu));
             this.menuPanel = new System.Windows.Forms.Panel();
+            this.newHighScoreLabel = new System.Windows.Forms.Label();
             this.highScoresScore = new System.Windows.Forms.Label();
             this.highScoresName = new System.Windows.Forms.Label();
             this.loosePictureBox = new System.Windows.Forms.PictureBox();
@@ -59,7 +60,6 @@ namespace Snake
             this.gameOverPictureBox = new System.Windows.Forms.PictureBox();
             this.playPictureBox = new System.Windows.Forms.PictureBox();
             this.titlePictureBox = new System.Windows.Forms.PictureBox();
-            this.newHighScoreLabel = new System.Windows.Forms.Label();
             this.menuPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.loosePictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.winPictureBox)).BeginInit();
@@ -120,6 +120,15 @@ namespace Snake
             this.menuPanel.Name = "menuPanel";
             this.menuPanel.Size = new System.Drawing.Size(756, 476);
             this.menuPanel.TabIndex = 0;
+            // 
+            // newHighScoreLabel
+            // 
+            this.newHighScoreLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.newHighScoreLabel.Location = new System.Drawing.Point(215, 40);
+            this.newHighScoreLabel.Name = "newHighScoreLabel";
+            this.newHighScoreLabel.Size = new System.Drawing.Size(354, 41);
+            this.newHighScoreLabel.TabIndex = 39;
+            this.newHighScoreLabel.Visible = false;
             // 
             // highScoresScore
             // 
@@ -329,7 +338,7 @@ namespace Snake
             // mainMenuPictureBox
             // 
             this.mainMenuPictureBox.Image = global::Snake.Properties.Resources.MainMenu;
-            this.mainMenuPictureBox.Location = new System.Drawing.Point(292, 260);
+            this.mainMenuPictureBox.Location = new System.Drawing.Point(292, 245);
             this.mainMenuPictureBox.Name = "mainMenuPictureBox";
             this.mainMenuPictureBox.Size = new System.Drawing.Size(189, 54);
             this.mainMenuPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -339,7 +348,7 @@ namespace Snake
             // retryPictureBox
             // 
             this.retryPictureBox.Image = ((System.Drawing.Image)(resources.GetObject("retryPictureBox.Image")));
-            this.retryPictureBox.Location = new System.Drawing.Point(347, 207);
+            this.retryPictureBox.Location = new System.Drawing.Point(347, 195);
             this.retryPictureBox.Name = "retryPictureBox";
             this.retryPictureBox.Size = new System.Drawing.Size(86, 54);
             this.retryPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -374,15 +383,6 @@ namespace Snake
             this.titlePictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.titlePictureBox.TabIndex = 11;
             this.titlePictureBox.TabStop = false;
-            // 
-            // newHighScoreLabel
-            // 
-            this.newHighScoreLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.newHighScoreLabel.Location = new System.Drawing.Point(215, 40);
-            this.newHighScoreLabel.Name = "newHighScoreLabel";
-            this.newHighScoreLabel.Size = new System.Drawing.Size(354, 41);
-            this.newHighScoreLabel.TabIndex = 39;
-            this.newHighScoreLabel.Visible = false;
             // 
             // Menu
             // 
