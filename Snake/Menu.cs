@@ -10,29 +10,48 @@ namespace Snake
 {
     public partial class Menu : UserControl
     {
-        private PersonalFont _Font;
+        /********************************************* Declaration of variables *********************************************/
+
+        #region Variables
+
+        private PersonalFont _Font;                                       // Font
+        private delegate void processOnMenuThread(Boolean b, Boolean b2); // Delegate type.
+        private processOnMenuThread _ConnectionEstablishedDel;            // Delegate for ConnectionEstablished method.
+        private processOnMenuThread _GameOverDel;                         // Delegate for GameOver method.
+
+        #endregion
+
+
+        /**************************************************** Constructor ****************************************************/
 
         #region Constructor
 
         public Menu()
         {
-            InitializeComponent();
+            InitializeComponent(); // Initialize component.
+            InitializeFont();      // Initialize font.
+            _ConnectionEstablishedDel = new processOnMenuThread(ConnectionEstablished); // Initialize the  ConnectionEstablished delegate.
+            _GameOverDel = new processOnMenuThread(GameOver);                           // Initialize the  GameOver delegate.
         }
 
         #endregion
+
+
+        /****************************************************** Methods ******************************************************/
 
         #region Methods
 
         internal void InitializeFont()
         {
             _Font = new PersonalFont();
-            ipTextBox1.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.
-            ipTextBox2.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.
-            ipTextBox3.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.
-            ipTextBox4.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.
+            nicknameTextBox.Font = new System.Drawing.Font(_Font.getPersonalFont(), 16, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));    // Set the font for the nickname textbox.
+            ipTextBox1.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));      // Set the font for the ip textbox (part 1).
+            ipTextBox2.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));      // Set the font for the ip textbox (part 2).
+            ipTextBox3.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));      // Set the font for the ip textbox (part 3).
+            ipTextBox4.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));      // Set the font for the ip textbox (part 4).            
             highScoresName.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.
-            highScoresScore.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.            
-            highScoreNameText.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.
+            highScoresScore.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.                        
+            newHighScoreLabel.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.                        
         }
 
         internal void MainMenu()
@@ -57,26 +76,29 @@ namespace Snake
             this.ipTextBox1.Visible = false;                      // Hide ipTextBox1.
             this.ipTextBox2.Visible = false;                      // Hide ipTextBox2.
             this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
-            this.ipTextBox4.Visible = false;                      // Hide ipTextBo41.
+            this.ipTextBox4.Visible = false;                      // Hide ipTextBo41.            
             this.highScoresName.Visible = false;                  // Hide highScoresLabel.             
-            this.highScoresScore.Visible = false;                 // Hide highScoresLabel. 
-            this.highScoreNameText.Visible = false;               // Hide highScoreNameText.
-            this.submitScoreButton.Visible = false;               // Hide submitScoreButton.
+            this.highScoresScore.Visible = false;                 // Hide highScoresLabel.                         
+            this.nicknamePictureBox.Visible = true;               // Show nicknamePictureBox.
+            this.nicknameTextBox.Visible = true;                  // Show nicknameTextBox.
+            this.playPictureBox.Select();                         // Select the playPictureBox.
+            this.winPictureBox.Visible = false;                   // Hide winPictureBox.
+            this.loosePictureBox.Visible = false;                 // Hide loosePictureBox.
+            this.newHighScoreLabel.Visible = false;               // Hide newHighScoreLabel
         }
 
         internal void InGame()
         {
-            this.Visible = false;
+            this.Visible = false; // Hide the menu.
         }
 
-        internal void GameOver()
+        internal void GameOver(Boolean multiplayer, Boolean victory)
         {
+            this.Visible = true;
             this.playPictureBox.Visible = false;                  // Hide playPictureBox.
             this.multiplayerPictureBox.Visible = false;           // Hide multiplayerPictureBox.
             this.highScoresPictureBox.Visible = false;            // Hide highScoresPictureBox;
             this.titlePictureBox.Visible = false;                 // Hide titlePictureBox.
-            this.gameOverPictureBox.Visible = true;               // Show gameOverPictureBox.
-            this.retryPictureBox.Visible = true;                  // Show retryPictureBox.
             this.mainMenuPictureBox.Visible = true;               // Show mainMenuPictureBox.
             this.multiplayerMenuPictureBox.Visible = false;       // Hide multiplayerMenuPictureBox.
             this.createGamePictureBox.Visible = false;            // Hide createGamePictureBox.
@@ -91,11 +113,32 @@ namespace Snake
             this.ipTextBox1.Visible = false;                      // Hide ipTextBox1.
             this.ipTextBox2.Visible = false;                      // Hide ipTextBox2.
             this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
-            this.ipTextBox4.Visible = false;                      // Hide ipTextBox4.
+            this.ipTextBox4.Visible = false;                      // Hide ipTextBox4.            
             this.highScoresName.Visible = false;                  // Hide highScoresLabel.            
-            this.highScoresScore.Visible = false;                 // Hide highScoresLabel.
-            this.highScoreNameText.Visible = true;               // True highScoreNameText.
-            this.submitScoreButton.Visible = true;               // True submitScoreButton.
+            this.highScoresScore.Visible = false;                 // Hide highScoresLabel.                        
+            this.nicknamePictureBox.Visible = false;              // Hide nicknamePictureBox.
+            this.nicknameTextBox.Visible = false;                 // Hide nicknameTextBox.
+            if (!multiplayer)
+            {
+                this.highScoresPictureBox.Visible = true;            // Hide highScoresPictureBox;
+                this.newHighScoreLabel.Visible = true;             // Show newHighScoreLabel
+                this.gameOverPictureBox.Visible = true;           // Show gameOverPictureBox.                
+                this.retryPictureBox.Visible = true;              // Show retryPictureBox.
+                this.winPictureBox.Visible = false;               // Hide winPictureBox.
+                this.loosePictureBox.Visible = false;             // Hide loosePictureBox.
+            }
+
+            if (multiplayer)                                      ////
+            {                                                     // Multiplayer mode :
+                if(victory)                                       // if victory
+                    this.winPictureBox.Visible = true;            // --> Show winPictureBox.
+                else if(!victory)                                 // if defeat
+                    this.loosePictureBox.Visible = true;          // --> Show loosePictureBox.
+                this.gameOverPictureBox.Visible = false;          // Hide gameOverPictureBox.
+                this.retryPictureBox.Visible = false;             // Hide retryPictureBox.
+            }
+
+                
         }
 
         internal void Multiplayer()
@@ -120,11 +163,14 @@ namespace Snake
             this.ipTextBox1.Visible = false;                      // Hide ipTextBox1.
             this.ipTextBox2.Visible = false;                      // Hide ipTextBox2.
             this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
-            this.ipTextBox4.Visible = false;                      // Hide ipTextBox4.
+            this.ipTextBox4.Visible = false;                      // Hide ipTextBox4.            
             this.highScoresName.Visible = false;                  // Hide highScoresLabel.            
-            this.highScoresScore.Visible = false;                 // Hide highScoresLabel.
-            this.highScoreNameText.Visible = false;               // Hide highScoreNameText.
-            this.submitScoreButton.Visible = false;               // Hide submitScoreButton.
+            this.highScoresScore.Visible = false;                 // Hide highScoresLabel.            
+            this.nicknamePictureBox.Visible = false;              // Hide nicknamePictureBox.
+            this.nicknameTextBox.Visible = false;                 // Hide nicknameTextBox.
+            this.winPictureBox.Visible = false;                   // Hide winPictureBox.
+            this.loosePictureBox.Visible = false;                 // Hide loosePictureBox.
+            this.newHighScoreLabel.Visible = false;               // Hide newHighScoreLabel
         }
 
         internal void Host()
@@ -141,9 +187,12 @@ namespace Snake
             this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
             this.ipTextBox4.Visible = false;                      // Hide ipTextBox4.
             this.highScoresName.Visible = false;                  // Hide highScoresLabel.            
-            this.highScoresScore.Visible = false;                 // Hide highScoresLabel.
-            this.highScoreNameText.Visible = false;               // Hide highScoreNameText.
-            this.submitScoreButton.Visible = false;               // Hide submitScoreButton.
+            this.highScoresScore.Visible = false;                 // Hide highScoresLabel.            
+            this.nicknamePictureBox.Visible = false;              // Hide nicknamePictureBox.
+            this.nicknameTextBox.Visible = false;                 // Hide nicknameTextBox.
+            this.winPictureBox.Visible = false;                   // Hide winPictureBox.
+            this.loosePictureBox.Visible = false;                 // Hide loosePictureBox.
+            this.newHighScoreLabel.Visible = false;               // Hide newHighScoreLabel
         }
 
         internal void Client1()
@@ -159,11 +208,14 @@ namespace Snake
             this.ipTextBox1.Visible = true;                       // Show ipTextBox1.
             this.ipTextBox2.Visible = true;                       // Show ipTextBox2.
             this.ipTextBox3.Visible = true;                       // Show ipTextBox3.
-            this.ipTextBox4.Visible = true;                       // Show ipTextBox4.
+            this.ipTextBox4.Visible = true;                       // Show ipTextBox4.            
             this.highScoresName.Visible = false;                  // Hide highScoresLabel.            
-            this.highScoresScore.Visible = false;                 // Hide highScoresLabel.
-            this.highScoreNameText.Visible = false;               // Hide highScoreNameText.
-            this.submitScoreButton.Visible = false;               // Hide submitScoreButton.
+            this.highScoresScore.Visible = false;                 // Hide highScoresLabel.                        
+            this.nicknamePictureBox.Visible = false;              // Hide nicknamePictureBox.
+            this.nicknameTextBox.Visible = false;                 // Hide nicknameTextBox.
+            this.winPictureBox.Visible = false;                   // Hide winPictureBox.
+            this.loosePictureBox.Visible = false;                 // Hide loosePictureBox.
+            this.newHighScoreLabel.Visible = false;               // Hide newHighScoreLabel
         }
 
         internal void Client2()
@@ -178,11 +230,14 @@ namespace Snake
             this.ipTextBox1.Visible = false;                      // Hide ipTextBox1.
             this.ipTextBox2.Visible = false;                      // Hide ipTextBox2.
             this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
-            this.ipTextBox4.Visible = false;                      // Hide ipTextBox4.
+            this.ipTextBox4.Visible = false;                      // Hide ipTextBox4.            
             this.highScoresName.Visible = false;                  // Hide highScoresLabel.            
-            this.highScoresScore.Visible = false;                 // Hide highScoresLabel.
-            this.highScoreNameText.Visible = false;               // Hide highScoreNameText.
-            this.submitScoreButton.Visible = false;               // Hide submitScoreButton.
+            this.highScoresScore.Visible = false;                 // Hide highScoresLabel.                        
+            this.nicknamePictureBox.Visible = false;              // Hide nicknamePictureBox.
+            this.nicknameTextBox.Visible = false;                 // Hide nicknameTextBox.
+            this.winPictureBox.Visible = false;                   // Hide winPictureBox.
+            this.loosePictureBox.Visible = false;                 // Hide loosePictureBox.
+            this.newHighScoreLabel.Visible = false;               // Hide newHighScoreLabel
         }
 
         internal void HighScoreShow()
@@ -207,31 +262,59 @@ namespace Snake
             this.ipTextBox1.Visible = false;                      // Hide ipTextBox1.
             this.ipTextBox2.Visible = false;                      // Hide ipTextBox2.
             this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
-            this.ipTextBox4.Visible = false;                      // Hide ipTextBox4.
+            this.ipTextBox4.Visible = false;                      // Hide ipTextBox4.            
             this.highScoresName.Visible = true;                   // Show highScoresLabel.            
-            this.highScoresScore.Visible = true;                 // Show highScoresLabel.
-            this.highScoreNameText.Visible = false;               // Hide highScoreNameText.
-            this.submitScoreButton.Visible = false;               // Hide submitScoreButton.
+            this.highScoresScore.Visible = true;                 // Show highScoresLabel.            
+            this.nicknamePictureBox.Visible = false;              // Hide nicknamePictureBox.
+            this.nicknameTextBox.Visible = false;                 // Hide nicknameTextBox.
+            this.winPictureBox.Visible = false;                   // Hide winPictureBox.
+            this.loosePictureBox.Visible = false;                 // Hide loosePictureBox.
+            this.newHighScoreLabel.Visible = false;               // Hide newHighScoreLabel
         }
 
-        internal void ConnectionEstablished(Boolean isHost)
+        private void ConnectionEstablished(Boolean isHost, Boolean multiplayer)
         {
-            this.connectionHostPictureBox.Visible = false;       // Hide connectionHostPictureBox.
+ 	        this.connectionHostPictureBox.Visible = false;       // Hide connectionHostPictureBox.
             this.waitClientPictureBox.Visible = false;           // Hide waitClientPictureBox
-            this.connectionEstablishedPictureBox.Visible = true; // Show connectionEstablishedPictureBox.
-            if (isHost)
-                this.startGamePictureBox.Visible = true;         // Show startGamePictureBox (if host).
+            if (multiplayer)
+            {                                                        // If multiplayer mode
+                this.connectionEstablishedPictureBox.Visible = true; //     Show connectionEstablishedPictureBox.
+                if (isHost)                                          //     if host :
+                    this.startGamePictureBox.Visible = true;         //        Show startGamePictureBox (if host).
+            }
             this.enterIpPictureBox.Visible = false;              // Hide enterIpPictureBox.
             this.okPictureBox.Visible = false;                   // Hide okPictureBox.
             this.ipTextBox1.Visible = false;                     // Hide ipTextBox1.
             this.ipTextBox2.Visible = false;                     // Hide ipTextBox2.
             this.ipTextBox3.Visible = false;                     // Hide ipTextBox3.
             this.ipTextBox4.Visible = false;                     // Hide ipTextBox4.
+            this.nicknamePictureBox.Visible = false;             // Hide nicknamePictureBox.
+            this.nicknameTextBox.Visible = false;                // Hide nicknameTextBox.
+            this.winPictureBox.Visible = false;                  // Hide winPictureBox.
+            this.loosePictureBox.Visible = false;                // Hide loosePictureBox.
         }
 
         #endregion
 
-       
+        #region Accessors
+
+        ////////////////////////////////
+        // Get ConnectionEstablishedDel
+
+        public Delegate Get_ConnectionEstablishedDel()
+        {
+            return _ConnectionEstablishedDel;
+        }
+
+        ////////////////////
+        // Get_GameOverDel
+
+        public Delegate Get_GameOverDel()
+        {
+            return _GameOverDel;
+        }
+
+        #endregion
 
     }
 }

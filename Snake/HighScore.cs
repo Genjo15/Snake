@@ -19,7 +19,7 @@ namespace Snake
         {
             PlayerName = new string[count];
             Score = new int[count];           
-            Count = count;            
+            Count = 0;            
         }
 
     }
@@ -31,10 +31,11 @@ namespace Snake
 
         public static int SaveHighScores(HighScoreData data)
         {
+            HighScore.sort(data);
             int success = 0;
             try
             {
-                using (Stream file = new FileStream(HighScoresFilename, FileMode.OpenOrCreate))
+                using (Stream file = new FileStream(HighScoresFilename, FileMode.Create))
                 {
                     try
                     {
@@ -59,20 +60,21 @@ namespace Snake
         }
 
 
-        public static HighScoreData LoadHighScores()
+        public static HighScoreData LoadHighScores()                //Retrieve the leaderboard or create a sample one if none exist
         {
 
             HighScoreData? hsLoad = HighScore._LoadHighScores();
             HighScoreData sample;
             if (hsLoad.Equals(null))
             {
-                sample = new HighScoreData(3);
+                sample = new HighScoreData(HighScore.MAX_HighScores);
                 sample.PlayerName[0] = "Test";
                 sample.Score[0] = 2;
                 sample.PlayerName[1] = "JohnTheCrazy";
                 sample.Score[1] = 20;
                 sample.PlayerName[2] = "Doe";
                 sample.Score[2] = 120;
+                sample.Count = 3;
                 HighScore.SaveHighScores(sample);
             }
             else
@@ -84,7 +86,7 @@ namespace Snake
 
     }
 
-        private static HighScoreData? _LoadHighScores()
+        private static HighScoreData? _LoadHighScores()                                             //Use nullable HighScoreData object to handle none existence of file
         {
             HighScoreData? data= null;
             // Open the file
@@ -112,18 +114,63 @@ namespace Snake
         }
 
 
-        public static bool check_ScoreUp(int score)
+        public static int check_ScoreUp(int score)
         {
-            bool beatten = false;
+            int beatten = -1;
+            int i = 0;
+            bool exit = false;
             HighScoreData data = HighScore.LoadHighScores();            
-            for(int i = 0;i < data.Count; i++)
-            {
+            while( i< data.Count || !exit)
+            {            
                 if(data.Score[i] < score)
                 {
-                        beatten = true;
+                        beatten = i;
+                        exit = true;
                 }
+                i++;
             }
             return beatten;
+        }
+
+        public static int isPlayerAlreadyIn(String nickname)
+        {
+            int index=-1;
+            HighScoreData data = HighScore.LoadHighScores();
+            for (int i = 0; i < data.Count; i++)
+            {
+                if (data.PlayerName[i].Equals(nickname))
+                {
+                    index = i;
+                }
+            }
+            return index;
+        }
+
+
+        private static void sort(HighScoreData data)
+        {            
+            int maxScoreIndex = 0;
+            int oldScore;
+            string oldNick;
+            for (int i = 0; i < data.Count; i++)
+            {
+                maxScoreIndex = i;
+                for (int j = i; j < data.Count; j++)
+                {
+                    if (data.Score[j] >= data.Score[maxScoreIndex])
+                    {
+                        maxScoreIndex = j;
+                    }
+                }
+                oldScore = data.Score[i];
+                oldNick = data.PlayerName[i];
+                data.PlayerName[i] = data.PlayerName[maxScoreIndex];
+                data.Score[i] = data.Score[maxScoreIndex];
+                data.PlayerName[maxScoreIndex] = oldNick;
+                data.Score[maxScoreIndex] = oldScore;
+                Console.Out.WriteLine("dump : dataScore["+i+"]="+data.Score[i]);
+            }
+
         }
     }
 }

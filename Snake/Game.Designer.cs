@@ -36,21 +36,22 @@ namespace Snake
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Game));
             this.scoreLabel = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.opponentScoreLabel = new System.Windows.Forms.Label();
+            this.miniGameBoardPictureBox = new System.Windows.Forms.PictureBox();
+            this.bottomBorderPictureBox = new System.Windows.Forms.PictureBox();
             this.topBorderPictureBox = new System.Windows.Forms.PictureBox();
+            this.rightBorderPictureBox = new System.Windows.Forms.PictureBox();
             this.leftBorderPictureBox = new System.Windows.Forms.PictureBox();
             this.exitPictureBox = new System.Windows.Forms.PictureBox();
-            this.bottomBorderPictureBox = new System.Windows.Forms.PictureBox();
-            this.rightBorderPictureBox = new System.Windows.Forms.PictureBox();
             this.gameBoardPictureBox = new System.Windows.Forms.PictureBox();
-            this.miniGameBoardPictureBox = new System.Windows.Forms.PictureBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            ((System.ComponentModel.ISupportInitialize)(this.miniGameBoardPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bottomBorderPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.topBorderPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rightBorderPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.leftBorderPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.exitPictureBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bottomBorderPictureBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.rightBorderPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gameBoardPictureBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.miniGameBoardPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // scoreLabel
@@ -64,14 +65,34 @@ namespace Snake
             this.scoreLabel.Text = "Score : ";
             this.scoreLabel.Visible = false;
             // 
-            // textBox1
+            // opponentScoreLabel
             // 
-            this.textBox1.Location = new System.Drawing.Point(16, 415);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(2);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(1, 20);
-            this.textBox1.TabIndex = 9;
-            this.textBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
+            this.opponentScoreLabel.AutoSize = true;
+            this.opponentScoreLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.opponentScoreLabel.Location = new System.Drawing.Point(790, 380);
+            this.opponentScoreLabel.Name = "opponentScoreLabel";
+            this.opponentScoreLabel.Size = new System.Drawing.Size(79, 29);
+            this.opponentScoreLabel.TabIndex = 40;
+            this.opponentScoreLabel.Text = "label1";
+            // 
+            // miniGameBoardPictureBox
+            // 
+            this.miniGameBoardPictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.miniGameBoardPictureBox.Location = new System.Drawing.Point(790, 140);
+            this.miniGameBoardPictureBox.Name = "miniGameBoardPictureBox";
+            this.miniGameBoardPictureBox.Size = new System.Drawing.Size(378, 238);
+            this.miniGameBoardPictureBox.TabIndex = 16;
+            this.miniGameBoardPictureBox.TabStop = false;
+            // 
+            // bottomBorderPictureBox
+            // 
+            this.bottomBorderPictureBox.Image = global::Snake.Properties.Resources.HorizontalBorder;
+            this.bottomBorderPictureBox.Location = new System.Drawing.Point(11, 491);
+            this.bottomBorderPictureBox.Name = "bottomBorderPictureBox";
+            this.bottomBorderPictureBox.Size = new System.Drawing.Size(762, 3);
+            this.bottomBorderPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.bottomBorderPictureBox.TabIndex = 13;
+            this.bottomBorderPictureBox.TabStop = false;
             // 
             // topBorderPictureBox
             // 
@@ -82,6 +103,16 @@ namespace Snake
             this.topBorderPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.topBorderPictureBox.TabIndex = 13;
             this.topBorderPictureBox.TabStop = false;
+            // 
+            // rightBorderPictureBox
+            // 
+            this.rightBorderPictureBox.Image = global::Snake.Properties.Resources.VerticalBorder;
+            this.rightBorderPictureBox.Location = new System.Drawing.Point(770, 15);
+            this.rightBorderPictureBox.Name = "rightBorderPictureBox";
+            this.rightBorderPictureBox.Size = new System.Drawing.Size(3, 476);
+            this.rightBorderPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.rightBorderPictureBox.TabIndex = 12;
+            this.rightBorderPictureBox.TabStop = false;
             // 
             // leftBorderPictureBox
             // 
@@ -104,26 +135,6 @@ namespace Snake
             this.exitPictureBox.TabStop = false;
             this.exitPictureBox.Click += new System.EventHandler(this.exitPictureBox_Click_1);
             // 
-            // bottomBorderPictureBox
-            // 
-            this.bottomBorderPictureBox.Image = global::Snake.Properties.Resources.HorizontalBorder;
-            this.bottomBorderPictureBox.Location = new System.Drawing.Point(11, 491);
-            this.bottomBorderPictureBox.Name = "bottomBorderPictureBox";
-            this.bottomBorderPictureBox.Size = new System.Drawing.Size(762, 3);
-            this.bottomBorderPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.bottomBorderPictureBox.TabIndex = 13;
-            this.bottomBorderPictureBox.TabStop = false;
-            // 
-            // rightBorderPictureBox
-            // 
-            this.rightBorderPictureBox.Image = global::Snake.Properties.Resources.VerticalBorder;
-            this.rightBorderPictureBox.Location = new System.Drawing.Point(770, 15);
-            this.rightBorderPictureBox.Name = "rightBorderPictureBox";
-            this.rightBorderPictureBox.Size = new System.Drawing.Size(3, 476);
-            this.rightBorderPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.rightBorderPictureBox.TabIndex = 12;
-            this.rightBorderPictureBox.TabStop = false;
-            // 
             // gameBoardPictureBox
             // 
             this.gameBoardPictureBox.BackColor = System.Drawing.Color.Transparent;
@@ -135,14 +146,14 @@ namespace Snake
             this.gameBoardPictureBox.TabIndex = 8;
             this.gameBoardPictureBox.TabStop = false;
             // 
-            // miniGameBoardPictureBox
+            // textBox1
             // 
-            this.miniGameBoardPictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.miniGameBoardPictureBox.Location = new System.Drawing.Point(790, 253);
-            this.miniGameBoardPictureBox.Name = "miniGameBoardPictureBox";
-            this.miniGameBoardPictureBox.Size = new System.Drawing.Size(378, 238);
-            this.miniGameBoardPictureBox.TabIndex = 16;
-            this.miniGameBoardPictureBox.TabStop = false;
+            this.textBox1.Location = new System.Drawing.Point(16, 415);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(2);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(1, 20);
+            this.textBox1.TabIndex = 9;
+            this.textBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
             // 
             // Game
             // 
@@ -150,6 +161,7 @@ namespace Snake
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.ClientSize = new System.Drawing.Size(784, 531);
+            this.Controls.Add(this.opponentScoreLabel);
             this.Controls.Add(this.miniGameBoardPictureBox);
             this.Controls.Add(this.bottomBorderPictureBox);
             this.Controls.Add(this.topBorderPictureBox);
@@ -165,13 +177,13 @@ namespace Snake
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Tag = "10";
             this.Text = "Snake";
+            ((System.ComponentModel.ISupportInitialize)(this.miniGameBoardPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bottomBorderPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.topBorderPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rightBorderPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.leftBorderPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.exitPictureBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bottomBorderPictureBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.rightBorderPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gameBoardPictureBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.miniGameBoardPictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -180,7 +192,6 @@ namespace Snake
         #endregion
 
         private System.Windows.Forms.Label scoreLabel;
-        private System.Windows.Forms.TextBox textBox1;
         private PictureBox gameBoardPictureBox;
         private PictureBox exitPictureBox;
         private PictureBox leftBorderPictureBox;
@@ -188,6 +199,9 @@ namespace Snake
         private PictureBox bottomBorderPictureBox;
         private PictureBox rightBorderPictureBox;
         private PictureBox miniGameBoardPictureBox;
+        private Label opponentScoreLabel;
+        private TextBox textBox1;
     }
+
 }
 

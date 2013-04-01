@@ -32,10 +32,12 @@ namespace Snake
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Menu));
             this.menuPanel = new System.Windows.Forms.Panel();
-            this.submitScoreButton = new System.Windows.Forms.PictureBox();
-            this.highScoreNameText = new System.Windows.Forms.TextBox();
             this.highScoresScore = new System.Windows.Forms.Label();
             this.highScoresName = new System.Windows.Forms.Label();
+            this.loosePictureBox = new System.Windows.Forms.PictureBox();
+            this.winPictureBox = new System.Windows.Forms.PictureBox();
+            this.nicknameTextBox = new System.Windows.Forms.TextBox();
+            this.nicknamePictureBox = new System.Windows.Forms.PictureBox();
             this.ipTextBox4 = new System.Windows.Forms.TextBox();
             this.ipTextBox3 = new System.Windows.Forms.TextBox();
             this.ipTextBox2 = new System.Windows.Forms.TextBox();
@@ -57,8 +59,11 @@ namespace Snake
             this.gameOverPictureBox = new System.Windows.Forms.PictureBox();
             this.playPictureBox = new System.Windows.Forms.PictureBox();
             this.titlePictureBox = new System.Windows.Forms.PictureBox();
+            this.newHighScoreLabel = new System.Windows.Forms.Label();
             this.menuPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.submitScoreButton)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.loosePictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.winPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nicknamePictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.okPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.enterIpPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.startGamePictureBox)).BeginInit();
@@ -81,10 +86,13 @@ namespace Snake
             // menuPanel
             // 
             this.menuPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.menuPanel.Controls.Add(this.submitScoreButton);
-            this.menuPanel.Controls.Add(this.highScoreNameText);
+            this.menuPanel.Controls.Add(this.newHighScoreLabel);
             this.menuPanel.Controls.Add(this.highScoresScore);
             this.menuPanel.Controls.Add(this.highScoresName);
+            this.menuPanel.Controls.Add(this.loosePictureBox);
+            this.menuPanel.Controls.Add(this.winPictureBox);
+            this.menuPanel.Controls.Add(this.nicknameTextBox);
+            this.menuPanel.Controls.Add(this.nicknamePictureBox);
             this.menuPanel.Controls.Add(this.ipTextBox4);
             this.menuPanel.Controls.Add(this.ipTextBox3);
             this.menuPanel.Controls.Add(this.ipTextBox2);
@@ -113,31 +121,12 @@ namespace Snake
             this.menuPanel.Size = new System.Drawing.Size(756, 476);
             this.menuPanel.TabIndex = 0;
             // 
-            // submitScoreButton
-            // 
-            this.submitScoreButton.Image = global::Snake.Properties.Resources.OK;
-            this.submitScoreButton.Location = new System.Drawing.Point(624, 98);
-            this.submitScoreButton.Name = "submitScoreButton";
-            this.submitScoreButton.Size = new System.Drawing.Size(58, 45);
-            this.submitScoreButton.TabIndex = 38;
-            this.submitScoreButton.TabStop = false;
-            // 
-            // highScoreNameText
-            // 
-            this.highScoreNameText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.highScoreNameText.Location = new System.Drawing.Point(624, 73);
-            this.highScoreNameText.Name = "highScoreNameText";
-            this.highScoreNameText.Size = new System.Drawing.Size(100, 19);
-            this.highScoreNameText.TabIndex = 37;
-            this.highScoreNameText.Text = "AAA";
-            this.highScoreNameText.Visible = false;
-            // 
             // highScoresScore
             // 
             this.highScoresScore.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.highScoresScore.Location = new System.Drawing.Point(450, 28);
+            this.highScoresScore.Location = new System.Drawing.Point(478, 32);
             this.highScoresScore.Name = "highScoresScore";
-            this.highScoresScore.Size = new System.Drawing.Size(148, 210);
+            this.highScoresScore.Size = new System.Drawing.Size(109, 210);
             this.highScoresScore.TabIndex = 35;
             this.highScoresScore.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.highScoresScore.Visible = false;
@@ -145,11 +134,49 @@ namespace Snake
             // highScoresName
             // 
             this.highScoresName.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.highScoresName.Location = new System.Drawing.Point(242, 28);
+            this.highScoresName.Location = new System.Drawing.Point(193, 28);
             this.highScoresName.Name = "highScoresName";
-            this.highScoresName.Size = new System.Drawing.Size(202, 210);
+            this.highScoresName.Size = new System.Drawing.Size(279, 210);
             this.highScoresName.TabIndex = 34;
             this.highScoresName.Visible = false;
+            // 
+            // loosePictureBox
+            // 
+            this.loosePictureBox.Image = global::Snake.Properties.Resources.Loose;
+            this.loosePictureBox.Location = new System.Drawing.Point(234, 102);
+            this.loosePictureBox.Name = "loosePictureBox";
+            this.loosePictureBox.Size = new System.Drawing.Size(352, 99);
+            this.loosePictureBox.TabIndex = 38;
+            this.loosePictureBox.TabStop = false;
+            // 
+            // winPictureBox
+            // 
+            this.winPictureBox.Image = global::Snake.Properties.Resources.Win;
+            this.winPictureBox.Location = new System.Drawing.Point(250, 102);
+            this.winPictureBox.Name = "winPictureBox";
+            this.winPictureBox.Size = new System.Drawing.Size(309, 92);
+            this.winPictureBox.TabIndex = 37;
+            this.winPictureBox.TabStop = false;
+            // 
+            // nicknameTextBox
+            // 
+            this.nicknameTextBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.nicknameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.nicknameTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nicknameTextBox.Location = new System.Drawing.Point(142, 405);
+            this.nicknameTextBox.Name = "nicknameTextBox";
+            this.nicknameTextBox.Size = new System.Drawing.Size(176, 19);
+            this.nicknameTextBox.TabIndex = 36;
+            this.nicknameTextBox.Text = "Unknown Player 1";
+            // 
+            // nicknamePictureBox
+            // 
+            this.nicknamePictureBox.Image = ((System.Drawing.Image)(resources.GetObject("nicknamePictureBox.Image")));
+            this.nicknamePictureBox.Location = new System.Drawing.Point(28, 404);
+            this.nicknamePictureBox.Name = "nicknamePictureBox";
+            this.nicknamePictureBox.Size = new System.Drawing.Size(305, 35);
+            this.nicknamePictureBox.TabIndex = 35;
+            this.nicknamePictureBox.TabStop = false;
             // 
             // ipTextBox4
             // 
@@ -348,6 +375,15 @@ namespace Snake
             this.titlePictureBox.TabIndex = 11;
             this.titlePictureBox.TabStop = false;
             // 
+            // newHighScoreLabel
+            // 
+            this.newHighScoreLabel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.newHighScoreLabel.Location = new System.Drawing.Point(215, 40);
+            this.newHighScoreLabel.Name = "newHighScoreLabel";
+            this.newHighScoreLabel.Size = new System.Drawing.Size(354, 41);
+            this.newHighScoreLabel.TabIndex = 39;
+            this.newHighScoreLabel.Visible = false;
+            // 
             // Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -359,7 +395,9 @@ namespace Snake
             this.Size = new System.Drawing.Size(758, 478);
             this.menuPanel.ResumeLayout(false);
             this.menuPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.submitScoreButton)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.loosePictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.winPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nicknamePictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.okPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.enterIpPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.startGamePictureBox)).EndInit();
@@ -407,7 +445,10 @@ namespace Snake
         internal TextBox ipTextBox2;
         internal Label highScoresName;
         internal Label highScoresScore;
-        internal PictureBox submitScoreButton;
-        internal TextBox highScoreNameText;
+        internal PictureBox nicknamePictureBox;
+        internal TextBox nicknameTextBox;
+        internal PictureBox winPictureBox;
+        internal PictureBox loosePictureBox;
+        internal Label newHighScoreLabel;
     }
 }
