@@ -35,50 +35,6 @@ namespace Snake
 
         #endregion
 
-        #region RenderMethods
-
-        ////////////////
-        // Render Walls
-
-        public void RenderWalls(PictureBox gameBoardPictureBox)
-        {
-            Graphics myGraphics;  // Graphics for main drawing.
-            Pen pen;              // Pen.
-
-            try
-            {
-                myGraphics = gameBoardPictureBox.CreateGraphics(); // Initialize the graphics. 
-                pen = new Pen(Color.Black, 2);                     // Initialize pen.
-                
-                foreach(Wall element in _ListWalls)
-                    myGraphics.DrawRectangle(pen, element.Get_X(), element.Get_Y(), element.Get_Side(), element.Get_Side()); // Draw a rectangle for each element of the list of walls.
-            }
-
-            catch (Exception e) { Console.WriteLine(e); }
-        }
-
-        /////////////////////
-        // render miniWalls
-
-        public void RenderMiniWalls(PictureBox gameBoardPictureBox)
-        {
-            Graphics myGraphics;  // Graphics for main drawing.
-            Pen pen;              // Pen.
-
-            try
-            {
-                myGraphics = gameBoardPictureBox.CreateGraphics(); // Initialize the graphics. 
-                pen = new Pen(Color.Black, 1);                     // Initialize pen.
-
-                foreach (Wall element in _ListWalls)
-                    myGraphics.DrawRectangle(pen, element.Get_X() / 2, element.Get_Y() / 2, element.Get_Side() / 2, element.Get_Side() / 2); // Draw a rectangle for each element of the list of walls.
-            }
-
-            catch (Exception e) { Console.WriteLine(e); }
-        }
-
-        #endregion
-
         #region Accessors&Mutators
 
         /////////////////////////
@@ -87,6 +43,14 @@ namespace Snake
         public List<Wall> Get_ListWalls()
         {
             return _ListWalls;
+        }
+
+        ////////////////////////////
+        // Get the size of the list
+
+        public int Get_ListWallsSize()
+        {
+            return _ListWalls.Count;
         }
 
         #endregion

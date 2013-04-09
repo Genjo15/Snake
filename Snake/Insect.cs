@@ -20,7 +20,6 @@ namespace Snake
         private const int _POINT = 25;             // The points earned when item reached.
         private int _Side;                         // Size of the insect.
         private Random _RandomNumber;              // Random number.
-        private Boolean _EraseStreak;  // Boolean which informs if the insect has been moved.
 
         #endregion
 
@@ -30,7 +29,6 @@ namespace Snake
 
         public Insect(int width, int height)
         {
-            _EraseStreak = false; // Set _EraseStreak to FALSE.
             _Side = width / 27 - 2; // Initialize dynamically the side of the insect.
             _RandomNumber = new Random();   // Initialize the generator of random.
             _X = (_Side + 2) * (_RandomNumber.Next(width - _Side) / (_Side + 2));  // Set _X thanks to a generated number.
@@ -39,7 +37,6 @@ namespace Snake
 
         public Insect(int width, int height, int x, int y)
         {
-            _EraseStreak = false; // Set _EraseStreak to FALSE.
             _Side = width / 27 - 2; // Initialize dynamically the side of the insect.
             _RandomNumber = new Random();   // Initialize the generator of random.
             _X = x; // Set _X.
@@ -94,7 +91,6 @@ namespace Snake
             _X = tmpX; // Finally assign X & Y.
             _Y = tmpY; //
 
-            Set_EraseStreak(true); // Set _EraseStreak to TRUE.
         }
 
         //////////////////////////////
@@ -120,7 +116,6 @@ namespace Snake
             _X = tmpX; // Finally assign X & Y.
             _Y = tmpY; //
 
-            Set_EraseStreak(true); // Set _EraseStreak to TRUE.
         }
 
         ////////////////////////////////////
@@ -132,8 +127,6 @@ namespace Snake
             _LastY = _Y; // Save _Y in _LastY.
             _X = -666; // Make the item unreachable for the user by changing its X & Y.
             _Y = -666;
-
-            Set_EraseStreak(true);
         }
 
         ///////////////
@@ -218,62 +211,6 @@ namespace Snake
 
         #endregion
 
-        #region RenderMethods
-
-        ///////////////////////////////////////////////
-        // Method to refresh the display of the insect 
-
-        public void RenderInsect(PictureBox gameBoardPictureBox)
-        {
-            Graphics myGraphics;  // Graphics for main drawing.
-            SolidBrush myBrush;   // Brush for filling shapes.
-            SolidBrush myBrush2;  // Second brush for erasing streaks.
-            Image _InsectPicture = Snake.Properties.Resources.Insect; // The picture of the insect.
-
-            try
-            {
-                myGraphics = gameBoardPictureBox.CreateGraphics(); // Initialize the 2nd graphics. 
-                myBrush = new System.Drawing.SolidBrush(Color.Black); // Initialize the first brush.
-                myBrush2 = new System.Drawing.SolidBrush(Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))))); // Initialize the 2nd brush.
-
-                if (_EraseStreak)
-                {
-                    myGraphics.FillRectangle(myBrush2, new Rectangle(_LastX, _LastY, (gameBoardPictureBox.Width / 27 - 2), (gameBoardPictureBox.Width / 27 - 2))); // Erase the streak.
-                    _EraseStreak = false; // Set _EraseStreak to FALSE.
-                }
-
-                myGraphics.DrawImage(_InsectPicture, new Rectangle(_X, _Y, (gameBoardPictureBox.Width / 27 - 2), (gameBoardPictureBox.Width / 27 - 2))); // Draw insect.
-            }
-
-            catch (Exception e) { Console.WriteLine(e); }
-        }
-
-        ////////////////////////////////////////////////////
-        // Method to refresh the display of the mini insect 
-
-        public void RenderMiniInsect(PictureBox gameBoardPictureBox)
-        {
-            Graphics myGraphics;  // Graphics for main drawing.
-            SolidBrush myBrush;   // Brush for filling shapes.
-            SolidBrush myBrush2;  // Second brush for erasing streaks.
-            Image _InsectPicture = Snake.Properties.Resources.Insect; // The picture of the insect.
-
-            try
-            {
-                myGraphics = gameBoardPictureBox.CreateGraphics(); // Initialize the 2nd graphics. 
-                myBrush = new System.Drawing.SolidBrush(Color.Black); // Initialize the first brush.
-                myBrush2 = new System.Drawing.SolidBrush(Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))))); // Initialize the 2nd brush.
-
-                myGraphics.FillRectangle(myBrush2, new Rectangle(_LastX / 2, _LastY / 2, (gameBoardPictureBox.Width / 27 - 1), (gameBoardPictureBox.Width / 27 - 1))); // Erase the streak.
-
-                myGraphics.DrawImage(_InsectPicture, new Rectangle(_X / 2, _Y / 2, (gameBoardPictureBox.Width / 27 - 1), (gameBoardPictureBox.Width / 27 - 1))); // Draw insect.
-            }
-
-            catch (Exception e) { Console.WriteLine(e); }
-        }
-
-        #endregion
-
         #region Accessors&Mutators
 
         //////////
@@ -322,14 +259,6 @@ namespace Snake
         public void Set_Y(int y)
         {
             _Y = y;
-        }
-
-        ///////////////////////////
-        // Set EraseStreaks (both)
-
-        public void Set_EraseStreak(Boolean b)
-        {
-            _EraseStreak = b;
         }
 
         #endregion

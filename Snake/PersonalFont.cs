@@ -23,12 +23,12 @@ namespace Snake
             byte[] fontArray = global::Snake.Properties.Resources.Kraboudja;
             int dataLength = global::Snake.Properties.Resources.Kraboudja.Length;
 
-            // Assign memory and copy byte[] on that memory address
-            System.IntPtr ptrData = Marshal.AllocCoTaskMem(dataLength);
+            // Assign memory and copy byte[] on that memory address 
+            System.IntPtr ptrData = Marshal.AllocCoTaskMem(dataLength); //(the common language runtime must marshal ptrdata which will be passed as a parameter with AddFontMemRessourceEx).
             Marshal.Copy(fontArray, 0, ptrData, dataLength);
 
             uint cFonts = 0;
-            AddFontMemResourceEx(ptrData, (uint)fontArray.Length, System.IntPtr.Zero, ref cFonts);
+            AddFontMemResourceEx(ptrData, (uint)fontArray.Length, System.IntPtr.Zero, ref cFonts); // Adds the font resource from a memory image to the system (from gdi32.dll)
 
             PrivateFontCollection pfc = new PrivateFontCollection();
             // Pass the font to the privatefontcollection object

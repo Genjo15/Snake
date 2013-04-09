@@ -20,8 +20,6 @@ namespace Snake
         private const int _POINT = 5; // The points earned when item reached.
         private int _Side;            // Size of the panel side.
         private Random _RandomNumber; // Random number.
-        private Boolean _EraseStreak; // Boolean which indicates if the streak has to be erased or not (useful for the render method).
-
 
         #endregion
 
@@ -31,7 +29,6 @@ namespace Snake
 
         public Fruit(int width, int height)
         {
-            _EraseStreak = true; // Initialize _EraseStreak to TRUE.
             _Side = width / 54 - 2; // Initialize dynamically the side of the fruit.
             _RandomNumber = new Random();   // Initialize the generator of random.
             _X = (_Side + 2) * (_RandomNumber.Next(width - _Side) / (_Side + 2));  // Set _X thanks to a generated number.
@@ -182,62 +179,6 @@ namespace Snake
 
         #endregion
 
-        #region RenderMethods
-
-        ///////////////////////////////////////////////
-        // Method to refresh the display of the fruit 
-
-        public void RenderFruit(PictureBox gameBoardPictureBox)
-        {
-            Graphics myGraphics;  // Graphics for main drawing.
-            SolidBrush myBrush;   // Brush for filling shapes.
-            SolidBrush myBrush2;  // Second brush for erasing streaks.
-            Image fruitPicture = Snake.Properties.Resources.Fruit;   // The picture of the fruit.
-
-            try
-            {
-                myGraphics = gameBoardPictureBox.CreateGraphics(); // Initialize the graphics. 
-                myBrush = new System.Drawing.SolidBrush(Color.Black); // Initialize the first brush.
-                myBrush2 = new System.Drawing.SolidBrush(Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))))); // Initialize the 2nd brush.
-
-                myGraphics.DrawImage(fruitPicture, new System.Drawing.Rectangle(_X, _Y, (gameBoardPictureBox.Width / 54 - 2), (gameBoardPictureBox.Width / 54 - 2))); // Draw fruit.
-
-                if (_EraseStreak)
-                {
-                    myGraphics.FillRectangle(myBrush2, _LastX, _LastY, (gameBoardPictureBox.Width / 54), (gameBoardPictureBox.Width / 54)); // Erase the streak before moving the fruit.    
-                    _EraseStreak = false; // Set _EraseStreak to FALSE.
-                }
-            }
-
-            catch (Exception e) { Console.WriteLine(e); }
-        }
-
-        ///////////////////////////////////////////////////
-        // Method to refresh the display of the mini fruit 
-
-        public void RenderMiniFruit(PictureBox gameBoardPictureBox)
-        {
-            Graphics myGraphics;  // Graphics for main drawing.
-            SolidBrush myBrush;   // Brush for filling shapes.
-            SolidBrush myBrush2;  // Second brush for erasing streaks.
-            Image fruitPicture = Snake.Properties.Resources.MiniFruit; // The picture of the fruit.
-
-            try
-            {
-                myGraphics = gameBoardPictureBox.CreateGraphics(); // Initialize the graphics. 
-                myBrush = new System.Drawing.SolidBrush(Color.Black); // Initialize the first brush.
-                myBrush2 = new System.Drawing.SolidBrush(Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))))); // Initialize the 2nd brush.
-
-                myGraphics.DrawImage(fruitPicture, new System.Drawing.Rectangle(_X / 2, _Y / 2, (gameBoardPictureBox.Width / 54 - 1), (gameBoardPictureBox.Width / 54 - 1))); // Draw fruit.
-
-                myGraphics.FillRectangle(myBrush2, new Rectangle(_LastX / 2, _LastY / 2, (gameBoardPictureBox.Width / 54 - 1), (gameBoardPictureBox.Width / 54 - 1))); // Erase the streak before moving the fruit. 
-
-            }
-            catch (Exception e) { Console.WriteLine(e); }
-        }
-
-        #endregion
-
         #region Accessors&Mutators
 
         //////////
@@ -270,22 +211,6 @@ namespace Snake
         public int Get_SIDE()
         {
             return _Side;
-        }
-
-        //////////////////
-        // Get _IsReached
-
-        public Boolean Get_IsReached()
-        {
-            return _EraseStreak;
-        }
-
-        //////////////////
-        // Set _IsReached
-
-        public void Set_EraseStreak(Boolean b)
-        {
-            _EraseStreak = b;
         }
 
         #endregion

@@ -35,6 +35,7 @@ namespace Snake
         private int _TimerInterval;                    // Timer interval.
 
         private System.Threading.Thread _RenderThread; // The render thread.
+        private Render _Render;
         
         ///////////////////////////
         // Multiplayer variables :
@@ -69,6 +70,8 @@ namespace Snake
         {
             InitializeComponent(); // Initialize components of the form.
             InitializeFont();      // Initialize font.
+
+            _Render = new Render(this.gameBoardPictureBox, this.miniGameBoardPictureBox);
 
             _CommandDispatcherDel = new processOnMainThread(NetworkProcessOnMainThread); //// 
             _PlayGameDel = new processOnMainThread(PlayGame);                            // Initialize delegates.
@@ -148,7 +151,6 @@ namespace Snake
 
                     _Score = _Score + _Fruit.Get_POINT();                    // Increment the score.
                     _FullSnake.AddSnakePart(this.gameBoardPictureBox.Width); // Add a Snake part.
-                    _Fruit.Set_EraseStreak(true);                            // Set EraseStreak to TRUE.
                 }
 
                 if (_Insect.IsReached(_FullSnake.Get_Snake()[0])) // If the insect is reached...
@@ -219,17 +221,18 @@ namespace Snake
 
         private void PlayGame()
         {
-            if (_Multiplayer)          ////
-            {                          // Multiplayer mode :
-                this.Width = 1200;     // Enlarge the form.
-                this.CenterToScreen(); // Center the form.
-            }                          //
+            if (_Multiplayer)                                  ////
+            {                                                  // Multiplayer mode :
+                this.Width = 1200;                             // Enlarge the form.
+                this.CenterToScreen();                         // Center the form.
+                this.miniGameBoardPictureBox.Controls.Clear(); // Erase the content of the mini picture Box.
+            }                                                  //
 
             InitializeGame(); // Initialize game.
                     
-            this.gameBoardPictureBox.Controls.Clear(); // Erase the content of the picture Box.
-            this.scoreLabel.Visible = true;            // Show the score label. 
-            _Menu.InGame();                            // Set the configuration for a game end (hide/show labels).
+            this.gameBoardPictureBox.Controls.Clear();     // Erase the content of the picture Box.
+            this.scoreLabel.Visible = true;                // Show the score label. 
+            _Menu.InGame();                                // Set the configuration for a game end (hide/show labels).
 
             _Timer.Start();        // Start timer.
             _InsectTimer.Start();  // Start insect timer.  
@@ -268,6 +271,9 @@ namespace Snake
                 }
 
             }
+
+            this.gameBoardPictureBox.Controls.Remove(_Render.Get_Fruit());
+            this.gameBoardPictureBox.Controls.Remove(_Render.Get_Insect());
         }
 
         private bool submitScore()
@@ -288,7 +294,7 @@ namespace Snake
                 }   
                 else                                                             // if he has beatten someone
                 {                    
-                    if((index=HighScore.check_ScoreUp(_Score))>=0)              //Replace that someone
+                    if((index=HighScore.check_ScoreUp(_Score))>=0)               //Replace that someone
                     {
                         data.PlayerName[index] = _Nickname;
                         data.Score[index] = _Score;
@@ -336,18 +342,24 @@ namespace Snake
         {
             while (_InGame)
             {
-                _Fruit.RenderFruit(this.gameBoardPictureBox);     // Refresh the display of the fruit.     
-                _Insect.RenderInsect(this.gameBoardPictureBox);   // Refresh the display of the insect.
-                _FullSnake.RenderSnake(this.gameBoardPictureBox); // Refresh the display of the snake.
+                try
+                {
+                    Invoke(_Render.Get_RenderFruitDel(), _Fruit, gameBoardPictureBox);   // Refresh the display of the fruit.  
+                    Invoke(_Render.Get_RenderInsectDel(), _Insect, gameBoardPictureBox); // Refresh the display of the insect.  
+                    _Render.RenderSnake(_FullSnake, gameBoardPictureBox);                // Refresh the display of the snake.
 
-                if (_Multiplayer)                                                                             ////
-                {                                                                                             // Multiplayer mode :
-                    _Reception.Get_Container().Get_Snake().RenderMiniSnake(this.miniGameBoardPictureBox);     //   - Refresh the opponent's snake on the mini-gameboard.
-                    _Reception.Get_Container().Get_Fruit().RenderMiniFruit(this.miniGameBoardPictureBox);     //   - Refresh the opponent's fruit on the mini-gameboard.
-                    _Reception.Get_Container().Get_Insect().RenderMiniInsect(this.miniGameBoardPictureBox);   //   - Refresh the opponent's insect on the mini-gameboard.
-                    _Reception.Get_Container().Get_ListWalls().RenderMiniWalls(this.miniGameBoardPictureBox); //   - Refresh the opponent's walls on the mini-gameboard.
-                    _ListWalls.RenderWalls(this.gameBoardPictureBox);                                         //   - Refresh the player's wall too.
-                }                                                                                             //
+
+                    if (_Multiplayer)                                                                                                     ////
+                    {                                                                                                                     // Multiplayer mode :
+                        Invoke(_Render.Get_RenderMiniSnakeDel(), _Reception.Get_Container().Get_Snake(), this.miniGameBoardPictureBox);   // - Refresh the opponent's snake on the mini-gameboard.
+                        Invoke(_Render.Get_RenderMiniFruitDel(), _Reception.Get_Container().Get_Fruit(), this.miniGameBoardPictureBox);   // - Refresh the opponent's fruit on the mini-gameboard.
+                        Invoke(_Render.Get_RenderMiniInsectDel(), _Reception.Get_Container().Get_Insect(), this.miniGameBoardPictureBox); // - Refresh the opponent's insect on the mini-gameboard.
+                        _Render.RenderMiniWalls(_Reception.Get_Container().Get_ListWalls());                                              // - Refresh the opponent's walls on the mini-gameboard.
+                        _Render.RenderWalls(_ListWalls);                                                                                  // - Refresh the player's wall too.
+                    }
+                }
+
+                catch (Exception e) { Console.WriteLine(e); }
             }
         }
 

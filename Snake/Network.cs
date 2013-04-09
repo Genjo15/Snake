@@ -112,6 +112,8 @@ namespace Snake
                 }
 
                 _Delegate.DynamicInvoke(); // Invoke delegate from main (command dispatcher).
+
+                System.Threading.Thread.Sleep(35); // Sleep for 35ms.
             }
         }
 
@@ -138,7 +140,7 @@ namespace Snake
                     Console.WriteLine("Server has sent : " + _Container.Get_Msg() + " to " + _EndPoint.Address.ToString().Split(':')[0]);
                 }
 
-                System.Threading.Thread.Sleep(30); // Sleep for 35ms.
+                System.Threading.Thread.Sleep(35); // Sleep for 35ms.
             }
         }
       
