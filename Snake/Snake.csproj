@@ -102,6 +102,7 @@
     </Compile>
     <Compile Include="Render.cs" />
     <Compile Include="SnakePart.cs" />
+    <Compile Include="SystemTime.cs" />
     <Compile Include="Wall.cs" />
     <EmbeddedResource Include="Game.resx">
       <DependentUpon>Game.cs</DependentUpon>

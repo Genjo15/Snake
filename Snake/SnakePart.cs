@@ -26,25 +26,35 @@ namespace Snake
 
         #region Constructors
 
+        /*
+         * Constructor of SnakePart
+         *      - Initialize variables.
+         * */
+
         public SnakePart(int width)
         {
-            _SIDE = width / 54 - 2;           // Determinate dynamically the side.
-            _IsHead = true;                   // Initialize _IsHead to TRUE.
-            _X = (_SIDE + 2) * 15;            // Position in X set to 210 (must be a multiple of _SIDE + 2 to be in synchronisation with items).
-            _Y = (_SIDE + 2) * 15;            // Position in Y set to 210 (must be a multiple of _SIDE + 2 to be in synchronisation with items).
-            _Direction = 1;                   // Direction is set to 1 (right).
-            _LastDirection = 1;               // Last direction is set to 1 (right).
+            _SIDE = width / 54 - 2;           
+            _IsHead = true;                   
+            _X = (_SIDE + 2) * 15;            
+            _Y = (_SIDE + 2) * 15;            
+            _Direction = 1;                   
+            _LastDirection = 1;               
             
         }
 
+        /*
+         * Another Constructor of SnakePart
+         *      - Initialize variables.
+         * */
+
         public SnakePart(int x, int y, int direction, int width)
         {
-            _SIDE = width / 54 - 2;           // Determinate dynamically the side.
-            _IsHead = false;                  // Initialize _IsHead to FALSE.
-            _X = x;                           // Position in X set to 250.
-            _Y = y;                           // Position in Y set to 250.
-            _Direction = direction;           // Direction is set to 1 (right).
-            _LastDirection = direction;       // Last direction is set to 1 (right).
+            _SIDE = width / 54 - 2;           
+            _IsHead = false;                  
+            _X = x;                           
+            _Y = y;                           
+            _Direction = direction;           
+            _LastDirection = direction;       
         }
 
         #endregion
@@ -53,72 +63,81 @@ namespace Snake
 
         #region Methods
 
-        ///////////
-        // Move up
+        /*
+         * Move Up
+         *      - Update snakePart position (edge reaching included)      
+         */
 
         public void MoveUp()
         {
-            _Y = _Y - (_SIDE + 2);       // Move 14 px up.
-            if (_Y == (0 - _SIDE - 2))   // if the snake part reaches the top edge...
-                _Y = (33 * (_SIDE + 2)); // it appears at the opposite of the map.
-            _Direction = 0;              // Set the direction to 0 (up).
+            _Y = _Y - (_SIDE + 2);       
+            if (_Y == (0 - _SIDE - 2))   
+                _Y = (33 * (_SIDE + 2)); 
+            _Direction = 0;              
         }
 
-        //////////////
-        // Move right
+        /*
+         * Move Right
+         *      - Update snakePart position (edge reaching included)      
+         */
 
         public void MoveRight()
         {
-            _X = _X + (_SIDE + 2);    // Move 14 px right.
-            if (_X == (54*(_SIDE+2))) // if the snake part reaches the right edge...
-                _X = 0;               // it appears at the opposite of the map.
-            _Direction = 1;           // Set the direction to 1 (right).
+            _X = _X + (_SIDE + 2);    
+            if (_X == (54*(_SIDE+2))) 
+                _X = 0;               
+            _Direction = 1;           
         }
 
-        /////////////
-        // Move down
+        /*
+         * Move Down
+         *      - Update snakePart position (edge reaching included)      
+         */
 
         public void MoveDown()
         {
-            _Y = _Y + (_SIDE + 2);         // Move 14 px down.
-            if (_Y == (34 * (_SIDE + 2)))  // if the snake part reaches the lower edge...
-                _Y = 0;                    // it appears at the opposite of the map.
-            _Direction = 2;                // Set the direction to 2 (down).
+            _Y = _Y + (_SIDE + 2);         
+            if (_Y == (34 * (_SIDE + 2)))  
+                _Y = 0;                    
+            _Direction = 2;                
         }
 
-        /////////////
-        // Move left
+        /*
+         * Move Left
+         *      - Update snakePart position (edge reaching included)      
+         */
 
         public void MoveLeft()
         {
-            _X = _X - (_SIDE + 2);      // Move 14 px left.
-            if (_X == 0 - _SIDE - 2)    // if the snake part reaches the left edge...
-                _X = 53 * (_SIDE + 2);  // it appears at the opposite of the map.
-            _Direction = 3;             // Set the direction to 2 (left).
+            _X = _X - (_SIDE + 2);      
+            if (_X == 0 - _SIDE - 2)    
+                _X = 53 * (_SIDE + 2);  
+            _Direction = 3;             
         }
 
-        ////////////////
-        // Get the part
+        /*
+         * Update part
+         *      - Update snakePart position (main function calling the above ones).     
+         */
 
         public void UpdateSnakePart(int direction)
         {         
-            //  If the user does nothing, direction is the same as the previous one.
             if (direction == -1)
                 _Direction = _LastDirection;
 
-            else // Update direction and last direction.
+            else 
             {
                 _LastDirection = _Direction;
                 _Direction = direction;
             }
 
             if (_Direction == 0)
-                MoveUp(); // Move up.
+                MoveUp(); 
             else if (_Direction == 1)
-                MoveRight(); // Move right.
+                MoveRight(); 
             else if (_Direction == 2)
-                MoveDown(); // Move down.
-            else MoveLeft(); // Move left. 
+                MoveDown(); 
+            else MoveLeft(); 
         }
 
         #endregion
@@ -174,6 +193,5 @@ namespace Snake
         }
 
         #endregion
-
     }
 }

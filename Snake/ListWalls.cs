@@ -24,7 +24,7 @@ namespace Snake
 
         public ListWalls()
         {
-            _ListWalls = new List<Wall>(); // new list of walls.
+            _ListWalls = new List<Wall>();
         }
 
         #endregion

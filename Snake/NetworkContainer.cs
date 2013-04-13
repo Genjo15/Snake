@@ -32,17 +32,22 @@ namespace Snake
 
         #region Constructors
 
+        /*
+         * Constructor of NetworkCOntainer
+         *      - Initialize variables.
+         * */
+
         public NetworkContainer()
         {
-            _Msg = "000";                 // Initialize _Msg.
-            _Snake = new FullSnake();     // Initialize _Snake.
-            _Fruit = new Fruit();         // Initialize _Fruit.
-            _Insect = new Insect();       // Initialize _Insect.
-            _ListWalls = new ListWalls(); // Initialize _ListWalls.
-            _Nickname = "";               // Initialize _Nickname.
-            _Score = 0;                   // Initialize _Score.
+            _Msg = "000";                 
+            _Snake = new FullSnake();     
+            _Fruit = new Fruit();         
+            _Insect = new Insect();       
+            _ListWalls = new ListWalls(); 
+            _Nickname = "";               
+            _Score = 0;                   
 
-            _HasBeenModified = false; // Initlialize _HasBeenModified to FALSE.
+            _HasBeenModified = false; 
         }
 
         #endregion
@@ -52,39 +57,45 @@ namespace Snake
 
         #region Methods
 
-        ///////////////////////////////////////////////////////////
-        // Function to serialize the object into an array of byte
+        /*
+         * Function to serialize the object into an array of byte
+         *      - Initialize binary formatter & memory stream.
+         *      - Serialize data and return them to a byte array.
+         * */
 
         public Byte[] SerializeContainer()
         {
-            BinaryFormatter binaryFormater = new BinaryFormatter(); // Binary formatter.
-            MemoryStream memoryStream = new MemoryStream();         // Memory stream.
+            BinaryFormatter binaryFormater = new BinaryFormatter(); 
+            MemoryStream memoryStream = new MemoryStream();         
 
-            binaryFormater.Serialize(memoryStream, this); // Serialize data.
+            binaryFormater.Serialize(memoryStream, this); 
 
-            return memoryStream.ToArray(); // Return memory stream to array of bytes.
+            return memoryStream.ToArray(); 
         }
 
 
-        /////////////////////////////////////////////////////////////////////////////
-        // Function to deserialize an array of byte into an object of type Container
+        /*
+         * Function to deserialize an array of byte into an object of type Container
+         *      - Initialize binary formatter & memory stream.
+         *      - Deserialize container (in array of byte format) and return it as object.
+         * */
 
         public NetworkContainer DeserializeContainer(byte[] arrayOfBytes)
         {
-            MemoryStream memoryStream = new MemoryStream();         // Memory stream.
-            BinaryFormatter binaryFormater = new BinaryFormatter(); // Binary formatter.
-            NetworkContainer obj = new NetworkContainer();          // Network Container.
+            MemoryStream memoryStream = new MemoryStream();         
+            BinaryFormatter binaryFormater = new BinaryFormatter(); 
+            NetworkContainer obj = new NetworkContainer();          
 
             try
             {
-                memoryStream.Write(arrayOfBytes, 0, arrayOfBytes.Length); // Get the array of bytes .
+                memoryStream.Write(arrayOfBytes, 0, arrayOfBytes.Length); 
                 memoryStream.Seek(0, SeekOrigin.Begin);
-                obj = (NetworkContainer)binaryFormater.Deserialize(memoryStream); // Deserialize container.
+                obj = (NetworkContainer)binaryFormater.Deserialize(memoryStream); 
                 
             }
             catch (Exception e) { Console.WriteLine(e); }
 
-            return obj; // Return object.   
+            return obj;  
         }
 
         #endregion

@@ -45,6 +45,7 @@ namespace Snake
             this.exitPictureBox = new System.Windows.Forms.PictureBox();
             this.gameBoardPictureBox = new System.Windows.Forms.PictureBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.timeLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.miniGameBoardPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bottomBorderPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.topBorderPictureBox)).BeginInit();
@@ -155,12 +156,23 @@ namespace Snake
             this.textBox1.TabIndex = 9;
             this.textBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
             // 
+            // timeLabel
+            // 
+            this.timeLabel.AutoSize = true;
+            this.timeLabel.Location = new System.Drawing.Point(25, 497);
+            this.timeLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.timeLabel.Name = "timeLabel";
+            this.timeLabel.Size = new System.Drawing.Size(30, 13);
+            this.timeLabel.TabIndex = 41;
+            this.timeLabel.Text = "Time";
+            // 
             // Game
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.ClientSize = new System.Drawing.Size(784, 531);
+            this.Controls.Add(this.timeLabel);
             this.Controls.Add(this.opponentScoreLabel);
             this.Controls.Add(this.miniGameBoardPictureBox);
             this.Controls.Add(this.bottomBorderPictureBox);
@@ -203,6 +215,7 @@ namespace Snake
         private PictureBox miniGameBoardPictureBox;
         private Label opponentScoreLabel;
         private TextBox textBox1;
+        private Label timeLabel;
     }
 
 }

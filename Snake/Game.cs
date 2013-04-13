@@ -35,30 +35,31 @@ namespace Snake
         private int _TimerInterval;                    // Timer interval.
 
         private System.Threading.Thread _RenderThread; // The render thread.
-        private Render _Render;
+        private Render _Render;   // Render object (to use render functions).
+        private SystemTime _Time; // Time object (to use the time).
         
         ///////////////////////////
         // Multiplayer variables :
 
-        private System.Threading.Thread _ReceptionThread;      // The reception thread.
-        private System.Threading.Thread _SendingThread;        // The sending thread.
+        private System.Threading.Thread _ReceptionThread;       // The reception thread.
+        private System.Threading.Thread _SendingThread;         // The sending thread.
 
-        private ListWalls _ListWalls;                          // List of walls.
-        private Network _Sending;                              // Network components (for sending data).
-        private Network _Reception;                            // Network components (for receiving data).
-        private NetworkContainer _SendingContainer;            // Temporary container for sending data.
-        private NetworkContainer _ReceptionContainer;          // Temporary container for receiving data.
+        private ListWalls _ListWalls;                           // List of walls.
+        private Network _Sending;                               // Network components (for sending data).
+        private Network _Reception;                             // Network components (for receiving data).
+        private NetworkContainer _SendingContainer;             // Temporary container for sending data.
+        private NetworkContainer _ReceptionContainer;           // Temporary container for receiving data.
         
-        private Boolean _Multiplayer;                          // Boolean which indicates if the game is multiplayer mode or not.
-        private Boolean _InGame;                               // Boolean which indicates if the multiplayer match is running or not.
-        private Boolean _WallHasBeenAdded;                     // Boolean which indicates if a wall has spawn or not.
-        private Boolean _EndGameHasBeenInvoked;                // Boolean which indicates if the function EndGame has been invoked or not.
+        private Boolean _Multiplayer;                           // Boolean which indicates if the game is multiplayer mode or not.
+        private Boolean _InGame;                                // Boolean which indicates if the multiplayer match is running or not.
+        private Boolean _WallHasBeenAdded;                      // Boolean which indicates if a wall has spawn or not.
+        private Boolean _EndGameHasBeenInvoked;                 // Boolean which indicates if the function EndGame has been invoked or not.
 
-        private delegate void processOnMainThread();           // A delegate type
-        private delegate void processOnMainThread2(Boolean b); // Another delegate type
-        private processOnMainThread _CommandDispatcherDel;     // The command dispatcher delegate.
-        private processOnMainThread _PlayGameDel;              // The play game delegate.
-        private processOnMainThread2 _EndGameDel;              // The end game delegate.
+        private delegate void processOnMainThread();            // A delegate type
+        private delegate void processOnMainThread2(Boolean b);  // Another delegate type
+        private processOnMainThread _CommandDispatcherDel;      // The command dispatcher delegate.
+        private processOnMainThread _PlayGameDel;               // The play game delegate.
+        private processOnMainThread2 _EndGameDel;               // The end game delegate.
 
         #endregion
 
@@ -66,22 +67,29 @@ namespace Snake
 
         #region Constructor
 
+        /*
+         * Constructor of the Game:
+         *      - Initialize some objects for the game / variables / label.     
+         * */
+
         public Game()
         {
-            InitializeComponent(); // Initialize components of the form.
-            InitializeFont();      // Initialize font.
+            InitializeComponent(); 
+            InitializeFont(); 
 
+            _Time = new SystemTime();
             _Render = new Render(this.gameBoardPictureBox, this.miniGameBoardPictureBox);
 
-            _CommandDispatcherDel = new processOnMainThread(NetworkProcessOnMainThread); //// 
-            _PlayGameDel = new processOnMainThread(PlayGame);                            // Initialize delegates.
-            _EndGameDel = new processOnMainThread2(EndGame);                             //
+            _CommandDispatcherDel = new processOnMainThread(NetworkProcessOnMainThread); 
+            _PlayGameDel = new processOnMainThread(PlayGame);                            
+            _EndGameDel = new processOnMainThread2(EndGame);                             
 
-            _Nickname = "";       // Initialize the _Nickname to "";
-            _Multiplayer = false; // Initialize _Multiplayer to false.
-            _InGame = false;      // Initialize _Ingame to false.
+            _Nickname = "";                    
+            _Multiplayer = false;             
+            _InGame = false;                   
+            timeLabel.Text = _Time.Get_Time(); 
    
-            LoadMenu(); // Load menu.
+            LoadMenu(); 
         }
 
         #endregion
@@ -90,54 +98,63 @@ namespace Snake
 
         #region Game Methods
 
-        ////////////////////////////////////
-        // Method for initializing the game
+        /*
+         * Method for initializing the Game:
+         *      - Initialize object for playing.
+         *      - Initialize timers (one for the game progress, one for the insect).
+         *      - initialize the thread for graphical rendering.
+         * */
 
         public void InitializeGame()
         {
-            _FullSnake = new FullSnake(this.gameBoardPictureBox.Width);                                        // New FullSnake.
-            _Fruit = new Fruit(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height);               // New fruit.
-            _Insect = new Insect(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height, -666, -666); // New insect.
+            _FullSnake = new FullSnake(this.gameBoardPictureBox.Width);                                        
+            _Fruit = new Fruit(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height);               
+            _Insect = new Insect(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height, -666, -666); 
             if (_Multiplayer)
-                _ListWalls = new ListWalls(); // New list of Walls (only in multiplayer mode).
+                _ListWalls = new ListWalls(); 
+            
 
-            _Score = 0;                 // Score is set to 0.
-            _TimerInterval = 70;        // Timer interval tick is set to 140 ms.
-            _Direction = 1;             // First direction is initially set to 1 (right).
-            _GameOver = false;          // _GameOver is initialized to FALSE.
-            _InsectIsPresent = false;   // _InsectIsPresent is initialized to FALSE.
-            _InGame = true;             // _InGame is set to TRUE
+            _Score = 0;                 
+            _TimerInterval = 70;        
+            _Direction = 1;             
+            _GameOver = false;          
+            _InsectIsPresent = false;   
+            _InGame = true;             
         
-            _Timer = new Timer();                       // New timer.
-            _Timer.Interval = _TimerInterval;           // Interval of the timer is set.
-            _Timer.Tick += new EventHandler(TimerTick); // New EventHandler. 
+            _Timer = new Timer();                       
+            _Timer.Interval = _TimerInterval;           
+            _Timer.Tick += new EventHandler(TimerTick);  
 
-            _InsectTimer = new Timer();                             // New timer.
-            _InsectTimer.Interval = 1000;                           // Interval of the timer is set to 1s.
-            _InsectTimer.Tick += new EventHandler(InsectTimerTick); // New EventHandler. 
+            _InsectTimer = new Timer();                             
+            _InsectTimer.Interval = 1000;                           
+            _InsectTimer.Tick += new EventHandler(InsectTimerTick); 
 
-             _RenderThread = new System.Threading.Thread(new System.Threading.ThreadStart(Render)); // Initialize the thread for rendering game.
-             _RenderThread.Name = "RenderThread";                                                   // Set its name.
-             _RenderThread.IsBackground = true;                                                     // Make it background runnable.
+             _RenderThread = new System.Threading.Thread(new System.Threading.ThreadStart(Render)); 
+             _RenderThread.Name = "RenderThread";                                                   
+             _RenderThread.IsBackground = true;                                                     
         }
 
-        /////////////////////////////
-        //  Event for the timer tick
+        /*
+         * Event for the timer tick. At each tick:
+         *      - Check collisions.
+         *      - Update snake.
+         *      - Check if fruit/insect is reached, and refresh score or list of walls(multiplayer).
+         * */
 
         public void TimerTick(object sender, EventArgs e)
         {
-            if (_Multiplayer)                                                                                                                       ////
-                _GameOver = _FullSnake.CheckCollision(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height, _ListWalls.Get_ListWalls()); // 
-            else                                                                                                                                    // Check collision (!= function is called depending if multiplayer mode or not).
-                _GameOver = _FullSnake.CheckCollision(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height);                             // 
+            if (_Multiplayer)                                                                                                                       
+                _GameOver = _FullSnake.CheckCollision(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height, _ListWalls.Get_ListWalls()); 
+            else                                                                                                                                    
+                _GameOver = _FullSnake.CheckCollision(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height);                              
 
             if (!_GameOver)
             {
-                _FullSnake.UpdateSnake(_Direction, this.gameBoardPictureBox.Width); // Update the movement of the snake.
+                _FullSnake.UpdateSnake(_Direction, this.gameBoardPictureBox.Width); 
 
-                if (_Fruit.IsReached(_FullSnake.Get_Snake()[0])) // If a fruit is reached...
+                if (_Fruit.IsReached(_FullSnake.Get_Snake()[0])) 
                 {
-                    if (_Multiplayer)                                                                                                              //////
+                    if (_Multiplayer)                                                                                                              ////
                     {                                                                                                                              // Multiplayer mode :
                         _Fruit.MoveFruit(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height, _FullSnake, _ListWalls.Get_ListWalls()); //   - Move fruit positions (considering walls)
                         while (!_Reception.Get_Container().Get_Msg().Equals("102"))                                                                //   - Send a message to the opponent (101) 
@@ -147,121 +164,135 @@ namespace Snake
                         }                                                                                                                          //   - Set bool HasBeenModified to TRUE
                     }                                                                                                                              //     (so that the sending thread send the container).
 
-                    else _Fruit.MoveFruit(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height, _FullSnake); // Move fruit positions (without considering walls, because offline mode).
+                    else _Fruit.MoveFruit(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height, _FullSnake); 
 
-                    _Score = _Score + _Fruit.Get_POINT();                    // Increment the score.
-                    _FullSnake.AddSnakePart(this.gameBoardPictureBox.Width); // Add a Snake part.
+                    _Score = _Score + _Fruit.Get_POINT();                    
+                    _FullSnake.AddSnakePart(this.gameBoardPictureBox.Width); 
                 }
 
-                if (_Insect.IsReached(_FullSnake.Get_Snake()[0])) // If the insect is reached...
+                if (_Insect.IsReached(_FullSnake.Get_Snake()[0])) 
                 {
-                    _InsectTimerCounter = 0;               // Reset the insect counter.
-                    _Insect.MoveInsect();                  // Move the insect (make it unreacheable by the player).
-                    _Score = _Score + _Insect.Get_POINT(); // Increment the score.
-                    _InsectIsPresent = false;              // Set the boolean to FALSE.
+                    _InsectTimerCounter = 0;               
+                    _Insect.MoveInsect();                  
+                    _Score = _Score + _Insect.Get_POINT(); 
+                    _InsectIsPresent = false;              
                 }
 
-                this.scoreLabel.Text = "Score : " + _Score; // Refresh the score label.
-                if(_Multiplayer)                                                                                                                     // If multiplayer mode,
-                    this.opponentScoreLabel.Text = _Reception.Get_Container().Get_Nickname() + " score : " + _Reception.Get_Container().Get_Score(); // refresh also the opponent' score label.
+                this.scoreLabel.Text = "Score : " + _Score;                                                                                          
+                timeLabel.Text = _Time.Get_Time();                                                                                                   
+                if (_Multiplayer)                                                                                                                    
+                    this.opponentScoreLabel.Text = _Reception.Get_Container().Get_Nickname() + " score : " + _Reception.Get_Container().Get_Score(); 
             }
 
-            else EndGame(false); // end game if _GameOver is TRUE.
+            else EndGame(false);
         }
 
-        /////////////////////////////
-        // Event for the insect timer
+        /*
+         * Event for the insect tick. At each tick:
+         *      - Manage insect presence (if it must appears/disappears).
+         * */
 
         public void InsectTimerTick(object sender, EventArgs e)
         {
-            _InsectTimerCounter = _InsectTimerCounter + 1; // Increment the counter.
+            _InsectTimerCounter = _InsectTimerCounter + 1; 
 
-            if ((_InsectTimerCounter % 8 == 0) && (_InsectIsPresent == false)) // If insect is not present, and it's time to show it...
+            if ((_InsectTimerCounter % 8 == 0) && (_InsectIsPresent == false)) 
             {
-                if (_Multiplayer)                                                                                                                        // Multiplayer mode :
-                    _Insect.MoveInsect(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height, _FullSnake, _Fruit, _ListWalls.Get_ListWalls()); // Move insect considering walls.
+                if (_Multiplayer)                                                                                                                        
+                    _Insect.MoveInsect(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height, _FullSnake, _Fruit, _ListWalls.Get_ListWalls()); 
                 else
-                    _Insect.MoveInsect(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height, _FullSnake, _Fruit); // Move insect.
+                    _Insect.MoveInsect(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height, _FullSnake, _Fruit); 
 
-                _InsectTimerCounter = 0; // Reset the counter.
-                _InsectIsPresent = true; // Set the boolean to true.
+                _InsectTimerCounter = 0; 
+                _InsectIsPresent = true; 
             }
 
-            else if ((_InsectTimerCounter % 3 == 0) && (_InsectIsPresent == true)) // If the user takes too much time to pick up the insect, it will disappear.
+            else if ((_InsectTimerCounter % 3 == 0) && (_InsectIsPresent == true)) 
             {
-                _Insect.MoveInsect();     // Move the insect (make it unreacheable by the player).
-                _InsectTimerCounter = 0;  // Reset the counter.
-                _InsectIsPresent = false; // Set the boolean to false.
+                _Insect.MoveInsect();     
+                _InsectTimerCounter = 0;  
+                _InsectIsPresent = false; 
             }
         }
 
-        ///////////////////////////////
-        // Method for loading the menu
+        /*
+         * Method for loading the menu:
+         *      - Instanciate/attach the menu.
+         *      - Define event handlers.
+         * */
 
         private void LoadMenu()
         {
-            _Menu = new Menu();                               // Instanciate a new menu;   
-            this.gameBoardPictureBox.Controls.Add(_Menu);     // Add it to the gameboard.
-            _Menu.MainMenu();                                 // Set the configuration for a game start (hide/show labels).
+            _Menu = new Menu();                                
+            this.gameBoardPictureBox.Controls.Add(_Menu);     
+            _Menu.MainMenu();                                 
 
-            _Menu.playPictureBox.Click += new EventHandler(playPictureBox_Click);               ///// 
-            _Menu.retryPictureBox.Click += new EventHandler(retryPictureBox_Click);             // 
-            _Menu.mainMenuPictureBox.Click += new EventHandler(mainMenuPictureBox_Click);       //  
-            _Menu.multiplayerPictureBox.Click += new EventHandler(multiplayerPictureBox_Click); // 
-            _Menu.highScoresPictureBox.Click += new EventHandler(highScoresPictureBox_Click);   // Define event handlers
-            _Menu.backPictureBox.Click += new EventHandler(backPictureBox_Click);               //
-            _Menu.createGamePictureBox.Click += new EventHandler(createGamePictureBox_Click);   //
-            _Menu.joinGamePictureBox.Click += new EventHandler(joinGamePictureBox_Click);       //
-            _Menu.okPictureBox.Click += new EventHandler(okPictureBox_Click);                   //
-            _Menu.startGamePictureBox.Click += new EventHandler(startGamePictureBox_Click);     //            
+            _Menu.playPictureBox.Click += new EventHandler(playPictureBox_Click);               
+            _Menu.retryPictureBox.Click += new EventHandler(retryPictureBox_Click);             
+            _Menu.mainMenuPictureBox.Click += new EventHandler(mainMenuPictureBox_Click);        
+            _Menu.multiplayerPictureBox.Click += new EventHandler(multiplayerPictureBox_Click);  
+            _Menu.highScoresPictureBox.Click += new EventHandler(highScoresPictureBox_Click);   
+            _Menu.backPictureBox.Click += new EventHandler(backPictureBox_Click);               
+            _Menu.createGamePictureBox.Click += new EventHandler(createGamePictureBox_Click);   
+            _Menu.joinGamePictureBox.Click += new EventHandler(joinGamePictureBox_Click);       
+            _Menu.okPictureBox.Click += new EventHandler(okPictureBox_Click);                   
+            _Menu.startGamePictureBox.Click += new EventHandler(startGamePictureBox_Click);     
         }
 
-        ////////////////////////
-        // Method for play game
+        /*
+         * Method for launching the game:
+         *      - Prepare interface.
+         *      - Start threads.
+         * */
 
         private void PlayGame()
         {
-            if (_Multiplayer)                                  ////
-            {                                                  // Multiplayer mode :
-                this.Width = 1200;                             // Enlarge the form.
-                this.CenterToScreen();                         // Center the form.
-                this.miniGameBoardPictureBox.Controls.Clear(); // Erase the content of the mini picture Box.
-            }                                                  //
+            if (_Multiplayer)                                  
+            {                                                  
+                this.Width = 1200;                             
+                this.CenterToScreen();                         
+                this.miniGameBoardPictureBox.Controls.Clear(); 
+            }                                                  
 
-            InitializeGame(); // Initialize game.
+            InitializeGame(); 
                     
-            this.gameBoardPictureBox.Controls.Clear();     // Erase the content of the picture Box.
-            this.scoreLabel.Visible = true;                // Show the score label. 
-            _Menu.InGame();                                // Set the configuration for a game end (hide/show labels).
+            this.gameBoardPictureBox.Controls.Clear();     
+            this.scoreLabel.Visible = true;                
+            _Menu.InGame();                                
 
-            _Timer.Start();        // Start timer.
-            _InsectTimer.Start();  // Start insect timer.  
-            _RenderThread.Start(); // Start Render thread.      
+            _Timer.Start();        
+            _InsectTimer.Start();  
+            _RenderThread.Start(); 
         }
 
-        //////////////////////////
-        // Method for ending game
+        /*
+         * Method for ending the game:
+         *      - Stop threads.
+         *      - Refresh interface.
+         *      - Send messages (multiplayer mode).
+         *      - Manage highscores
+         * */
 
         private void EndGame(Boolean victory)
         {
-            _Timer.Stop();       // Stop the timer.
-            _InsectTimer.Stop(); // Stop insect timer.
+            _Timer.Stop();       
+            _InsectTimer.Stop(); 
 
-            this.gameBoardPictureBox.Controls.Add(_Menu);           // Reattach the menu to the gameboard.
-            Invoke(_Menu.Get_GameOverDel(), _Multiplayer, victory); // Set the configuration for a game end (hide/show labels).
+            this.gameBoardPictureBox.Controls.Add(_Menu);           
+            Invoke(_Menu.Get_GameOverDel(), _Multiplayer, victory); 
 
-            if (_Multiplayer && !victory)                                   ////
-            {                                                               // Multiplayer mode :
-                while (!_Reception.Get_Container().Get_Msg().Equals("112")) // if current player is the looser :
-                {                                                           //   - Send a message to the opponent (111) to tell him that
-                    _SendingContainer.Set_Msg("111");                       //     the game is finished.
-                    _SendingContainer.Set_HasBeenModified(true);            //   - Keep sending that message while an acknowledgement
-                }                                                           //     of receipt has not been received (112).
-            }                                                               //   - Set bool HasBeenModified to TRUE.
+            if (_Multiplayer && !victory)                                   
+            {                                                               
+                while (!_Reception.Get_Container().Get_Msg().Equals("112")) 
+                {                                                           
+                    _SendingContainer.Set_Msg("111");                       
+                    _SendingContainer.Set_HasBeenModified(true);            
+                }                                                           
+            }                                                               
 
             if (!_Multiplayer)
             {
-                if (submitScore())                                                  //Test if new highscore has been submitted and display text accordingly
+                if (submitScore())                                                  
                 {                    
                     _Menu.newHighScoreLabel.Text = "New record : " + _Score;
                 }
@@ -335,8 +366,11 @@ namespace Snake
 
         #region Render
 
-        ///////////////////////////////////////
-        // Method to refresh the display (all)
+        /*
+         * Method for refreshing the graphical rendering:
+         *      - Refresh Snake/Fruit/Insect.
+         *      - Refresh mini Snake/Fruit/Insect/Walls if multiplayer
+         * */
 
         private void Render()
         {
@@ -344,117 +378,141 @@ namespace Snake
             {
                 try
                 {
-                    Invoke(_Render.Get_RenderFruitDel(), _Fruit, gameBoardPictureBox);   // Refresh the display of the fruit.  
-                    Invoke(_Render.Get_RenderInsectDel(), _Insect, gameBoardPictureBox); // Refresh the display of the insect.  
-                    _Render.RenderSnake(_FullSnake, gameBoardPictureBox);                // Refresh the display of the snake.
+                    Invoke(_Render.Get_RenderFruitDel(), _Fruit, gameBoardPictureBox);  
+                    Invoke(_Render.Get_RenderInsectDel(), _Insect, gameBoardPictureBox);
+                    _Render.RenderSnake(_FullSnake, gameBoardPictureBox);               
 
 
-                    if (_Multiplayer)                                                                                                     ////
-                    {                                                                                                                     // Multiplayer mode :
-                        Invoke(_Render.Get_RenderMiniSnakeDel(), _Reception.Get_Container().Get_Snake(), this.miniGameBoardPictureBox);   // - Refresh the opponent's snake on the mini-gameboard.
-                        Invoke(_Render.Get_RenderMiniFruitDel(), _Reception.Get_Container().Get_Fruit(), this.miniGameBoardPictureBox);   // - Refresh the opponent's fruit on the mini-gameboard.
-                        Invoke(_Render.Get_RenderMiniInsectDel(), _Reception.Get_Container().Get_Insect(), this.miniGameBoardPictureBox); // - Refresh the opponent's insect on the mini-gameboard.
-                        _Render.RenderMiniWalls(_Reception.Get_Container().Get_ListWalls());                                              // - Refresh the opponent's walls on the mini-gameboard.
-                        _Render.RenderWalls(_ListWalls);                                                                                  // - Refresh the player's wall too.
+                    if (_Multiplayer)                                                                                                    
+                    {                                                                                                                    
+                      Invoke(_Render.Get_RenderMiniSnakeDel(), _Reception.Get_Container().Get_Snake(), this.miniGameBoardPictureBox);
+                      Invoke(_Render.Get_RenderMiniFruitDel(), _Reception.Get_Container().Get_Fruit(), this.miniGameBoardPictureBox);   
+                      Invoke(_Render.Get_RenderMiniInsectDel(), _Reception.Get_Container().Get_Insect(), this.miniGameBoardPictureBox); 
+                      _Render.RenderMiniWalls(_Reception.Get_Container().Get_ListWalls());                                              
+                      _Render.RenderWalls(_ListWalls);                                                                                                                                                   
                     }
                 }
 
                 catch (Exception e) { Console.WriteLine(e); }
+
+                System.Threading.Thread.Sleep(35);
             }
         }
 
-        //////////////////////////////////////
-        // Method to clean the miniPictureBox
+        /*
+         * Method for cleaning the miniGameboard
+         *      - Initialize graphics
+         *      - Draw
+         * */
 
         public void CleanMiniPictureBox()
         {
-            Graphics myGraphics;  // Graphics for main drawing.
-            SolidBrush myBrush;   // Brush for filling shapes.
+            Graphics myGraphics;  
+            SolidBrush myBrush;   
 
-            myGraphics = this.miniGameBoardPictureBox.CreateGraphics(); // Initialize the graphics. 
-            myBrush = new System.Drawing.SolidBrush(Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))))); // Initialize the brush.
-            myGraphics.FillRectangle(myBrush, 790, 140, this.miniGameBoardPictureBox.Width, this.miniGameBoardPictureBox.Height); // Draw a rectangle (color of the background) of the size of the mini gameboard.
+            myGraphics = this.miniGameBoardPictureBox.CreateGraphics(); 
+            myBrush = new System.Drawing.SolidBrush(Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))))); 
+            myGraphics.FillRectangle(myBrush, 790, 140, this.miniGameBoardPictureBox.Width, this.miniGameBoardPictureBox.Height); 
         }
 
-        /////////////////////////////
-        // Method to initialize font
+        /*
+         * Method for initializing font
+         *      - Instanciate font.
+         *      - Apply font.
+         * */
 
         public void InitializeFont()
         {
-            this._Font = new PersonalFont(); // Create new font.
-            this.scoreLabel.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));      // Set the font for the score label.
-            this.opponentScoreLabel.Font = new System.Drawing.Font(_Font.getPersonalFont(), 16, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font for the opponent score label.
+            this._Font = new PersonalFont(); 
+            this.scoreLabel.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));     
+            this.timeLabel.Font = new System.Drawing.Font(_Font.getPersonalFont(), 16, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));       
+            this.opponentScoreLabel.Font = new System.Drawing.Font(_Font.getPersonalFont(), 16, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
         }
 
         #endregion
 
         #region Events Methods
 
-        /////////////////////////////////////////
-        // Event for clicking the retryPictureBox
+        /*
+         * Event for clicking the retryPictureBox
+         *      - Launch game.
+         * */
 
         void retryPictureBox_Click(object sender, EventArgs e)
         {
-            PlayGame(); // Play game.
+            PlayGame(); 
         }
 
-        /////////////////////////////////////////////
-        // Event for clicking the mainMenuPictureBox
+        /*
+         * Event for clicking the mainMenuPictureBox
+         *      - End threads.
+         *      - Refresh interface.
+         * */
 
         void mainMenuPictureBox_Click(object sender, EventArgs e)
         {
-            if (_Multiplayer)                             ////
-            {                                             // Multiplayer mode:
-                Invoke(_Sending.Get_NetworkDelegate());   //   - Close Sending thread by invoking the network delegate.
-                Invoke(_Reception.Get_NetworkDelegate()); //   - Close Reception thread by invoking the network delegate.
+            if (_Multiplayer)                             
+            {                                             
+                Invoke(_Sending.Get_NetworkDelegate());   
+                Invoke(_Reception.Get_NetworkDelegate()); 
             }
 
             if (_RenderThread != null)
             {
-                _RenderThread.Abort();  // Terminate the render thread.
+                _RenderThread.Abort(); 
             }
-            CleanMiniPictureBox();  // Clean the mini gameboard.
+            CleanMiniPictureBox(); 
 
-            this.scoreLabel.Visible = false; // Hide score label. 
-            _Menu.MainMenu();                // Set the configuration for the menu (hide/show labels).
-            this.Width = 800;                // Resize the form.
-            this.CenterToScreen();           // Center it.
-            _InGame = false;                 // Set _InGame to FALSE.   
-            _Multiplayer = false;            // Set _Multiplayer to FALSE. 
+            this.scoreLabel.Visible = false; 
+            _Menu.MainMenu();                
+            this.Width = 800;                
+            this.CenterToScreen();           
+            _InGame = false;                 
+            _Multiplayer = false;            
         }
 
-        /////////////////////////////////////////
-        // Event for clicking the exitPictureBox
+        /*
+         * Event for clicking the exitPictureBox
+         *      - Close form.
+         * */
 
         private void exitPictureBox_Click_1(object sender, EventArgs e)
         {
             try
             {
-                this.Close(); // Close the form.
+                this.Close();
             }
             catch (Exception exitException) { Console.WriteLine(exitException); }
         }
 
-        //////////////////////////////////////////
-        // Event for clicking the playPictureBox
+        /*
+         * Event for clicking the playPictureBox
+         *      - Update nickname.
+         *      - Launch game.
+         * */
 
         private void playPictureBox_Click(object sender, EventArgs e)
         {
-            _Nickname = _Menu.nicknameTextBox.Text; // Fetch the nickname entered on the textbox.
-            PlayGame(); // Play game.
+            _Nickname = _Menu.nicknameTextBox.Text; 
+            PlayGame(); 
         }
 
-        //////////////////////////////////////////
-        // Event for clicking the multiplayerPictureBox
+        /*
+         * Event for clicking the multiplayerPictureBox
+         *      - Update nickname.
+         *      - Update interface.
+         * */
 
         private void multiplayerPictureBox_Click(object sender, EventArgs e)
         {
-            _Nickname = _Menu.nicknameTextBox.Text; // Fetch the nickname entered on the textbox.
-            _Menu.Multiplayer(); // Set the configuration for the menu (hide/show labels).                                                             
+            _Nickname = _Menu.nicknameTextBox.Text; 
+            _Menu.Multiplayer();                                                             
         }
 
-        ///////////////////////////////////////////////
-        // Event for clicking the highScoresPictureBox
+        /*
+         * Event for clicking the highScoresPictureBox
+         *      - Show Highscores
+         * */
 
         private void highScoresPictureBox_Click(object sender, EventArgs e)
         {
@@ -469,95 +527,108 @@ namespace Snake
                 _Menu.highScoresScore.Text += "\n" + sample.Score[i].ToString();               
             }                             
             _Menu.HighScoreShow();
-
-
         }
 
-        //////////////////////////////////////////
-        // Event for clicking the backPictureBox
+        /*
+         * Event for clicking the backPictureBox
+         *      - Update interface.
+         *      - Close network threads.
+         * */
 
         private void backPictureBox_Click(object sender, EventArgs e)
         {
-            _Menu.MainMenu(); // Set the configuration for the menu (hide/show labels).
+            _Menu.MainMenu(); 
 
-            if (_Multiplayer && _Sending != null && _Reception != null) ////
-            {                                                           // Multiplayer mode:
-                Invoke(_Sending.Get_NetworkDelegate());                 //   - Close Sending thread by invoking the network delegate.
-                Invoke(_Reception.Get_NetworkDelegate());               //   - Close Reception thread by invoking the network delegate.
-            }                                                           //
+            if (_Multiplayer && _Sending != null && _Reception != null) 
+            {                                                           
+                Invoke(_Sending.Get_NetworkDelegate());                 
+                Invoke(_Reception.Get_NetworkDelegate());               
+            }                                                           
 
-            _Multiplayer = false; // Set _Multiplayer to FALSE.
+            _Multiplayer = false;
         }
 
-        ///////////////////////////////////////////////
-        // Event for clicking the createGamePictureBox
+        /*
+         * Event for clicking the createGamePictureBox
+         *      - Update interface.
+         *      - Initialize Network.
+         * */
 
         private void createGamePictureBox_Click(object sender, EventArgs e)
         {
-            _Menu.Host();            // Set the configuration for the menu (hide/show labels).
-            InitializeNetwork(true); // Initialize network components.
+            _Menu.Host();            
+            InitializeNetwork(true); 
         }
 
-        //////////////////////////////////////////////
-        // Event for clicking the joinGamePictureBox
+        /*
+         * Event for clicking the joinGamePictureBox
+         *      - Update interface.
+         *      - Initialize Network.
+         * */
 
         private void joinGamePictureBox_Click(object sender, EventArgs e)
         {
-            _Menu.Client1();                                   // Set the configuration for the menu (hide/show labels).
-            InitializeNetwork(false);                          // Initialize network components.
+            _Menu.Client1();                                   
+            InitializeNetwork(false);                          
         }
 
-        ///////////////////////////////////////
-        // Event for clicking the okPictureBox
+        /*
+         * Event for clicking the okPictureBox
+         *      - Update interface.
+         *      - Send message to the server.
+         * */
 
         private void okPictureBox_Click(object sender, EventArgs e)
         {
             if (!_Sending.Get_IsHost())
             {
-                _Sending.Set_HostIpAdress(_Menu.ipTextBox1.Text + "." + _Menu.ipTextBox2.Text + "." + _Menu.ipTextBox3.Text + "." + _Menu.ipTextBox4.Text); // Set the entered ip by the user.
-                _SendingContainer.Set_Msg("001");            // Set the message to send : 001 --> ask for connection.
-                _SendingContainer.Set_HasBeenModified(true); // Set the bool HasBeenModified to TRUE (so that the message is sent by the sending thread).
+                _Sending.Set_HostIpAdress(_Menu.ipTextBox1.Text + "." + _Menu.ipTextBox2.Text + "." + _Menu.ipTextBox3.Text + "." + _Menu.ipTextBox4.Text);
+                _SendingContainer.Set_Msg("001"); // Set the message to send : 001 --> Ask for connection.           
+                _SendingContainer.Set_HasBeenModified(true); 
             }
             
-            _Menu.Client2(); // Set the configuration for the menu (hide/show labels).
+            _Menu.Client2(); 
         }
 
-
-
-        /////////////////////////////////////////////////////
-        // Event for pressing the startGamePictureBox button
+        /*
+         * Event for pressing the startGamePictureBox button
+         *      - Send message to the client.
+         *      - Launch game.
+         * */
 
         private void startGamePictureBox_Click(object sender, EventArgs e)
         {
-            if (_Sending.Get_IsHost()) // If user is host...
+            if (_Sending.Get_IsHost()) 
             {
-                _SendingContainer.Set_Msg("100");            // Set the message to send : 001 --> Game Started.
-                _SendingContainer.Set_HasBeenModified(true); // Set the bool HasBeenModified to TRUE (so that the message is sent by the sending thread).
+                _SendingContainer.Set_Msg("100"); // Set the message to send : 100 --> Game Started.
+                _SendingContainer.Set_HasBeenModified(true); 
             }
 
-            PlayGame(); // Launch game.
+            PlayGame(); 
         }
 
-        //////////////////////////////////////
-        // Event for pressing keyboard touchs 
+        /*
+         * Event for pressing keyboard touchs 
+         *      - Move Snake.
+         * */
 
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Up)
             {
-                if (_FullSnake.Get_Snake()[0].Get_Direction() != 2) _Direction = 0; // Snake will move up.
+                if (_FullSnake.Get_Snake()[0].Get_Direction() != 2) _Direction = 0; 
             }
             else if (e.KeyCode == Keys.Right)
             {
-                if (_FullSnake.Get_Snake()[0].Get_Direction() != 3) _Direction = 1; // Snake will move right.
+                if (_FullSnake.Get_Snake()[0].Get_Direction() != 3) _Direction = 1; 
             }
             else if (e.KeyCode == Keys.Down)
             {
-                if (_FullSnake.Get_Snake()[0].Get_Direction() != 0) _Direction = 2; // Snake will move down.
+                if (_FullSnake.Get_Snake()[0].Get_Direction() != 0) _Direction = 2; 
             }
             else if (e.KeyCode == Keys.Left)
             {
-                if (_FullSnake.Get_Snake()[0].Get_Direction() != 1) _Direction = 3; // Snake will move left.
+                if (_FullSnake.Get_Snake()[0].Get_Direction() != 1) _Direction = 3; 
             }
         }
 
@@ -565,103 +636,115 @@ namespace Snake
 
         #region Network
 
-        //////////////////////////////////
-        // Multiplayer Command Dispatcher
+        /*
+         * Multiplayer Command Dispatcher
+         *      001 --> Ask for connection
+         *      010 --> acknowledgement of receipt received by the client.
+         *      100 --> Game running.
+         *      101 --> when this message is received, a wall must spawn.
+         *      102 --> wall created (opponent side) and aknowledgement of receipt received.
+         *      111 --> when this message is received, the opponent has lost the game.
+         * */
 
         private void NetworkProcessOnMainThread()
         {
             _Sending.Set_EndPoint(_Reception.Get_EndPoint()); // Set the endpoint.
 
-            switch(_Reception.Get_Container().Get_Msg()) // Switch 
+            switch(_Reception.Get_Container().Get_Msg()) 
             {
-                case "001": _SendingContainer.Set_Msg("010");                                                  ////
-                            _SendingContainer.Set_HasBeenModified(true);                                       // 001 --> Ask for connection
-                            Invoke(_Menu.Get_ConnectionEstablishedDel(), _Sending.Get_IsHost(), _Multiplayer); //  - Send a message to the client (010). this is
-                            break;                                                                             //    an acknowledgement of receipt.
-                                                                                                               //  - Set the menu configuration for connection established (hide/show pictures box)
+                case "001": _SendingContainer.Set_Msg("010");                                                 
+                            _SendingContainer.Set_HasBeenModified(true);                                      
+                            Invoke(_Menu.Get_ConnectionEstablishedDel(), _Sending.Get_IsHost(), _Multiplayer);
+                            break;                                                                            
+                                                                                                              
 
-                case "010": Invoke(_Menu.Get_ConnectionEstablishedDel(), _Sending.Get_IsHost(), _Multiplayer); // 010 --> acknowledgement of receipt received by the client.
-                            break;                                                                             // Set the menu configuration for connection established (hide/show pictures box)
+                case "010": Invoke(_Menu.Get_ConnectionEstablishedDel(), _Sending.Get_IsHost(), _Multiplayer);
+                            break;                                                                            
 
-                case "100": if (!_InGame)                     ////
-                                Invoke(_PlayGameDel);         // 
-                                                              // 100 --> Game running.
-                            if (_WallHasBeenAdded)            //   - if not in game, launch game.
-                                _WallHasBeenAdded = false;    //   - Set _WallHasBeenAdded to FALSE if not the case.
-                            _SendingContainer.Set_Msg("100"); //   - Send a message to the opponent (100, still in game)
-                            FillContainer();                  //   - Fill Container
-                            break;                            //
+                case "100": if (!_InGame)                    
+                                Invoke(_PlayGameDel);        
+                                                             
+                            if (_WallHasBeenAdded)           
+                                _WallHasBeenAdded = false;   
+                            _SendingContainer.Set_Msg("100");
+                            FillContainer();                 
+                            break;                           
 
-                case "101": if (!_WallHasBeenAdded)                                                                                                                                                 ////
-                            {                                                                                                                                                                       //
-                                _ListWalls.Get_ListWalls().Add(new Wall(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height, _FullSnake, _Fruit, _Insect, _ListWalls.Get_ListWalls())); // 101 --> when this message is received, a wall must spawn.
-                                _WallHasBeenAdded = true;                                                                                                                                           //  - Create a new Wall and add it to the list of walls.
-                            }                                                                                                                                                                       //  - Send a message to the opponent (102). this is
-                            _SendingContainer.Set_Msg("102");                                                                                                                                       //    an acknowledgement of receipt.
-                            FillContainer();                                                                                                                                                        //  - Fill container.
-                            break;                                                                                                                                                                  //
+                case "101": if (!_WallHasBeenAdded)                                                                                                                                                 
+                            {                                                                                                                                                                       
+                                _ListWalls.Get_ListWalls().Add(new Wall(this.gameBoardPictureBox.Width, this.gameBoardPictureBox.Height, _FullSnake, _Fruit, _Insect, _ListWalls.Get_ListWalls())); 
+                                _WallHasBeenAdded = true;                                                                                                                                           
+                            }                                                                                                                                                                       
+                            _SendingContainer.Set_Msg("102");                                                                                                                                       
+                            FillContainer();                                                                                                                                                        
+                            break;                                                                                                                                                                  
 
-                case "102": _SendingContainer.Set_Msg("100"); // 102 --> wall created (opponent side) and aknowledgement of receipt received.
-                            FillContainer();                  //  - Send a message to the opponent (100) : Game is continuing.
-                            break;                            //  - Fill container.
+                case "102": _SendingContainer.Set_Msg("100"); 
+                            FillContainer();                  
+                            break;                            
 
-                case "111": if(!_EndGameHasBeenInvoked)                  ////
-                                Invoke(_EndGameDel, true);               // 111 --> when this message is received, the opponent has lost the game.
-                            _EndGameHasBeenInvoked = true;               //  - Invoke EndGame method.
-                            _SendingContainer.Set_Msg("112");            //  - Send a message to the opponent (112) as an aknowledgement of receipt.
-                            _SendingContainer.Set_HasBeenModified(true); //
-                            break;                                       //
+                case "111": if(!_EndGameHasBeenInvoked)                  
+                                Invoke(_EndGameDel, true);               
+                            _EndGameHasBeenInvoked = true;               
+                            _SendingContainer.Set_Msg("112");            
+                            _SendingContainer.Set_HasBeenModified(true); 
+                            break;                                       
             }
         }
 
-        //////////////////////////////////////////
-        // Function initializing network elements
+        /*
+         * Function initializing network elements
+         *      - Initialize network objects/variables.
+         *      - Initialize network threads.
+         * */
 
         private void InitializeNetwork(Boolean isHost)
         {
-            _SendingContainer = new NetworkContainer();   // New Network container for sending.
-            _ReceptionContainer = new NetworkContainer(); // New Network container for reception.
+            _SendingContainer = new NetworkContainer();   
+            _ReceptionContainer = new NetworkContainer(); 
 
-            _Multiplayer = true;            // Initialize _Multiplayer to FALSE.
-            _EndGameHasBeenInvoked = false; // Initialize _EndGameHasBeenInvoked to FALSE.
-            _WallHasBeenAdded = false;      // _WallHasBeenAdded to FALSE.
+            _Multiplayer = true;            
+            _EndGameHasBeenInvoked = false; 
+            _WallHasBeenAdded = false;      
 
+            _Sending = new Network(ref _SendingContainer, isHost, true, _CommandDispatcherDel);      
+            _Reception = new Network(ref _ReceptionContainer, isHost, false, _CommandDispatcherDel); 
 
-            _Sending = new Network(ref _SendingContainer, isHost, true, _CommandDispatcherDel);      // New network component for sinding (including socket).
-            _Reception = new Network(ref _ReceptionContainer, isHost, false, _CommandDispatcherDel); // New network component for reception (including socket).
-
-            InitializeNetworkThreads(); // Initialize sending and reception threads.
+            InitializeNetworkThreads(); 
         }
 
-
-        ////////////////////////////////////////////////////////////////
-        // Function initializing threads for sending and receiving data
+        /*
+         * Function initializing threads for sending and receiving data
+         *      - Initialize and start receiving & sending threads.
+         * */
 
         private void InitializeNetworkThreads()
         {
-            _ReceptionThread = new System.Threading.Thread(new System.Threading.ThreadStart(_Reception.ReceiveLoop)); // Initialize the thread.
-            _ReceptionThread.Name = "ReceptionThread";                                                                // Set its name.
-            _ReceptionThread.IsBackground = true;                                                                     // Make it background runnable.
-            _ReceptionThread.Start();                                                                                 // Start the thread.
+            _ReceptionThread = new System.Threading.Thread(new System.Threading.ThreadStart(_Reception.ReceiveLoop)); 
+            _ReceptionThread.Name = "ReceptionThread";                                                                
+            _ReceptionThread.IsBackground = true;                                                                     
+            _ReceptionThread.Start();                                                                                 
 
-            _SendingThread = new System.Threading.Thread(new System.Threading.ThreadStart(_Sending.SendLoop)); // Initialize the thread.
-            _SendingThread.Name = "SendingThread";                                                             // Set its name.
-            _SendingThread.IsBackground = true;                                                                // Make it background runnable.
-            _SendingThread.Start();                                                                            // Start the thread.
+            _SendingThread = new System.Threading.Thread(new System.Threading.ThreadStart(_Sending.SendLoop)); 
+            _SendingThread.Name = "SendingThread";                                                             
+            _SendingThread.IsBackground = true;                                                                
+            _SendingThread.Start();                                                                            
         }
 
-        /////////////////////////////////////////////////////////
-        // Method to fill the sending container (except message)
+        /*
+         * Method to fill the sending container (except message)
+         *      - Fill container to be sent.
+         * */
 
         private void FillContainer()
         {
-            _SendingContainer.Set_Snake(_FullSnake);     // Fill _FullSnake in the sending container by the player fullsnake.
-            _SendingContainer.Set_Fruit(_Fruit);         // Fill _Fruit in the sending container by the player fruit.
-            _SendingContainer.Set_Insect(_Insect);       // Fill _Insect in the sending container by the player insect.
-            _SendingContainer.Set_ListWalls(_ListWalls); // Fill _ListWalls in the sending container by the player listWalls.
-            _SendingContainer.Set_Nickname(_Nickname);   // Fill _Nickname in the sending container by the player nickname.
-            _SendingContainer.Set_Score(_Score);         // Fill _Score in the sending container by the player score.
-            _SendingContainer.Set_HasBeenModified(true); // Set _HasBeenModified to TRUE (so that the sending thread send the container).
+            _SendingContainer.Set_Snake(_FullSnake);     
+            _SendingContainer.Set_Fruit(_Fruit);         
+            _SendingContainer.Set_Insect(_Insect);       
+            _SendingContainer.Set_ListWalls(_ListWalls); 
+            _SendingContainer.Set_Nickname(_Nickname);   
+            _SendingContainer.Set_Score(_Score);         
+            _SendingContainer.Set_HasBeenModified(true); 
         }
 
         #endregion

@@ -34,29 +34,35 @@ namespace Snake
 
         #region Constructors
 
+        /*
+         * Constructor of Network
+         *      - Initialize variables.
+         *      - Bind sockets.
+         * */
+
         public Network(ref NetworkContainer container, Boolean isHost, Boolean forSending, Delegate del)
         {
-            _Container = container; // Set _Container.
-            _IsHost = isHost;       // Set _IsHost.
-            _HostIpAdress = "";     // Initialize _HostIpAdress to "".
-            _Continue = true;       // Initialize _Continue to TRUE.
+            _Container = container; 
+            _IsHost = isHost;       
+            _HostIpAdress = "";     
+            _Continue = true;       
 
-            _Delegate = del; // Set _Delegate.
-            _NetworkDelegate = new networkDelegate(AbortConnection); // Initilialize delegate.
+            _Delegate = del; 
+            _NetworkDelegate = new networkDelegate(AbortConnection); 
 
-            _Socket = new System.Net.Sockets.UdpClient(); // Initialization of the socket.
-            _Socket.EnableBroadcast = false;              // Disable broadcast.
+            _Socket = new System.Net.Sockets.UdpClient(); 
+            _Socket.EnableBroadcast = false;              
 
-            if (forSending)                                              ////
-            {                                                            //
-                _Socket.Client.Bind(new System.Net.IPEndPoint(0, 5000)); // Bind Sending socket to port 5001.
-                _EndPoint = new System.Net.IPEndPoint(0, 5000);          //
-            }                                                            //
-            else if (!forSending)                                        //
-            {                                                            //
-                _Socket.Client.Bind(new System.Net.IPEndPoint(0, 5001)); // Bind Reception socket to port 5001.
-                _EndPoint = new System.Net.IPEndPoint(0, 5001);          //
-            }                                                            //
+            if (forSending)                                              
+            {                                                            
+                _Socket.Client.Bind(new System.Net.IPEndPoint(0, 5000)); 
+                _EndPoint = new System.Net.IPEndPoint(0, 5000);          
+            }                                                            
+            else if (!forSending)                                        
+            {                                                            
+                _Socket.Client.Bind(new System.Net.IPEndPoint(0, 5001)); 
+                _EndPoint = new System.Net.IPEndPoint(0, 5001);          
+            }                                                            
         }
 
         #endregion
@@ -65,82 +71,90 @@ namespace Snake
 
         #region Methods
 
-        ///////////////////////////////////
-        // Method for abort the connection
+        /*
+         * Method for aborting the connection
+         *      - Close socket (and set _continue to false, so that the thread associated stops naturally at the end of loop)
+         */
 
         private void AbortConnection()
         {
-            _Continue = false;                // Set _Continue to FALSE.
-            System.Threading.Thread.Sleep(5); // Wait 5 ms.
+            _Continue = false;                
+            System.Threading.Thread.Sleep(5); 
 
             try
             {
-                _Socket.Close(); // Close the socket.
+                _Socket.Close(); 
             }
             catch (Exception e) { Console.WriteLine(e); }
         }
 
-        //////////////////////////////////////////////
-        // Function called when _ReceptionThread starts
+        /*
+         * Function called when _ReceptionThread starts
+         *      - Receive & deserialize data.
+         *      - Call command dispatcher.
+         * */
 
         public void ReceiveLoop()
         {
-            while (_Continue) // While _Continue is TRUE...
+            while (_Continue) 
             {
-                if (_IsHost) // If Host...
+                if (_IsHost) 
                 {
                     try
                     {
-                        _Buffer = _Socket.Receive(ref _EndPoint); // Receive data.
+                        _Buffer = _Socket.Receive(ref _EndPoint); 
                     }
                     catch (Exception e) { Console.WriteLine(e); }
 
-                    _Container = _Container.DeserializeContainer(_Buffer); // Deserialize data.
+                    _Container = _Container.DeserializeContainer(_Buffer); 
                     Console.WriteLine("Server has received : " + _Container.Get_Msg() + " from : " + _EndPoint.Address.ToString().Split(':')[0]);
                 }
 
-                if (!_IsHost) // If Client...
+                if (!_IsHost) 
                 {
                     try
                     {
-                        _Buffer = _Socket.Receive(ref _EndPoint); // Receive data.
+                        _Buffer = _Socket.Receive(ref _EndPoint); 
                     }
                     catch (Exception e) { Console.WriteLine(e); }
 
-                    _Container = _Container.DeserializeContainer(_Buffer); // Deserialize data.
+                    _Container = _Container.DeserializeContainer(_Buffer); 
                     Console.WriteLine("Client has received : " + _Container.Get_Msg() + " from : " + _EndPoint.Address.ToString().Split(':')[0]);
                 }
 
-                _Delegate.DynamicInvoke(); // Invoke delegate from main (command dispatcher).
+                _Delegate.DynamicInvoke(); 
 
-                System.Threading.Thread.Sleep(35); // Sleep for 35ms.
+                System.Threading.Thread.Sleep(35);
             }
         }
 
-        //////////////////////////////////////////////
-        // Function called when _SendingThread starts
+        /*
+         * Function called when _SendingThread starts
+         *      - Serialize data.
+         *      - Send them.
+         * */
 
         public void SendLoop()
         {
-            while (_Continue) // While _Continue is TRUE...
+            while (_Continue) 
             {
-                if (!_IsHost && _Container.Get_HasBeenModified()) // If Client...
+                if (!_IsHost && _Container.Get_HasBeenModified()) 
                 {
-                    _Buffer = _Container.SerializeContainer();                  // Serialize data.
-                    _Socket.Send(_Buffer, _Buffer.Length, _HostIpAdress, 5001); // Send data to host.
-                    _Container.Set_HasBeenModified(false);                      // Set _HasBeenModified to FALSE.
+                    _Buffer = _Container.SerializeContainer();                  
+                    _Socket.Send(_Buffer, _Buffer.Length, _HostIpAdress, 5001); 
+                    _Container.Set_HasBeenModified(false);                      
                     Console.WriteLine("Client has sent : " + _Container.Get_Msg() + " to " + _HostIpAdress);
                 }
                 
-                if (_IsHost && _Container.Get_HasBeenModified()) // If Host...
+                if (_IsHost && _Container.Get_HasBeenModified())
                 {
-                    _Buffer = _Container.SerializeContainer();                                               // Serialize data.
-                    _Socket.Send(_Buffer, _Buffer.Length, _EndPoint.Address.ToString().Split(':')[0], 5001); // Send data to client.
-                    _Container.Set_HasBeenModified(false);                                                   // Set _HasBeenModified to FALSE.
+                    _Buffer = _Container.SerializeContainer();                                               
+                    _Socket.Send(_Buffer, _Buffer.Length, _EndPoint.Address.ToString().Split(':')[0], 5001); 
+                    _Container.Set_HasBeenModified(false);                                                   
                     Console.WriteLine("Server has sent : " + _Container.Get_Msg() + " to " + _EndPoint.Address.ToString().Split(':')[0]);
                 }
 
-                System.Threading.Thread.Sleep(35); // Sleep for 35ms.
+                System.Threading.Thread.Sleep(35);
             }
         }
       

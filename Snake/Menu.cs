@@ -26,12 +26,17 @@ namespace Snake
 
         #region Constructor
 
+        /*
+         * Construtor of the menu
+         *      - Initialize Components/variables.
+         * */
+
         public Menu()
         {
-            InitializeComponent(); // Initialize component.
-            InitializeFont();      // Initialize font.
-            _ConnectionEstablishedDel = new processOnMenuThread(ConnectionEstablished); // Initialize the  ConnectionEstablished delegate.
-            _GameOverDel = new processOnMenuThread(GameOver);                           // Initialize the  GameOver delegate.
+            InitializeComponent(); 
+            InitializeFont();      
+            _ConnectionEstablishedDel = new processOnMenuThread(ConnectionEstablished); 
+            _GameOverDel = new processOnMenuThread(GameOver);                           
         }
 
         #endregion
@@ -41,257 +46,261 @@ namespace Snake
 
         #region Methods
 
+        /*
+         * Method for initialiazing fonts
+         *      - Instanciate font.
+         *      - Apply font.
+         * */
+
         internal void InitializeFont()
         {
             _Font = new PersonalFont();
-            nicknameTextBox.Font = new System.Drawing.Font(_Font.getPersonalFont(), 16, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));    // Set the font for the nickname textbox.
-            ipTextBox1.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));      // Set the font for the ip textbox (part 1).
-            ipTextBox2.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));      // Set the font for the ip textbox (part 2).
-            ipTextBox3.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));      // Set the font for the ip textbox (part 3).
-            ipTextBox4.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));      // Set the font for the ip textbox (part 4).            
-            highScoresName.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.
-            highScoresScore.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.                        
-            newHighScoreLabel.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); // Set the font.                        
+            nicknameTextBox.Font = new System.Drawing.Font(_Font.getPersonalFont(), 16, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));    
+            ipTextBox1.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));      
+            ipTextBox2.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));      
+            ipTextBox3.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));      
+            ipTextBox4.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));               
+            highScoresName.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); 
+            highScoresScore.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0))); 
+            newHighScoreLabel.Font = new System.Drawing.Font(_Font.getPersonalFont(), 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
         }
 
         internal void MainMenu()
         {
-            this.playPictureBox.Visible = true;                   // Show playPictureBox.
-            this.multiplayerPictureBox.Visible = true;            // Show multiplayerPictureBox.
-            this.highScoresPictureBox.Visible = true;             // Show highScoresPictureBox;
-            this.titlePictureBox.Visible = true;                  // Show titlePictureBox.
-            this.gameOverPictureBox.Visible = false;              // Hide gameOverPictureBox.
-            this.retryPictureBox.Visible = false;                 // Hide retryPictureBox.
-            this.mainMenuPictureBox.Visible = false;              // Hide mainMenuPictureBox.
-            this.multiplayerMenuPictureBox.Visible = false;       // Hide multiplayerMenuPictureBox.
-            this.createGamePictureBox.Visible = false;            // Hide createGamePictureBox.
-            this.joinGamePictureBox.Visible = false;              // Hide joinGamePictureBox.
-            this.backPictureBox.Visible = false;                  // Hide backPictureBox.
-            this.waitClientPictureBox.Visible = false;            // Hide waitClientPictureBox.
-            this.connectionHostPictureBox.Visible = false;        // Hide connectionHostPictureBox.
-            this.connectionEstablishedPictureBox.Visible = false; // Hide connectionEstablishedPictureBox.
-            this.startGamePictureBox.Visible = false;             // Hide startGamePictureBox.
-            this.enterIpPictureBox.Visible = false;               // Hide enterIpPictureBox.
-            this.okPictureBox.Visible = false;                    // Hide okPictureBox.
-            this.ipTextBox1.Visible = false;                      // Hide ipTextBox1.
-            this.ipTextBox2.Visible = false;                      // Hide ipTextBox2.
-            this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
-            this.ipTextBox4.Visible = false;                      // Hide ipTextBo41.            
-            this.highScoresName.Visible = false;                  // Hide highScoresLabel.             
-            this.highScoresScore.Visible = false;                 // Hide highScoresLabel.                         
-            this.nicknamePictureBox.Visible = true;               // Show nicknamePictureBox.
-            this.nicknameTextBox.Visible = true;                  // Show nicknameTextBox.
-            this.playPictureBox.Select();                         // Select the playPictureBox.
-            this.winPictureBox.Visible = false;                   // Hide winPictureBox.
-            this.loosePictureBox.Visible = false;                 // Hide loosePictureBox.
-            this.newHighScoreLabel.Visible = false;               // Hide newHighScoreLabel
+            this.playPictureBox.Visible = true;                   
+            this.multiplayerPictureBox.Visible = true;            
+            this.highScoresPictureBox.Visible = true;             
+            this.titlePictureBox.Visible = true;                  
+            this.gameOverPictureBox.Visible = false;              
+            this.retryPictureBox.Visible = false;                 
+            this.mainMenuPictureBox.Visible = false;              
+            this.multiplayerMenuPictureBox.Visible = false;       
+            this.createGamePictureBox.Visible = false;            
+            this.joinGamePictureBox.Visible = false;              
+            this.backPictureBox.Visible = false;                  
+            this.waitClientPictureBox.Visible = false;            
+            this.connectionHostPictureBox.Visible = false;        
+            this.connectionEstablishedPictureBox.Visible = false; 
+            this.startGamePictureBox.Visible = false;             
+            this.enterIpPictureBox.Visible = false;               
+            this.okPictureBox.Visible = false;                    
+            this.ipTextBox1.Visible = false;                      
+            this.ipTextBox2.Visible = false;                      
+            this.ipTextBox3.Visible = false;                      
+            this.ipTextBox4.Visible = false;                      
+            this.highScoresName.Visible = false;                  
+            this.highScoresScore.Visible = false;                 
+            this.nicknamePictureBox.Visible = true;               
+            this.nicknameTextBox.Visible = true;                  
+            this.playPictureBox.Select();                         
+            this.winPictureBox.Visible = false;                   
+            this.loosePictureBox.Visible = false;                 
+            this.newHighScoreLabel.Visible = false;               
         }
 
         internal void InGame()
         {
-            this.Visible = false; // Hide the menu.
+            this.Visible = false; 
         }
 
         internal void GameOver(Boolean multiplayer, Boolean victory)
         {
             this.Visible = true;
-            this.playPictureBox.Visible = false;                  // Hide playPictureBox.
-            this.multiplayerPictureBox.Visible = false;           // Hide multiplayerPictureBox.
-            this.highScoresPictureBox.Visible = false;            // Hide highScoresPictureBox;
-            this.titlePictureBox.Visible = false;                 // Hide titlePictureBox.
-            this.mainMenuPictureBox.Visible = true;               // Show mainMenuPictureBox.
-            this.multiplayerMenuPictureBox.Visible = false;       // Hide multiplayerMenuPictureBox.
-            this.createGamePictureBox.Visible = false;            // Hide createGamePictureBox.
-            this.joinGamePictureBox.Visible = false;              // Hide joinGamePictureBox.
-            this.backPictureBox.Visible = false;                  // Hide backPictureBox.
-            this.waitClientPictureBox.Visible = false;            // Hide waitClientPictureBox.
-            this.connectionHostPictureBox.Visible = false;        // Hide connectionHostPictureBox.
-            this.connectionEstablishedPictureBox.Visible = false; // Hide connectionEstablishedPictureBox.
-            this.startGamePictureBox.Visible = false;             // Hide startGamePictureBox.
-            this.enterIpPictureBox.Visible = false;               // Hide enterIpPictureBox.
-            this.okPictureBox.Visible = false;                    // Hide okPictureBox.
-            this.ipTextBox1.Visible = false;                      // Hide ipTextBox1.
-            this.ipTextBox2.Visible = false;                      // Hide ipTextBox2.
-            this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
-            this.ipTextBox4.Visible = false;                      // Hide ipTextBox4.            
-            this.highScoresName.Visible = false;                  // Hide highScoresLabel.            
-            this.highScoresScore.Visible = false;                 // Hide highScoresLabel.                        
-            this.nicknamePictureBox.Visible = false;              // Hide nicknamePictureBox.
-            this.nicknameTextBox.Visible = false;                 // Hide nicknameTextBox.
+            this.playPictureBox.Visible = false;                  
+            this.multiplayerPictureBox.Visible = false;           
+            this.highScoresPictureBox.Visible = false;            
+            this.titlePictureBox.Visible = false;                 
+            this.mainMenuPictureBox.Visible = true;               
+            this.multiplayerMenuPictureBox.Visible = false;       
+            this.createGamePictureBox.Visible = false;            
+            this.joinGamePictureBox.Visible = false;              
+            this.backPictureBox.Visible = false;                  
+            this.waitClientPictureBox.Visible = false;            
+            this.connectionHostPictureBox.Visible = false;        
+            this.connectionEstablishedPictureBox.Visible = false; 
+            this.startGamePictureBox.Visible = false;             
+            this.enterIpPictureBox.Visible = false;               
+            this.okPictureBox.Visible = false;                    
+            this.ipTextBox1.Visible = false;                      
+            this.ipTextBox2.Visible = false;                      
+            this.ipTextBox3.Visible = false;                      
+            this.ipTextBox4.Visible = false;                      
+            this.highScoresName.Visible = false;                  
+            this.highScoresScore.Visible = false;                     
+            this.nicknamePictureBox.Visible = false;              
+            this.nicknameTextBox.Visible = false;                 
             if (!multiplayer)
             {
-                this.highScoresPictureBox.Visible = true;            // Hide highScoresPictureBox;
-                this.newHighScoreLabel.Visible = true;             // Show newHighScoreLabel
-                this.gameOverPictureBox.Visible = true;           // Show gameOverPictureBox.                
-                this.retryPictureBox.Visible = true;              // Show retryPictureBox.
-                this.winPictureBox.Visible = false;               // Hide winPictureBox.
-                this.loosePictureBox.Visible = false;             // Hide loosePictureBox.
+                this.highScoresPictureBox.Visible = true;        
+                this.newHighScoreLabel.Visible = true;           
+                this.gameOverPictureBox.Visible = true;          
+                this.retryPictureBox.Visible = true;             
+                this.winPictureBox.Visible = false;              
+                this.loosePictureBox.Visible = false;            
             }
 
-            if (multiplayer)                                      ////
-            {                                                     // Multiplayer mode :
-                if(victory)                                       // if victory
-                    this.winPictureBox.Visible = true;            // --> Show winPictureBox.
-                else if(!victory)                                 // if defeat
-                    this.loosePictureBox.Visible = true;          // --> Show loosePictureBox.
-                this.gameOverPictureBox.Visible = false;          // Hide gameOverPictureBox.
-                this.retryPictureBox.Visible = false;             // Hide retryPictureBox.
-            }
-
-                
+            if (multiplayer)                                     
+            {                                                    
+                if(victory)                                      
+                    this.winPictureBox.Visible = true;           
+                else if(!victory)                                
+                    this.loosePictureBox.Visible = true;         
+                this.gameOverPictureBox.Visible = false;         
+                this.retryPictureBox.Visible = false;            
+            }              
         }
 
         internal void Multiplayer()
         {
-            this.playPictureBox.Visible = false;                  // Hide playPictureBox.
-            this.multiplayerPictureBox.Visible = false;           // Hide multiplayerPictureBox.
-            this.highScoresPictureBox.Visible = false;            // Hide highScoresPictureBox;
-            this.titlePictureBox.Visible = false;                 // Hide titlePictureBox.
-            this.gameOverPictureBox.Visible = false;              // Hide gameOverPictureBox.
-            this.retryPictureBox.Visible = false;                 // Hide retryPictureBox.
-            this.mainMenuPictureBox.Visible = false;              // Hide mainMenuPictureBox.
-            this.multiplayerMenuPictureBox.Visible = true;        // Show multiplayerMenuPictureBox.
-            this.createGamePictureBox.Visible = true;             // Show createGamePictureBox.
-            this.joinGamePictureBox.Visible = true;               // Show joinGamePictureBox.
-            this.backPictureBox.Visible = true;                   // Show backPictureBox.
-            this.waitClientPictureBox.Visible = false;            // Hide waitClientPictureBox.
-            this.connectionHostPictureBox.Visible = false;        // Hide connectionHostPictureBox.
-            this.connectionEstablishedPictureBox.Visible = false; // Hide connectionEstablishedPictureBox.
-            this.startGamePictureBox.Visible = false;             // Hide startGamePictureBox.
-            this.enterIpPictureBox.Visible = false;               // Hide enterIpPictureBox.
-            this.okPictureBox.Visible = false;                    // Hide okPictureBox.
-            this.ipTextBox1.Visible = false;                      // Hide ipTextBox1.
-            this.ipTextBox2.Visible = false;                      // Hide ipTextBox2.
-            this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
-            this.ipTextBox4.Visible = false;                      // Hide ipTextBox4.            
-            this.highScoresName.Visible = false;                  // Hide highScoresLabel.            
-            this.highScoresScore.Visible = false;                 // Hide highScoresLabel.            
-            this.nicknamePictureBox.Visible = false;              // Hide nicknamePictureBox.
-            this.nicknameTextBox.Visible = false;                 // Hide nicknameTextBox.
-            this.winPictureBox.Visible = false;                   // Hide winPictureBox.
-            this.loosePictureBox.Visible = false;                 // Hide loosePictureBox.
-            this.newHighScoreLabel.Visible = false;               // Hide newHighScoreLabel
+            this.playPictureBox.Visible = false;                  
+            this.multiplayerPictureBox.Visible = false;           
+            this.highScoresPictureBox.Visible = false;            
+            this.titlePictureBox.Visible = false;                 
+            this.gameOverPictureBox.Visible = false;              
+            this.retryPictureBox.Visible = false;                 
+            this.mainMenuPictureBox.Visible = false;              
+            this.multiplayerMenuPictureBox.Visible = true;        
+            this.createGamePictureBox.Visible = true;             
+            this.joinGamePictureBox.Visible = true;               
+            this.backPictureBox.Visible = true;                   
+            this.waitClientPictureBox.Visible = false;            
+            this.connectionHostPictureBox.Visible = false;        
+            this.connectionEstablishedPictureBox.Visible = false; 
+            this.startGamePictureBox.Visible = false;             
+            this.enterIpPictureBox.Visible = false;               
+            this.okPictureBox.Visible = false;                    
+            this.ipTextBox1.Visible = false;                      
+            this.ipTextBox2.Visible = false;                      
+            this.ipTextBox3.Visible = false;                      
+            this.ipTextBox4.Visible = false;                      
+            this.highScoresName.Visible = false;                  
+            this.highScoresScore.Visible = false;                 
+            this.nicknamePictureBox.Visible = false;              
+            this.nicknameTextBox.Visible = false;                 
+            this.winPictureBox.Visible = false;                   
+            this.loosePictureBox.Visible = false;                 
+            this.newHighScoreLabel.Visible = false;               
         }
 
         internal void Host()
         {
-            this.createGamePictureBox.Visible = false;            // Hide createGamePictureBox.
-            this.joinGamePictureBox.Visible = false;              // Hide joinGamePictureBox.
-            this.waitClientPictureBox.Visible = true;             // Show waitClientPictureBox
-            this.connectionEstablishedPictureBox.Visible = false; // Hide connectionEstablishedPictureBox.
-            this.startGamePictureBox.Visible = false;             // Hide startGamePictureBox.
-            this.enterIpPictureBox.Visible = false;               // Hide enterIpPictureBox.
-            this.okPictureBox.Visible = false;                    // Hide okPictureBox.
-            this.ipTextBox1.Visible = false;                      // Hide ipTextBox1.
-            this.ipTextBox2.Visible = false;                      // Hide ipTextBox2.
-            this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
-            this.ipTextBox4.Visible = false;                      // Hide ipTextBox4.
-            this.highScoresName.Visible = false;                  // Hide highScoresLabel.            
-            this.highScoresScore.Visible = false;                 // Hide highScoresLabel.            
-            this.nicknamePictureBox.Visible = false;              // Hide nicknamePictureBox.
-            this.nicknameTextBox.Visible = false;                 // Hide nicknameTextBox.
-            this.winPictureBox.Visible = false;                   // Hide winPictureBox.
-            this.loosePictureBox.Visible = false;                 // Hide loosePictureBox.
-            this.newHighScoreLabel.Visible = false;               // Hide newHighScoreLabel
+            this.createGamePictureBox.Visible = false;            
+            this.joinGamePictureBox.Visible = false;              
+            this.waitClientPictureBox.Visible = true;             
+            this.connectionEstablishedPictureBox.Visible = false; 
+            this.startGamePictureBox.Visible = false;             
+            this.enterIpPictureBox.Visible = false;               
+            this.okPictureBox.Visible = false;                    
+            this.ipTextBox1.Visible = false;                      
+            this.ipTextBox2.Visible = false;                      
+            this.ipTextBox3.Visible = false;                      
+            this.ipTextBox4.Visible = false;                      
+            this.highScoresName.Visible = false;                  
+            this.highScoresScore.Visible = false;                 
+            this.nicknamePictureBox.Visible = false;              
+            this.nicknameTextBox.Visible = false;                 
+            this.winPictureBox.Visible = false;                   
+            this.loosePictureBox.Visible = false;                 
+            this.newHighScoreLabel.Visible = false;               
         }
 
         internal void Client1()
         {
-            this.createGamePictureBox.Visible = false;            // Hide createGamePictureBox.
-            this.joinGamePictureBox.Visible = false;              // Hide joinGamePictureBox.
-            this.connectionHostPictureBox.Visible = false;        // Show connectionHostPictureBox.
-            this.connectionEstablishedPictureBox.Visible = false; // Hide connectionEstablishedPictureBox.
-            this.startGamePictureBox.Visible = false;             // Hide startGamePictureBox.
-            this.enterIpPictureBox.Visible = true;                // Show enterIpPictureBox.
-            this.enterIpPictureBox.SendToBack();                  // Send it to background.
-            this.okPictureBox.Visible = true;                     // Show okPictureBox.
-            this.ipTextBox1.Visible = true;                       // Show ipTextBox1.
-            this.ipTextBox2.Visible = true;                       // Show ipTextBox2.
-            this.ipTextBox3.Visible = true;                       // Show ipTextBox3.
-            this.ipTextBox4.Visible = true;                       // Show ipTextBox4.            
-            this.highScoresName.Visible = false;                  // Hide highScoresLabel.            
-            this.highScoresScore.Visible = false;                 // Hide highScoresLabel.                        
-            this.nicknamePictureBox.Visible = false;              // Hide nicknamePictureBox.
-            this.nicknameTextBox.Visible = false;                 // Hide nicknameTextBox.
-            this.winPictureBox.Visible = false;                   // Hide winPictureBox.
-            this.loosePictureBox.Visible = false;                 // Hide loosePictureBox.
-            this.newHighScoreLabel.Visible = false;               // Hide newHighScoreLabel
+            this.createGamePictureBox.Visible = false;            
+            this.joinGamePictureBox.Visible = false;              
+            this.connectionHostPictureBox.Visible = false;        
+            this.connectionEstablishedPictureBox.Visible = false; 
+            this.startGamePictureBox.Visible = false;             
+            this.enterIpPictureBox.Visible = true;                
+            this.enterIpPictureBox.SendToBack();                  
+            this.okPictureBox.Visible = true;                     
+            this.ipTextBox1.Visible = true;                       
+            this.ipTextBox2.Visible = true;                       
+            this.ipTextBox3.Visible = true;                       
+            this.ipTextBox4.Visible = true;                       
+            this.highScoresName.Visible = false;                  
+            this.highScoresScore.Visible = false;                      
+            this.nicknamePictureBox.Visible = false;              
+            this.nicknameTextBox.Visible = false;                 
+            this.winPictureBox.Visible = false;                   
+            this.loosePictureBox.Visible = false;                 
+            this.newHighScoreLabel.Visible = false;               
         }
 
         internal void Client2()
         {
-            this.createGamePictureBox.Visible = false;            // Hide createGamePictureBox.
-            this.joinGamePictureBox.Visible = false;              // Hide joinGamePictureBox.
-            this.connectionHostPictureBox.Visible = true  ;       // Show connectionHostPictureBox.
-            this.connectionEstablishedPictureBox.Visible = false; // Hide connectionEstablishedPictureBox.
-            this.startGamePictureBox.Visible = false;             // Hide startGamePictureBox.
-            this.enterIpPictureBox.Visible = false;               // Hide enterIpPictureBox.
-            this.okPictureBox.Visible = false;                    // Hide okPictureBox.
-            this.ipTextBox1.Visible = false;                      // Hide ipTextBox1.
-            this.ipTextBox2.Visible = false;                      // Hide ipTextBox2.
-            this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
-            this.ipTextBox4.Visible = false;                      // Hide ipTextBox4.            
-            this.highScoresName.Visible = false;                  // Hide highScoresLabel.            
-            this.highScoresScore.Visible = false;                 // Hide highScoresLabel.                        
-            this.nicknamePictureBox.Visible = false;              // Hide nicknamePictureBox.
-            this.nicknameTextBox.Visible = false;                 // Hide nicknameTextBox.
-            this.winPictureBox.Visible = false;                   // Hide winPictureBox.
-            this.loosePictureBox.Visible = false;                 // Hide loosePictureBox.
-            this.newHighScoreLabel.Visible = false;               // Hide newHighScoreLabel
+            this.createGamePictureBox.Visible = false;            
+            this.joinGamePictureBox.Visible = false;              
+            this.connectionHostPictureBox.Visible = true  ;       
+            this.connectionEstablishedPictureBox.Visible = false; 
+            this.startGamePictureBox.Visible = false;             
+            this.enterIpPictureBox.Visible = false;               
+            this.okPictureBox.Visible = false;                    
+            this.ipTextBox1.Visible = false;                      
+            this.ipTextBox2.Visible = false;                      
+            this.ipTextBox3.Visible = false;                      
+            this.ipTextBox4.Visible = false;                      
+            this.highScoresName.Visible = false;                  
+            this.highScoresScore.Visible = false;                    
+            this.nicknamePictureBox.Visible = false;              
+            this.nicknameTextBox.Visible = false;                 
+            this.winPictureBox.Visible = false;                   
+            this.loosePictureBox.Visible = false;                 
+            this.newHighScoreLabel.Visible = false;               
         }
 
         internal void HighScoreShow()
         {
-            this.playPictureBox.Visible = false;                  // Hide playPictureBox.
-            this.multiplayerPictureBox.Visible = false;           // Hide multiplayerPictureBox.
-            this.highScoresPictureBox.Visible = false;            // Hide highScoresPictureBox;
-            this.titlePictureBox.Visible = false;                 // Hide titlePictureBox.
-            this.gameOverPictureBox.Visible = false;              // Hide gameOverPictureBox.
-            this.retryPictureBox.Visible = false;                 // Hide retryPictureBox.
-            this.mainMenuPictureBox.Visible = true;               // Show mainMenuPictureBox.
-            this.multiplayerMenuPictureBox.Visible = false;       // Hide multiplayerMenuPictureBox.
-            this.createGamePictureBox.Visible = false;            // Hide createGamePictureBox.
-            this.joinGamePictureBox.Visible = false;              // Hide joinGamePictureBox.
-            this.backPictureBox.Visible = false;                  // Hide backPictureBox.
-            this.waitClientPictureBox.Visible = false;            // Hide waitClientPictureBox.
-            this.connectionHostPictureBox.Visible = false;        // Hide connectionHostPictureBox.
-            this.connectionEstablishedPictureBox.Visible = false; // Hide connectionEstablishedPictureBox.
-            this.startGamePictureBox.Visible = false;             // Hide startGamePictureBox.
-            this.enterIpPictureBox.Visible = false;               // Hide enterIpPictureBox.
-            this.okPictureBox.Visible = false;                    // Hide okPictureBox.
-            this.ipTextBox1.Visible = false;                      // Hide ipTextBox1.
-            this.ipTextBox2.Visible = false;                      // Hide ipTextBox2.
-            this.ipTextBox3.Visible = false;                      // Hide ipTextBox3.
-            this.ipTextBox4.Visible = false;                      // Hide ipTextBox4.            
-            this.highScoresName.Visible = true;                   // Show highScoresLabel.            
-            this.highScoresScore.Visible = true;                 // Show highScoresLabel.            
-            this.nicknamePictureBox.Visible = false;              // Hide nicknamePictureBox.
-            this.nicknameTextBox.Visible = false;                 // Hide nicknameTextBox.
-            this.winPictureBox.Visible = false;                   // Hide winPictureBox.
-            this.loosePictureBox.Visible = false;                 // Hide loosePictureBox.
-            this.newHighScoreLabel.Visible = false;               // Hide newHighScoreLabel
+            this.playPictureBox.Visible = false;                  
+            this.multiplayerPictureBox.Visible = false;           
+            this.highScoresPictureBox.Visible = false;            
+            this.titlePictureBox.Visible = false;                 
+            this.gameOverPictureBox.Visible = false;              
+            this.retryPictureBox.Visible = false;                 
+            this.mainMenuPictureBox.Visible = true;               
+            this.multiplayerMenuPictureBox.Visible = false;       
+            this.createGamePictureBox.Visible = false;            
+            this.joinGamePictureBox.Visible = false;              
+            this.backPictureBox.Visible = false;                  
+            this.waitClientPictureBox.Visible = false;            
+            this.connectionHostPictureBox.Visible = false;        
+            this.connectionEstablishedPictureBox.Visible = false; 
+            this.startGamePictureBox.Visible = false;             
+            this.enterIpPictureBox.Visible = false;               
+            this.okPictureBox.Visible = false;                    
+            this.ipTextBox1.Visible = false;                      
+            this.ipTextBox2.Visible = false;                      
+            this.ipTextBox3.Visible = false;                      
+            this.ipTextBox4.Visible = false;                      
+            this.highScoresName.Visible = true;                   
+            this.highScoresScore.Visible = true;                 
+            this.nicknamePictureBox.Visible = false;              
+            this.nicknameTextBox.Visible = false;                 
+            this.winPictureBox.Visible = false;                   
+            this.loosePictureBox.Visible = false;                 
+            this.newHighScoreLabel.Visible = false;               
         }
 
         private void ConnectionEstablished(Boolean isHost, Boolean multiplayer)
         {
- 	        this.connectionHostPictureBox.Visible = false;       // Hide connectionHostPictureBox.
-            this.waitClientPictureBox.Visible = false;           // Hide waitClientPictureBox
+ 	        this.connectionHostPictureBox.Visible = false;      
+            this.waitClientPictureBox.Visible = false;          
             if (multiplayer)
-            {                                                        // If multiplayer mode
-                this.connectionEstablishedPictureBox.Visible = true; //     Show connectionEstablishedPictureBox.
-                if (isHost)                                          //     if host :
-                    this.startGamePictureBox.Visible = true;         //        Show startGamePictureBox (if host).
+            {                                                       
+                this.connectionEstablishedPictureBox.Visible = true;
+                if (isHost)                                         
+                    this.startGamePictureBox.Visible = true;        
             }
-            this.enterIpPictureBox.Visible = false;              // Hide enterIpPictureBox.
-            this.okPictureBox.Visible = false;                   // Hide okPictureBox.
-            this.ipTextBox1.Visible = false;                     // Hide ipTextBox1.
-            this.ipTextBox2.Visible = false;                     // Hide ipTextBox2.
-            this.ipTextBox3.Visible = false;                     // Hide ipTextBox3.
-            this.ipTextBox4.Visible = false;                     // Hide ipTextBox4.
-            this.nicknamePictureBox.Visible = false;             // Hide nicknamePictureBox.
-            this.nicknameTextBox.Visible = false;                // Hide nicknameTextBox.
-            this.winPictureBox.Visible = false;                  // Hide winPictureBox.
-            this.loosePictureBox.Visible = false;                // Hide loosePictureBox.
+            this.enterIpPictureBox.Visible = false;              
+            this.okPictureBox.Visible = false;                   
+            this.ipTextBox1.Visible = false;                     
+            this.ipTextBox2.Visible = false;                     
+            this.ipTextBox3.Visible = false;                     
+            this.ipTextBox4.Visible = false;                     
+            this.nicknamePictureBox.Visible = false;             
+            this.nicknameTextBox.Visible = false;                
+            this.winPictureBox.Visible = false;                  
+            this.loosePictureBox.Visible = false;                
         }
 
         #endregion

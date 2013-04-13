@@ -15,8 +15,6 @@ namespace Snake
 
         private int _X;                            // Position in X.
         private int _Y;                            // Position in Y.
-        private int _LastX;                        // Last position in X.
-        private int _LastY;                        // Last position in Y.
         private const int _POINT = 25;             // The points earned when item reached.
         private int _Side;                         // Size of the insect.
         private Random _RandomNumber;              // Random number.
@@ -27,26 +25,41 @@ namespace Snake
 
         #region Constructors
 
+        /*
+         * Constructor for the Insect
+         *      - Initialize variables
+         * */
+
         public Insect(int width, int height)
         {
-            _Side = width / 27 - 2; // Initialize dynamically the side of the insect.
-            _RandomNumber = new Random();   // Initialize the generator of random.
-            _X = (_Side + 2) * (_RandomNumber.Next(width - _Side) / (_Side + 2));  // Set _X thanks to a generated number.
-            _Y = (_Side + 2) * (_RandomNumber.Next(height - _Side) / (_Side + 2)); // Set _Y thanks to another generated number.
+            _Side = width / 27 - 2; 
+            _RandomNumber = new Random(); 
+            _X = (_Side + 2) * (_RandomNumber.Next(width - _Side) / (_Side + 2));  
+            _Y = (_Side + 2) * (_RandomNumber.Next(height - _Side) / (_Side + 2)); 
         }
+
+        /*
+         * Another Constructor for the Insect
+         *      - Initialize variables
+         * */
 
         public Insect(int width, int height, int x, int y)
         {
-            _Side = width / 27 - 2; // Initialize dynamically the side of the insect.
-            _RandomNumber = new Random();   // Initialize the generator of random.
-            _X = x; // Set _X.
-            _Y = y; // Set _Y.
+            _Side = width / 27 - 2; 
+            _RandomNumber = new Random();
+            _X = x; 
+            _Y = y; 
         }
+
+        /*
+         * Another Constructor for the Insect
+         *      - Initialize variables
+         * */
 
         public Insect()
         {
-            _X = -666; // Set _X.
-            _Y = -666; // Set _Y.
+            _X = -666;
+            _Y = -666;
         }
 
         #endregion
@@ -55,158 +68,160 @@ namespace Snake
 
         #region Methods
 
-        ///////////////////////////////////////////////////////////////
-        // Method which determines if the snake has reached the insect
+        /*
+         * Method which determines if the snake has reached the insect
+         */
 
         public Boolean IsReached(SnakePart snakePart)
         {
-            Boolean isReached = false; // Boolean.
+            Boolean isReached = false; 
 
-            if (((snakePart.Get_X() == _X) && (snakePart.Get_Y() == _Y)) || ((snakePart.Get_X() == (_X + (_Side / 2 + 1))) && (snakePart.Get_Y() == _Y)) || ((snakePart.Get_X() == _X) && (snakePart.Get_Y() == (_Y + (_Side / 2) + 1))) || ((snakePart.Get_X() == (_X + (_Side / 2 + 1))) && (snakePart.Get_Y() == (_Y + (_Side / 2) + 1)))) // If the snake has reached the insect...
-                isReached = true; // Set the boolean to TRUE.
+            if (((snakePart.Get_X() == _X) && (snakePart.Get_Y() == _Y)) || ((snakePart.Get_X() == (_X + (_Side / 2 + 1))) && (snakePart.Get_Y() == _Y)) || ((snakePart.Get_X() == _X) && (snakePart.Get_Y() == (_Y + (_Side / 2) + 1))) || ((snakePart.Get_X() == (_X + (_Side / 2 + 1))) && (snakePart.Get_Y() == (_Y + (_Side / 2) + 1))))
+                isReached = true; 
     
-            return isReached; // Return the boolean.
+            return isReached;
         }
 
-        ///////////////
-        // Move insect
+        /*
+         * Move insect
+         *      - Move positions of the insect
+         *      - Check if new positions are on the snake/fruit, regenerate if needed.
+         * */
 
         public void MoveInsect(int width, int height, FullSnake snake, Fruit fruit)
         {
-            int tmpX; // Temporary X.
-            int tmpY; // Temporary Y. 
+            int tmpX; 
+            int tmpY; 
 
-            _LastX = _X; // Save _X in _LastX.
-            _LastY = _Y; // Save _Y in _LastY.
+            tmpX = Generate_X(width);  
+            tmpY = Generate_Y(height); 
 
-            tmpX = Generate_X(width);  // Generate temporary X and Y.
-            tmpY = Generate_Y(height); //
-
-            while (!CheckPositions(tmpX, tmpY, snake, fruit)) // Check positions regarding the snake and the fruit.
+            while (!CheckPositions(tmpX, tmpY, snake, fruit)) 
             {
-                tmpX = Generate_X(width);  // If not OK regenerate X and Y.
-                tmpY = Generate_Y(height); //
+                tmpX = Generate_X(width);  
+                tmpY = Generate_Y(height); 
             }
 
-            _X = tmpX; // Finally assign X & Y.
-            _Y = tmpY; //
-
+            _X = tmpX; 
+            _Y = tmpY; 
         }
 
-        //////////////////////////////
-        // Move insect (multiplayers)
+        /*
+         * Move insect (multiplayers)
+         *      - Move positions of the insect
+         *      - Check if new positions are on the snake/fruit/walls, regenerate if needed.
+         * */
 
         public void MoveInsect(int width, int height, FullSnake snake, Fruit fruit, List<Wall> listWalls)
         {
-            int tmpX; // Temporary X.
-            int tmpY; // Temporary Y. 
+            int tmpX; 
+            int tmpY; 
 
-            _LastX = _X; // Save _X in _LastX.
-            _LastY = _Y; // Save _Y in _LastY.
+            tmpX = Generate_X(width);  
+            tmpY = Generate_Y(height); 
 
-            tmpX = Generate_X(width);   // Generate temporary X and Y.
-            tmpY = Generate_Y(height);  //
-
-            while (!CheckPositions(tmpX, tmpY, snake, fruit, listWalls)) // Check positions regarding the snake, the fruit and the walls.
+            while (!CheckPositions(tmpX, tmpY, snake, fruit, listWalls)) 
             {
-                tmpX = Generate_X(width);  // If not OK regenerate X and Y.
-                tmpY = Generate_Y(height); //
+                tmpX = Generate_X(width); 
+                tmpY = Generate_Y(height);
             }
 
-            _X = tmpX; // Finally assign X & Y.
-            _Y = tmpY; //
-
+            _X = tmpX; 
+            _Y = tmpY; 
         }
 
-        ////////////////////////////////////
-        // Move insect (make it unreachable)
+        /*
+         * Move insect (make it unreachable)
+         * */
 
         public void MoveInsect()
         {
-            _LastX = _X; // Save _X in _LastX.
-            _LastY = _Y; // Save _Y in _LastY.
-            _X = -666; // Make the item unreachable for the user by changing its X & Y.
+            _X = -666; 
             _Y = -666;
         }
 
-        ///////////////
-        // Generate _X
+        /*
+         * Generate _X
+         * */
 
         private int Generate_X(int width)
         {
             int generatedNumber;
-            generatedNumber = (_Side + 2) * (_RandomNumber.Next(width - _Side) / (_Side + 2));  // Set _X thanks to a generated number.
+            generatedNumber = (_Side + 2) * (_RandomNumber.Next(width - _Side) / (_Side + 2));  
             return generatedNumber;
         }
 
-        ///////////////
-        // Generate _Y
+        /*
+         * Generate _Y
+         * */
 
         private int Generate_Y(int height)
         {
             int generatedNumber;
-            generatedNumber = (_Side + 2) * (_RandomNumber.Next(height - _Side) / (_Side + 2)); // Set _Y thanks to another generated number.
+            generatedNumber = (_Side + 2) * (_RandomNumber.Next(height - _Side) / (_Side + 2)); 
             return generatedNumber;
         }
 
-        /////////////////////////////////////////////////////////
-        // Check if temporary X & Y are on the snake or the fruit
+        /*
+         * Check if temporary X & Y are on the snake or the fruit
+         * */
 
         private Boolean CheckPositions(int x, int y, FullSnake snake, Fruit fruit)
         {
-            Boolean ok = true; // Boolean
+            Boolean ok = true;
 
             for (int i = 0; i < snake.Get_SnakeSize(); i++)
             {
-                if (((snake.Get_Snake()[i].Get_X() == x) && (snake.Get_Snake()[i].Get_Y() == y)) || ((snake.Get_Snake()[i].Get_X() == (x + (_Side / 2 + 1))) && (snake.Get_Snake()[i].Get_Y() == y)) || ((snake.Get_Snake()[i].Get_X() == x) && (snake.Get_Snake()[i].Get_Y() == (y + (_Side / 2) + 1))) || ((snake.Get_Snake()[i].Get_X() == (x + (_Side / 2 + 1))) && (snake.Get_Snake()[i].Get_Y() == (y + (_Side / 2) + 1)))) // If the insect is in the same position of one of the snake parts...
+                if (((snake.Get_Snake()[i].Get_X() == x) && (snake.Get_Snake()[i].Get_Y() == y)) || ((snake.Get_Snake()[i].Get_X() == (x + (_Side / 2 + 1))) && (snake.Get_Snake()[i].Get_Y() == y)) || ((snake.Get_Snake()[i].Get_X() == x) && (snake.Get_Snake()[i].Get_Y() == (y + (_Side / 2) + 1))) || ((snake.Get_Snake()[i].Get_X() == (x + (_Side / 2 + 1))) && (snake.Get_Snake()[i].Get_Y() == (y + (_Side / 2) + 1))))
                 {
-                    ok = false; // Set the boolean to false.
+                    ok = false; 
                     //Console.WriteLine("Insect is on the snake");
                 }
             }
 
-            if (((fruit.Get_X() == x) && (fruit.Get_Y() == y)) || ((fruit.Get_X() == (x + (_Side / 2 + 1))) && (fruit.Get_Y() == y)) || ((fruit.Get_X() == x) && (fruit.Get_Y() == (y + (_Side / 2) + 1))) || ((fruit.Get_X() == (x + (_Side / 2 + 1))) && (fruit.Get_Y() == (y + (_Side / 2) + 1)))) // If the insect is in the same position of the fruit...
+            if (((fruit.Get_X() == x) && (fruit.Get_Y() == y)) || ((fruit.Get_X() == (x + (_Side / 2 + 1))) && (fruit.Get_Y() == y)) || ((fruit.Get_X() == x) && (fruit.Get_Y() == (y + (_Side / 2) + 1))) || ((fruit.Get_X() == (x + (_Side / 2 + 1))) && (fruit.Get_Y() == (y + (_Side / 2) + 1)))) 
             {
-                ok = false; // Set the boolean to false.
+                ok = false; 
                 //Console.WriteLine("Insect is on the fruit");
             }
 
-            return ok; // Return the boolean.
+            return ok;
         }
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // Check if temporary X & Y are on the snake, the fruit, or a wall (multiplayers)
+        /*
+         * Check if temporary X & Y are on the snake, the fruit, or a wall (multiplayers)
+         * */
 
         private Boolean CheckPositions(int x, int y, FullSnake snake, Fruit fruit, List<Wall> listWalls)
         {
-            Boolean ok = true; // Boolean
+            Boolean ok = true; 
 
             for (int i = 0; i < snake.Get_SnakeSize(); i++)
             {
-                if (((snake.Get_Snake()[i].Get_X() == x) && (snake.Get_Snake()[i].Get_Y() == y)) || ((snake.Get_Snake()[i].Get_X() == (x + (_Side / 2 + 1))) && (snake.Get_Snake()[i].Get_Y() == y)) || ((snake.Get_Snake()[i].Get_X() == x) && (snake.Get_Snake()[i].Get_Y() == (y + (_Side / 2) + 1))) || ((snake.Get_Snake()[i].Get_X() == (x + (_Side / 2 + 1))) && (snake.Get_Snake()[i].Get_Y() == (y + (_Side / 2) + 1)))) // If the insect is in the same position of one of the snake parts...
+                if (((snake.Get_Snake()[i].Get_X() == x) && (snake.Get_Snake()[i].Get_Y() == y)) || ((snake.Get_Snake()[i].Get_X() == (x + (_Side / 2 + 1))) && (snake.Get_Snake()[i].Get_Y() == y)) || ((snake.Get_Snake()[i].Get_X() == x) && (snake.Get_Snake()[i].Get_Y() == (y + (_Side / 2) + 1))) || ((snake.Get_Snake()[i].Get_X() == (x + (_Side / 2 + 1))) && (snake.Get_Snake()[i].Get_Y() == (y + (_Side / 2) + 1)))) 
                 {
-                    ok = false; // Set the boolean to false.
+                    ok = false; 
                     //Console.WriteLine("Insect is on the snake");
                 }
             }
 
-            if (((fruit.Get_X() == x) && (fruit.Get_Y() == y)) || ((fruit.Get_X() == (x + (_Side / 2 + 1))) && (fruit.Get_Y() == y)) || ((fruit.Get_X() == x) && (fruit.Get_Y() == (y + (_Side / 2) + 1))) || ((fruit.Get_X() == (x + (_Side / 2 + 1))) && (fruit.Get_Y() == (y + (_Side / 2) + 1)))) // If the insect is in the same position than the fruit...
+            if (((fruit.Get_X() == x) && (fruit.Get_Y() == y)) || ((fruit.Get_X() == (x + (_Side / 2 + 1))) && (fruit.Get_Y() == y)) || ((fruit.Get_X() == x) && (fruit.Get_Y() == (y + (_Side / 2) + 1))) || ((fruit.Get_X() == (x + (_Side / 2 + 1))) && (fruit.Get_Y() == (y + (_Side / 2) + 1))))
             {
-                ok = false; // Set the boolean to false.
+                ok = false; 
                 //Console.WriteLine("Insect is on the fruit");
             }
 
             foreach (Wall element in listWalls)
             {
-                if (((element.Get_X() == x) && (element.Get_Y() == y)) || ((element.Get_X() == (x + (_Side / 2 + 1))) && (element.Get_Y() == y)) || ((element.Get_X() == x) && (element.Get_Y() == (y + (_Side / 2) + 1))) || ((element.Get_X() == (x + (_Side / 2 + 1))) && (element.Get_Y() == (y + (_Side / 2) + 1)))) // If the insect is in the same position than a wall...
+                if (((element.Get_X() == x) && (element.Get_Y() == y)) || ((element.Get_X() == (x + (_Side / 2 + 1))) && (element.Get_Y() == y)) || ((element.Get_X() == x) && (element.Get_Y() == (y + (_Side / 2) + 1))) || ((element.Get_X() == (x + (_Side / 2 + 1))) && (element.Get_Y() == (y + (_Side / 2) + 1)))) 
                 {
-                    ok = false; // Set the boolean to false.
+                    ok = false;
                     //Console.WriteLine("Insect is on a wall");
                 }
             
             }
 
-            return ok; // Return the boolean.
+            return ok;
         }
 
         #endregion
